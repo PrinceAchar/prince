@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
@@ -156,6 +157,8 @@ export default function ContactPage() {
           </div>
         </div>
       </section>
+
+      <Footer />
     </>
   );
 }
