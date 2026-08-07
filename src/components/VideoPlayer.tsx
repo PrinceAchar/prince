@@ -1,0 +1,74 @@
+"use client";
+
+import { useRef, useState } from "react";
+
+export default function VideoPlayer() {
+  const thumbRef = useRef<HTMLVideoElement>(null);
+  const overlayRef = useRef<HTMLVideoElement>(null);
+  const [overlayOpen, setOverlayOpen] = useState(false);
+
+  const handleOpen = () => {
+    setOverlayOpen(true);
+  };
+
+  const handleClose = () => {
+    overlayRef.current?.pause();
+    setOverlayOpen(false);
+  };
+
+  return (
+    <>
+      {/* 1:1 Thumbnail */}
+      <div
+        onClick={handleOpen}
+        className="relative w-full aspect-square bg-brand-black rounded-lg overflow-hidden group cursor-pointer"
+      >
+        <video
+          ref={thumbRef}
+          src="/reel.mp4"
+          poster="https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=600&h=600&fit=crop"
+          className="w-full h-full object-cover"
+          muted
+          playsInline
+        />
+        <div className="absolute inset-0 flex items-center justify-center bg-black/30 transition-opacity group-hover:bg-black/40">
+          <div className="w-20 h-20 rounded-full bg-red/90 flex items-center justify-center shadow-lg">
+            <svg className="w-8 h-8 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M8 5v14l11-7z" />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      {/* Full-size overlay */}
+      {overlayOpen && (
+        <div
+          className="fixed inset-0 z-[2000] flex items-center justify-center bg-black/70 backdrop-blur-sm"
+          onClick={handleClose}
+        >
+          <div
+            className="relative w-[400px] max-w-[90vw] aspect-[9/16] rounded-2xl overflow-hidden shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <video
+              ref={overlayRef}
+              src="/reel.mp4"
+              className="w-full h-full object-cover"
+              controls
+              autoPlay
+              playsInline
+            />
+            <button
+              onClick={handleClose}
+              className="absolute top-3 right-3 w-9 h-9 rounded-full bg-black/50 flex items-center justify-center text-white hover:bg-black/70 transition-colors"
+            >
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}

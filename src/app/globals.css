@@ -1,26 +1,46 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-red: #C21A33;
+  --color-red-dark: #9c1529;
+  --color-yellow: #FAF5E4;
+  --color-off-white: #FAFAFA;
+  --color-brand-black: #1A1A1A;
+  --color-gray: #6B6B6B;
+  --color-light-gray: #E5E5E5;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-body), -apple-system, sans-serif;
+  background: #FAF5E4;
+  color: #1A1A1A;
+  overflow-x: hidden;
+}
+
+.font-heading {
+  font-family: var(--font-heading), Georgia, serif;
+}
+
+@keyframes marquee-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes carousel-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.navbar-hidden {
+  transform: translateY(-100%);
+}
+
+.hero-dialog-fade-out {
+  opacity: 0;
+  pointer-events: none;
 }
