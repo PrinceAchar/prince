@@ -46,7 +46,7 @@ export default function Home() {
           {/* Mobile: image first */}
           <div className="md:hidden px-6 pt-12 pb-2">
             <Image
-              src="https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=800&h=800&fit=crop"
+              src="/about-us.jpg"
               alt="Our Story"
               width={800}
               height={800}
@@ -92,7 +92,7 @@ export default function Home() {
           {/* Desktop: image right, edge-to-edge */}
           <div className="hidden md:block relative w-[35%]">
             <Image
-              src="https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=800&h=800&fit=crop"
+              src="/about-us.jpg"
               alt="Our Story"
               fill
               sizes="35vw"
