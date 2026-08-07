@@ -37,9 +37,9 @@ export default function Home() {
       </section>
 
       {/* OUR STORY */}
-      <section id="story" className="py-12 md:py-16 px-6 md:px-16 lg:px-[120px] bg-white">
-        <div className="flex flex-col md:flex-row gap-8 md:gap-[60px] max-w-[1200px] mx-auto items-stretch">
-          <div className="flex-1">
+      <section id="story" className="relative bg-white">
+        <div className="flex flex-col md:flex-row">
+          <div className="flex-1 py-12 md:py-16 px-6 md:px-16 lg:pl-[120px] lg:pr-12">
             <span className="inline-block text-[11px] font-semibold uppercase tracking-[3px] text-red mb-4">
               About Us
             </span>
@@ -72,13 +72,21 @@ export default function Home() {
               A Promise of Quality. Prince Achar — Celebrating Authentic Flavors Since 1980.
             </p>
           </div>
-          <div className="flex-none w-full md:w-[450px] lg:w-[550px]">
+          <div className="hidden md:block w-[35%]">
             <img
               src="https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=800&h=1067&fit=crop"
               alt="Our Story"
-              className="w-full aspect-[3/4] object-cover"
+              className="w-full h-full object-cover"
             />
           </div>
+        </div>
+        {/* Mobile image */}
+        <div className="md:hidden px-6 pb-12">
+          <img
+            src="https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=800&h=1067&fit=crop"
+            alt="Our Story"
+            className="w-full aspect-[3/4] object-cover"
+          />
         </div>
       </section>
 
