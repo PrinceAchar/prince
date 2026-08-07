@@ -41,8 +41,20 @@ export default function Home() {
       </section>
 
       {/* OUR STORY */}
-      <section id="story" className="relative bg-white">
+      <section id="story" className="bg-white">
         <div className="flex flex-col md:flex-row">
+          {/* Mobile: image first */}
+          <div className="md:hidden px-6 pt-12 pb-2">
+            <Image
+              src="https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=800&h=800&fit=crop"
+              alt="Our Story"
+              width={800}
+              height={800}
+              className="w-full aspect-square object-cover rounded-lg"
+            />
+          </div>
+
+          {/* Text */}
           <div className="flex-1 py-12 md:py-16 px-6 md:px-16 lg:pl-[120px] lg:pr-12">
             <span className="inline-block text-[11px] font-semibold uppercase tracking-[3px] text-red mb-4">
               About Us
@@ -76,25 +88,17 @@ export default function Home() {
               A Promise of Quality. Prince Achar — Celebrating Authentic Flavors Since 1980.
             </p>
           </div>
-          <div className="hidden md:block w-[35%]">
+
+          {/* Desktop: image right, edge-to-edge */}
+          <div className="hidden md:block relative w-[35%]">
             <Image
-              src="https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=800&h=1067&fit=crop"
+              src="https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=800&h=800&fit=crop"
               alt="Our Story"
               fill
-              sizes="(min-width: 768px) 35vw, 100vw"
+              sizes="35vw"
               className="object-cover"
             />
           </div>
-        </div>
-        {/* Mobile image */}
-        <div className="md:hidden px-6 pb-12">
-          <Image
-            src="https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=800&h=1067&fit=crop"
-            alt="Our Story"
-            width={800}
-            height={1067}
-            className="w-full aspect-[3/4] object-cover"
-          />
         </div>
       </section>
 
