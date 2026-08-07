@@ -12,8 +12,8 @@ export default function ContactPage() {
       <Navbar />
 
       <section className="pt-[60px] md:pt-[70px] min-h-screen bg-white flex items-center">
-        <div className="max-w-[1200px] mx-auto px-6 py-10 md:py-16 w-full">
-          <div className="flex flex-col md:flex-row gap-10 md:gap-16">
+        <div className="max-w-[1200px] mx-auto px-6 py-6 md:py-8 w-full">
+          <div className="flex flex-col md:flex-row gap-6 md:gap-10">
             {/* Contact Info */}
             <div className="md:w-[35%]">
               <span className="inline-block text-[11px] font-semibold uppercase tracking-[3px] text-red mb-3">
