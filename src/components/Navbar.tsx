@@ -46,16 +46,16 @@ export default function Navbar() {
             </svg>
           </button>
           <div className="hidden md:flex gap-7">
-            <a href="#home" className="text-[14px] font-medium text-red uppercase tracking-[0.5px] hover:opacity-70 transition-opacity">
+            <a href="/" className="text-[14px] font-medium text-red uppercase tracking-[0.5px] hover:opacity-70 transition-opacity">
               Home
             </a>
-            <a href="#achar" className="text-[14px] font-medium text-red uppercase tracking-[0.5px] hover:opacity-70 transition-opacity">
+            <a href="/achar" className="text-[14px] font-medium text-red uppercase tracking-[0.5px] hover:opacity-70 transition-opacity">
               Achar
             </a>
-            <a href="#murabba" className="text-[14px] font-medium text-red uppercase tracking-[0.5px] hover:opacity-70 transition-opacity">
+            <a href="/murabba" className="text-[14px] font-medium text-red uppercase tracking-[0.5px] hover:opacity-70 transition-opacity">
               Murabba
             </a>
-            <a href="#contact" className="text-[14px] font-medium text-red uppercase tracking-[0.5px] hover:opacity-70 transition-opacity">
+            <a href="/contact" className="text-[14px] font-medium text-red uppercase tracking-[0.5px] hover:opacity-70 transition-opacity">
               Contact
             </a>
           </div>
@@ -63,7 +63,7 @@ export default function Navbar() {
 
         {/* Center: Logo */}
         <div className="absolute left-1/2 -translate-x-1/2">
-          <a href="#home" className="flex items-center justify-center">
+          <a href="/" className="flex items-center justify-center">
             <Image src="/logo.jpeg" alt="Prince Achar" width={50} height={50} className="h-[45px] md:h-[60px] w-auto object-contain" />
           </a>
         </div>
@@ -87,10 +87,10 @@ export default function Navbar() {
       {menuOpen && (
         <div className="fixed top-[60px] left-0 w-full bg-yellow border-t border-brand-black/10 z-[999] md:hidden">
           <div className="flex flex-col px-6 py-4 gap-4">
-            <a href="#home" onClick={() => setMenuOpen(false)} className="text-[14px] font-medium text-red uppercase tracking-[0.5px]">Home</a>
-            <a href="#achar" onClick={() => setMenuOpen(false)} className="text-[14px] font-medium text-red uppercase tracking-[0.5px]">Achar</a>
-            <a href="#murabba" onClick={() => setMenuOpen(false)} className="text-[14px] font-medium text-red uppercase tracking-[0.5px]">Murabba</a>
-            <a href="#contact" onClick={() => setMenuOpen(false)} className="text-[14px] font-medium text-red uppercase tracking-[0.5px]">Contact</a>
+            <a href="/" onClick={() => setMenuOpen(false)} className="text-[14px] font-medium text-red uppercase tracking-[0.5px]">Home</a>
+            <a href="/achar" onClick={() => setMenuOpen(false)} className="text-[14px] font-medium text-red uppercase tracking-[0.5px]">Achar</a>
+            <a href="/murabba" onClick={() => setMenuOpen(false)} className="text-[14px] font-medium text-red uppercase tracking-[0.5px]">Murabba</a>
+            <a href="/contact" onClick={() => setMenuOpen(false)} className="text-[14px] font-medium text-red uppercase tracking-[0.5px]">Contact</a>
           </div>
         </div>
       )}
