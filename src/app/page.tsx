@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import HeroDialog from "@/components/HeroDialog";
 import VideoPlayer from "@/components/VideoPlayer";
@@ -11,10 +12,13 @@ export default function Home() {
       {/* HERO */}
       <section id="home" className="pt-[60px] md:pt-[70px] bg-yellow">
         <div className="relative w-full aspect-[16/9] overflow-hidden">
-          <img
+          <Image
             src="/hero.png"
             alt="Prince Achar Hero"
-            className="w-full h-full object-cover"
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover"
           />
           <HeroDialog />
         </div>
@@ -73,18 +77,22 @@ export default function Home() {
             </p>
           </div>
           <div className="hidden md:block w-[35%]">
-            <img
+            <Image
               src="https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=800&h=1067&fit=crop"
               alt="Our Story"
-              className="w-full h-full object-cover"
+              fill
+              sizes="(min-width: 768px) 35vw, 100vw"
+              className="object-cover"
             />
           </div>
         </div>
         {/* Mobile image */}
         <div className="md:hidden px-6 pb-12">
-          <img
+          <Image
             src="https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=800&h=1067&fit=crop"
             alt="Our Story"
+            width={800}
+            height={1067}
             className="w-full aspect-[3/4] object-cover"
           />
         </div>
@@ -127,7 +135,7 @@ export default function Home() {
           {/* Logo + Description — centered on mobile */}
           <div className="text-center md:text-left mb-8 md:mb-0 md:max-w-[280px]">
             <div className="mb-3 flex justify-center md:justify-start">
-              <img src="/logo.jpeg" alt="Prince Achar" className="h-16 md:h-20 w-auto object-contain rounded-full" />
+              <Image src="/logo.jpeg" alt="Prince Achar" width={80} height={80} className="h-16 md:h-20 w-auto object-contain rounded-full" />
             </div>
             <p className="text-[13px] md:text-[14px] text-brand-black/60 leading-relaxed">
               Authentic Delhi flavors, handcrafted with love since 1980.

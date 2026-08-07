@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 
 const awards = [
   { year: "1983", awardedBy: "Shri Jagmohan", title: "Lieutenant Governor of Delhi", desc: "First Prize — Excellence in Pickles & Murabbas", img: "/1983.png" },
@@ -40,10 +41,12 @@ export default function AwardsCarousel() {
                 className="flex-none w-[220px] md:w-[260px] lg:w-[280px] bg-white rounded-lg overflow-hidden shadow-sm group text-left cursor-pointer"
               >
                 <div className="relative w-full aspect-square overflow-hidden">
-                  <img
+                  <Image
                     src={award.img}
                     alt={award.awardedBy}
-                    className="w-full h-full object-cover transition-transform duration-400 group-hover:scale-105"
+                    fill
+                    sizes="280px"
+                    className="object-cover transition-transform duration-400 group-hover:scale-105"
                   />
                   {award.year && (
                     <span className="absolute top-2 left-2 md:top-3 md:left-3 bg-red text-white text-[10px] md:text-[11px] font-semibold px-2.5 py-0.5 md:px-3 md:py-1 rounded-full">
@@ -74,10 +77,12 @@ export default function AwardsCarousel() {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="relative w-full aspect-square overflow-hidden">
-              <img
+              <Image
                 src={selected.img}
                 alt={selected.awardedBy}
-                className="w-full h-full object-cover"
+                fill
+                sizes="400px"
+                className="object-cover"
               />
               {selected.year && (
                 <span className="absolute top-3 left-3 md:top-4 md:left-4 bg-red text-white text-[12px] md:text-[13px] font-semibold px-3 py-1 md:px-4 md:py-1.5 rounded-full">
