@@ -32,8 +32,8 @@ export default function VideoPlayer() {
           playsInline
         />
         <div className="absolute inset-0 flex items-center justify-center bg-black/30 transition-opacity group-hover:bg-black/40">
-          <div className="w-20 h-20 rounded-full bg-red/90 flex items-center justify-center shadow-lg">
-            <svg className="w-8 h-8 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
+          <div className="w-14 h-14 md:w-20 md:h-20 rounded-full bg-red/90 flex items-center justify-center shadow-lg">
+            <svg className="w-6 h-6 md:w-8 md:h-8 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24">
               <path d="M8 5v14l11-7z" />
             </svg>
           </div>
@@ -47,7 +47,7 @@ export default function VideoPlayer() {
           onClick={handleClose}
         >
           <div
-            className="relative w-[400px] max-w-[90vw] aspect-[9/16] rounded-2xl overflow-hidden shadow-2xl"
+            className="relative w-[90vw] max-w-[350px] md:max-w-[400px] aspect-[9/16] rounded-2xl overflow-hidden shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
             <video
@@ -60,9 +60,9 @@ export default function VideoPlayer() {
             />
             <button
               onClick={handleClose}
-              className="absolute top-3 right-3 w-9 h-9 rounded-full bg-black/50 flex items-center justify-center text-white hover:bg-black/70 transition-colors"
+              className="absolute top-3 right-3 w-8 h-8 md:w-9 md:h-9 rounded-full bg-black/50 flex items-center justify-center text-white hover:bg-black/70 transition-colors"
             >
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+              <svg className="w-4 h-4 md:w-5 md:h-5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>

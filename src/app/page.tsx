@@ -9,7 +9,7 @@ export default function Home() {
       <Navbar />
 
       {/* HERO */}
-      <section id="home" className="pt-[70px] bg-yellow">
+      <section id="home" className="pt-[60px] md:pt-[70px] bg-yellow">
         <div className="relative w-full aspect-[16/9] overflow-hidden">
           <img
             src="/hero.png"
@@ -20,15 +20,15 @@ export default function Home() {
         </div>
 
         {/* Marquee */}
-        <div className="bg-red py-[14px] overflow-hidden">
+        <div className="bg-red py-3 md:py-[14px] overflow-hidden">
           <div className="flex w-max animate-[marquee-scroll_20s_linear_infinite]">
             {["FREE DELIVERY ON ORDERS ABOVE \u20B9500", "HANDMADE IN DELHI SINCE 1980", "100% NATURAL INGREDIENTS"].map((text, i) => (
-              <span key={i} className="text-[13px] font-semibold text-white uppercase tracking-[2px] whitespace-nowrap px-[60px]">
+              <span key={i} className="text-[11px] md:text-[13px] font-semibold text-white uppercase tracking-[2px] whitespace-nowrap px-8 md:px-[60px]">
                 {text}
               </span>
             ))}
             {["FREE DELIVERY ON ORDERS ABOVE \u20B9500", "HANDMADE IN DELHI SINCE 1980", "100% NATURAL INGREDIENTS"].map((text, i) => (
-              <span key={`dup-${i}`} className="text-[13px] font-semibold text-white uppercase tracking-[2px] whitespace-nowrap px-[60px]">
+              <span key={`dup-${i}`} className="text-[11px] md:text-[13px] font-semibold text-white uppercase tracking-[2px] whitespace-nowrap px-8 md:px-[60px]">
                 {text}
               </span>
             ))}
@@ -37,46 +37,46 @@ export default function Home() {
       </section>
 
       {/* OUR STORY */}
-      <section id="story" className="py-16 px-[120px] bg-white max-[900px]:px-6 max-[900px]:py-12">
-        <div className="flex gap-[60px] max-w-[1200px] mx-auto items-stretch max-[900px]:flex-col max-[900px]:px-6 max-[900px]:py-16">
+      <section id="story" className="py-12 md:py-16 px-6 md:px-16 lg:px-[120px] bg-white">
+        <div className="flex flex-col md:flex-row gap-8 md:gap-[60px] max-w-[1200px] mx-auto items-stretch">
           <div className="flex-1">
             <span className="inline-block text-[11px] font-semibold uppercase tracking-[3px] text-red mb-4">
               About Us
             </span>
-            <h2 className="font-heading text-[38px] font-bold text-brand-black mb-7 leading-tight max-[600px]:text-[28px]">
+            <h2 className="font-heading text-[28px] md:text-[34px] lg:text-[38px] font-bold text-brand-black mb-5 md:mb-7 leading-tight">
               A Legacy of Taste. A Tradition of Excellence.
             </h2>
-            <p className="text-[15px] text-gray leading-[1.8] mb-5">
+            <p className="text-[14px] md:text-[15px] text-gray leading-[1.8] mb-4 md:mb-5">
               Since 1980, Prince Achar has been dedicated to preserving the rich heritage of Indian
               flavors through products crafted with authenticity, care, and uncompromising
               quality. What began as a passion for traditional recipes has evolved into a trusted
               brand, loved for its exceptional taste and consistency across generations.
             </p>
-            <p className="text-[15px] text-gray leading-[1.8] mb-5">
+            <p className="text-[14px] md:text-[15px] text-gray leading-[1.8] mb-4 md:mb-5">
               Our portfolio features a thoughtfully curated range of premium pickles, murabbas,
               fruit candies, and ingredients for plum cakes. Each product is prepared using carefully
               selected ingredients, ensuring the perfect balance of tradition, flavor, and quality.
             </p>
-            <p className="text-[15px] text-gray leading-[1.8] mb-5">
+            <p className="text-[14px] md:text-[15px] text-gray leading-[1.8] mb-4 md:mb-5">
               At Prince Achar, we believe that great taste is timeless. By blending traditional
               craftsmanship with modern production standards, we deliver products that meet the
               expectations of today&apos;s consumers while retaining the authenticity that defines our
               legacy.
             </p>
-            <p className="text-[15px] text-gray leading-[1.8]">
+            <p className="text-[14px] md:text-[15px] text-gray leading-[1.8]">
               As we continue to grow, we remain committed to building strong and lasting
               partnerships with distributors, retailers, and food businesses, bringing the finest
               flavors of India to every table.
             </p>
-            <p className="text-[15px] text-red font-semibold mt-5 italic">
+            <p className="text-[14px] md:text-[15px] text-red font-semibold mt-4 md:mt-5 italic">
               A Promise of Quality. Prince Achar — Celebrating Authentic Flavors Since 1980.
             </p>
           </div>
-          <div className="flex-none w-[550px] max-[900px]:static max-[900px]:w-full max-[900px]:max-w-[400px] max-[900px]:mx-auto">
+          <div className="flex-none w-full md:w-[450px] lg:w-[550px]">
             <img
               src="https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=800&h=1067&fit=crop"
               alt="Our Story"
-              className="h-full w-full object-cover"
+              className="w-full aspect-[3/4] object-cover"
             />
           </div>
         </div>
@@ -86,26 +86,26 @@ export default function Home() {
       <AwardsCarousel />
 
       {/* VIDEO */}
-      <section id="video" className="py-[100px] px-[60px] bg-white max-[900px]:px-6 max-[900px]:py-16">
-        <div className="flex gap-[60px] max-w-[1200px] mx-auto items-center max-[900px]:flex-col">
-          <div className="flex-none w-[320px] rounded-lg overflow-hidden max-[900px]:w-full max-[900px]:max-w-[300px] max-[900px]:mx-auto">
+      <section id="video" className="py-12 md:py-[100px] px-6 md:px-16 lg:px-[60px] bg-white">
+        <div className="flex flex-col md:flex-row gap-8 md:gap-[60px] max-w-[1200px] mx-auto items-center">
+          <div className="w-full max-w-[300px] md:max-w-none md:w-[320px] rounded-lg overflow-hidden">
             <VideoPlayer />
           </div>
-          <div className="flex-1">
+          <div className="flex-1 text-center md:text-left">
             <span className="inline-block text-[11px] font-semibold uppercase tracking-[3px] text-red mb-4">
               Watch Our Story
             </span>
-            <h2 className="font-heading text-[36px] font-bold text-brand-black mb-5 leading-tight max-[600px]:text-[28px]">
-              Crafting Tradition,<br />One Jar at a Time
+            <h2 className="font-heading text-[28px] md:text-[32px] lg:text-[36px] font-bold text-brand-black mb-4 md:mb-5 leading-tight">
+              Crafting Tradition,<br className="hidden md:block" /> One Jar at a Time
             </h2>
-            <p className="text-[15px] text-gray leading-[1.8] mb-7">
+            <p className="text-[14px] md:text-[15px] text-gray leading-[1.8] mb-6 md:mb-7">
               Go behind the scenes and see how Prince Achar brings the rich heritage of Delhi&apos;s
               pickle-making tradition to your table. From sourcing the finest mangoes to the final
               seal of every jar, witness the passion and dedication that goes into every batch.
             </p>
             <a
               href="#shop"
-              className="inline-block px-8 py-3 border-2 border-red text-red text-[13px] font-semibold uppercase tracking-[1px] hover:bg-red hover:text-white transition-colors"
+              className="inline-block px-6 md:px-8 py-2.5 md:py-3 border-2 border-red text-red text-[12px] md:text-[13px] font-semibold uppercase tracking-[1px] hover:bg-red hover:text-white transition-colors"
             >
               Shop Now
             </a>
@@ -114,36 +114,36 @@ export default function Home() {
       </section>
 
       {/* FOOTER */}
-      <footer id="contact" className="bg-yellow text-brand-black pt-[60px]">
-        <div className="flex justify-between gap-10 max-w-[1200px] mx-auto pb-12 border-b border-brand-black/10 max-[900px]:flex-wrap max-[900px]:px-6 max-[900px]:gap-8">
+      <footer id="contact" className="bg-yellow text-brand-black pt-10 md:pt-[60px]">
+        <div className="flex flex-col md:flex-row flex-wrap md:justify-between gap-8 md:gap-10 max-w-[1200px] mx-auto pb-10 md:pb-12 border-b border-brand-black/10 px-6">
           <div className="max-w-[280px]">
             <div className="mb-3">
-              <img src="/logo.jpeg" alt="Prince Achar" className="h-20 w-auto object-contain rounded-full" />
+              <img src="/logo.jpeg" alt="Prince Achar" className="h-16 md:h-20 w-auto object-contain rounded-full" />
             </div>
-            <p className="text-[14px] text-brand-black/60 leading-relaxed">
+            <p className="text-[13px] md:text-[14px] text-brand-black/60 leading-relaxed">
               Authentic Delhi flavors, handcrafted with love since 1980.
             </p>
           </div>
           <div>
-            <h4 className="text-[13px] font-semibold uppercase tracking-[1.5px] mb-5 text-red">
+            <h4 className="text-[12px] md:text-[13px] font-semibold uppercase tracking-[1.5px] mb-4 md:mb-5 text-red">
               Quick Links
             </h4>
-            <a href="#home" className="block text-[14px] text-brand-black/60 mb-[10px] hover:text-brand-black transition-colors">Home</a>
-            <a href="#achar" className="block text-[14px] text-brand-black/60 mb-[10px] hover:text-brand-black transition-colors">Achar</a>
-            <a href="#murabba" className="block text-[14px] text-brand-black/60 mb-[10px] hover:text-brand-black transition-colors">Murabba</a>
-            <a href="#contact" className="block text-[14px] text-brand-black/60 mb-[10px] hover:text-brand-black transition-colors">Contact</a>
+            <a href="#home" className="block text-[13px] md:text-[14px] text-brand-black/60 mb-2 md:mb-[10px] hover:text-brand-black transition-colors">Home</a>
+            <a href="#achar" className="block text-[13px] md:text-[14px] text-brand-black/60 mb-2 md:mb-[10px] hover:text-brand-black transition-colors">Achar</a>
+            <a href="#murabba" className="block text-[13px] md:text-[14px] text-brand-black/60 mb-2 md:mb-[10px] hover:text-brand-black transition-colors">Murabba</a>
+            <a href="#contact" className="block text-[13px] md:text-[14px] text-brand-black/60 mb-2 md:mb-[10px] hover:text-brand-black transition-colors">Contact</a>
           </div>
           <div>
-            <h4 className="text-[13px] font-semibold uppercase tracking-[1.5px] mb-5 text-red">
+            <h4 className="text-[12px] md:text-[13px] font-semibold uppercase tracking-[1.5px] mb-4 md:mb-5 text-red">
               Support
             </h4>
-            <a href="#faq" className="block text-[14px] text-brand-black/60 mb-[10px] hover:text-brand-black transition-colors">FAQ</a>
-            <a href="#shipping" className="block text-[14px] text-brand-black/60 mb-[10px] hover:text-brand-black transition-colors">Shipping</a>
-            <a href="#returns" className="block text-[14px] text-brand-black/60 mb-[10px] hover:text-brand-black transition-colors">Returns</a>
-            <a href="#privacy" className="block text-[14px] text-brand-black/60 mb-[10px] hover:text-brand-black transition-colors">Privacy Policy</a>
+            <a href="#faq" className="block text-[13px] md:text-[14px] text-brand-black/60 mb-2 md:mb-[10px] hover:text-brand-black transition-colors">FAQ</a>
+            <a href="#shipping" className="block text-[13px] md:text-[14px] text-brand-black/60 mb-2 md:mb-[10px] hover:text-brand-black transition-colors">Shipping</a>
+            <a href="#returns" className="block text-[13px] md:text-[14px] text-brand-black/60 mb-2 md:mb-[10px] hover:text-brand-black transition-colors">Returns</a>
+            <a href="#privacy" className="block text-[13px] md:text-[14px] text-brand-black/60 mb-2 md:mb-[10px] hover:text-brand-black transition-colors">Privacy Policy</a>
           </div>
           <div>
-            <h4 className="text-[13px] font-semibold uppercase tracking-[1.5px] mb-5 text-red">
+            <h4 className="text-[12px] md:text-[13px] font-semibold uppercase tracking-[1.5px] mb-4 md:mb-5 text-red">
               Follow Us
             </h4>
             <div className="flex gap-4">
@@ -162,8 +162,8 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <div className="max-w-[1200px] mx-auto py-6 text-center">
-          <p className="text-[12px] text-brand-black/40">&copy; 2025 Prince Achar. All rights reserved.</p>
+        <div className="max-w-[1200px] mx-auto py-5 md:py-6 text-center px-6">
+          <p className="text-[11px] md:text-[12px] text-brand-black/40">&copy; 2025 Prince Achar. All rights reserved.</p>
         </div>
       </footer>
     </>
