@@ -23,7 +23,7 @@ body {
 }
 
 .font-heading {
-  font-family: var(--font-heading), Georgia, serif;
+  font-family: var(--font-heading), "Times New Roman", serif;
 }
 
 @keyframes marquee-scroll {
