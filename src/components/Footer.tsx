@@ -34,10 +34,10 @@ export default function Footer() {
               Support
             </h4>
             <div className="space-y-1.5">
-              <a href="#faq" className="block text-[13px] text-brand-black/60 hover:text-brand-black transition-colors">FAQ</a>
-              <a href="#shipping" className="block text-[13px] text-brand-black/60 hover:text-brand-black transition-colors">Shipping</a>
-              <a href="#returns" className="block text-[13px] text-brand-black/60 hover:text-brand-black transition-colors">Returns</a>
-              <a href="#privacy" className="block text-[13px] text-brand-black/60 hover:text-brand-black transition-colors">Privacy Policy</a>
+              <a href="/faq" className="block text-[13px] text-brand-black/60 hover:text-brand-black transition-colors">FAQ</a>
+              <a href="/shipping" className="block text-[13px] text-brand-black/60 hover:text-brand-black transition-colors">Shipping</a>
+              <a href="/returns" className="block text-[13px] text-brand-black/60 hover:text-brand-black transition-colors">Returns</a>
+              <a href="/privacy" className="block text-[13px] text-brand-black/60 hover:text-brand-black transition-colors">Privacy Policy</a>
             </div>
           </div>
 
