@@ -44,3 +44,27 @@ body {
   opacity: 0;
   pointer-events: none;
 }
+
+@keyframes overlay-backdrop-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes overlay-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-overlay-backdrop {
+  animation: overlay-backdrop-in 200ms ease-out forwards;
+}
+
+.animate-overlay-panel {
+  animation: overlay-panel-in 250ms ease-out forwards;
+}
