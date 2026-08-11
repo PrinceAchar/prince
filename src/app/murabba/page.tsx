@@ -3,6 +3,7 @@ import Footer from "@/components/Footer";
 import ProductGrid from "@/components/ProductGrid";
 import { shopifyFetch, type CollectionByHandleData, type ShopifyProduct } from "@/lib/shopify";
 import { PRODUCTS_BY_COLLECTION_QUERY } from "@/lib/queries";
+import { Suspense } from "react";
 
 async function getMurabbaProducts(): Promise<ShopifyProduct[]> {
   try {
@@ -49,7 +50,9 @@ export default async function MurabbaPage() {
       <section className="bg-white py-12 md:py-20">
         <div className="max-w-[1200px] mx-auto px-6">
           {products.length > 0 ? (
-            <ProductGrid products={products} />
+            <Suspense>
+              <ProductGrid products={products} />
+            </Suspense>
           ) : (
             <p className="text-center text-gray text-[14px]">Products coming soon.</p>
           )}
