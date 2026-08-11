@@ -1,13 +1,28 @@
 import { NextResponse } from "next/server";
-import { clearSessionTokens } from "@/lib/auth";
+
+const SESSION_COOKIE = "__customer_session";
 
 export async function POST() {
-  await clearSessionTokens();
-  return NextResponse.json({ success: true });
+  const response = NextResponse.json({ success: true });
+  response.cookies.set(SESSION_COOKIE, "", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    maxAge: 0,
+    path: "/",
+  });
+  return response;
 }
 
 export async function GET(request: Request) {
-  await clearSessionTokens();
   const { origin } = new URL(request.url);
-  return NextResponse.redirect(new URL("/", origin));
+  const response = NextResponse.redirect(new URL("/", origin));
+  response.cookies.set(SESSION_COOKIE, "", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    maxAge: 0,
+    path: "/",
+  });
+  return response;
 }

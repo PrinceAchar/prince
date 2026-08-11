@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import { exchangeCodeForAccessToken } from "@/lib/shopify-customer";
-import { getAndClearPkceState, setSessionTokens } from "@/lib/auth";
+import { getAndClearPkceState } from "@/lib/auth";
+
+const SESSION_COOKIE = "__customer_session";
+const SESSION_MAX_AGE = 60 * 60 * 24 * 7; // 7 days
 
 export async function GET(request: Request) {
   const url = new URL(request.url);
@@ -36,13 +39,22 @@ export async function GET(request: Request) {
       redirectUri
     );
 
-    await setSessionTokens({
+    const sessionData = JSON.stringify({
       accessToken: tokens.access_token,
       refreshToken: tokens.refresh_token,
       idToken: tokens.id_token,
     });
 
-    return NextResponse.redirect(new URL("/account", url.origin));
+    const response = NextResponse.redirect(new URL("/account", url.origin));
+    response.cookies.set(SESSION_COOKIE, sessionData, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: SESSION_MAX_AGE,
+      path: "/",
+    });
+
+    return response;
   } catch (error) {
     console.error("Token exchange error:", error);
     return NextResponse.redirect(
