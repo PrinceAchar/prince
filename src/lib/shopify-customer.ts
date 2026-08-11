@@ -98,6 +98,10 @@ export async function refreshAccessToken(
 
 // --- GraphQL Client ---
 
+function formatAccessToken(token: string): string {
+  return token.startsWith("shcat_") ? token : `shcat_${token}`;
+}
+
 export async function customerAccountFetch<T>(
   query: string,
   variables?: Record<string, unknown>,
@@ -109,7 +113,7 @@ export async function customerAccountFetch<T>(
     "Content-Type": "application/json",
   };
   if (accessToken) {
-    headers["Authorization"] = accessToken;
+    headers["Authorization"] = formatAccessToken(accessToken);
   }
 
   const res = await fetch(graphqlEndpoint, {

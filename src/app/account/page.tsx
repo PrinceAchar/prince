@@ -1,20 +1,77 @@
-import { redirect } from "next/navigation";
+"use client";
+
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { getSessionTokens } from "@/lib/auth";
-import { getCustomer } from "@/lib/shopify-customer";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
-export const metadata = {
-  title: "My Account | Prince Achar",
-};
+interface Customer {
+  firstName: string;
+  lastName: string;
+  emailAddress: { emailAddress: string };
+  phone: string | null;
+  orders: { edges: { node: unknown }[] };
+  addresses: { edges: { node: unknown }[] };
+}
 
-export default async function AccountPage() {
-  const tokens = await getSessionTokens();
-  if (!tokens) redirect("/account/login");
+export default function AccountPage() {
+  const router = useRouter();
+  const [customer, setCustomer] = useState<Customer | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const customer = await getCustomer(tokens.accessToken);
-  if (!customer) redirect("/account/login");
+  useEffect(() => {
+    fetch("/api/account/me")
+      .then((res) => {
+        if (!res.ok) {
+          router.push("/account/login");
+          return;
+        }
+        return res.json();
+      })
+      .then((data) => {
+        if (data?.customer) {
+          setCustomer(data.customer);
+        } else {
+          setError(data?.error || "Failed to load account");
+        }
+      })
+      .catch(() => setError("Failed to load account"))
+      .finally(() => setLoading(false));
+  }, [router]);
+
+  if (loading) {
+    return (
+      <>
+        <Navbar />
+        <main className="min-h-screen bg-[#FAF5E4] pt-[70px] md:pt-[80px] flex items-center justify-center">
+          <p className="text-[14px] text-[#1A1A1A]/50">Loading...</p>
+        </main>
+        <Footer />
+      </>
+    );
+  }
+
+  if (error || !customer) {
+    return (
+      <>
+        <Navbar />
+        <main className="min-h-screen bg-[#FAF5E4] pt-[70px] md:pt-[80px] flex items-center justify-center">
+          <div className="text-center">
+            <p className="text-[14px] text-red-600 mb-4">{error || "Failed to load account"}</p>
+            <a
+              href="/account/login"
+              className="text-[13px] text-[#C21A33] underline underline-offset-4"
+            >
+              Try logging in again
+            </a>
+          </div>
+        </main>
+        <Footer />
+      </>
+    );
+  }
 
   const ordersCount = customer.orders.edges.length;
   const addressesCount = customer.addresses.edges.length;

@@ -1,14 +1,28 @@
-import { redirect } from "next/navigation";
+"use client";
+
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { getSessionTokens } from "@/lib/auth";
-import { getCustomer } from "@/lib/shopify-customer";
 import { formatPrice } from "@/lib/shopify";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
-export const metadata = {
-  title: "My Orders | Prince Achar",
-};
+interface OrderLineItem {
+  title: string;
+  quantity: number;
+  price: { amount: string; currencyCode: string };
+  variant: { image: { url: string; altText: string | null } | null } | null;
+}
+
+interface Order {
+  id: string;
+  orderNumber: number;
+  processedAt: string;
+  financialStatus: string;
+  fulfillmentStatus: string;
+  totalPrice: { amount: string; currencyCode: string };
+  lineItems: { edges: { node: OrderLineItem }[] };
+}
 
 function getStatusColor(status: string): string {
   switch (status) {
@@ -26,14 +40,60 @@ function getStatusColor(status: string): string {
   }
 }
 
-export default async function OrdersPage() {
-  const tokens = await getSessionTokens();
-  if (!tokens) redirect("/account/login");
+export default function OrdersPage() {
+  const router = useRouter();
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const customer = await getCustomer(tokens.accessToken);
-  if (!customer) redirect("/account/login");
+  useEffect(() => {
+    fetch("/api/account/orders")
+      .then((res) => {
+        if (!res.ok) {
+          router.push("/account/login");
+          return;
+        }
+        return res.json();
+      })
+      .then((data) => {
+        if (data?.orders) {
+          setOrders(data.orders);
+        } else {
+          setError(data?.error || "Failed to load orders");
+        }
+      })
+      .catch(() => setError("Failed to load orders"))
+      .finally(() => setLoading(false));
+  }, [router]);
 
-  const orders = customer.orders.edges.map((e) => e.node);
+  if (loading) {
+    return (
+      <>
+        <Navbar />
+        <main className="min-h-screen bg-[#FAF5E4] pt-[70px] md:pt-[80px] flex items-center justify-center">
+          <p className="text-[14px] text-[#1A1A1A]/50">Loading...</p>
+        </main>
+        <Footer />
+      </>
+    );
+  }
+
+  if (error) {
+    return (
+      <>
+        <Navbar />
+        <main className="min-h-screen bg-[#FAF5E4] pt-[70px] md:pt-[80px] flex items-center justify-center">
+          <div className="text-center">
+            <p className="text-[14px] text-red-600 mb-4">{error}</p>
+            <a href="/account/login" className="text-[13px] text-[#C21A33] underline underline-offset-4">
+              Try logging in again
+            </a>
+          </div>
+        </main>
+        <Footer />
+      </>
+    );
+  }
 
   return (
     <>
