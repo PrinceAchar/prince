@@ -43,13 +43,21 @@ export async function POST(request: Request) {
   }
 
   const body: AddressInput = await request.json();
-  const result = await createAddress(tokens.accessToken, body);
+  try {
+    const result = await createAddress(tokens.accessToken, body);
 
-  if (result.errors.length > 0) {
-    return NextResponse.json({ error: result.errors.join(", ") }, { status: 400 });
+    if (result.errors.length > 0) {
+      return NextResponse.json({ error: result.errors.join(", ") }, { status: 400 });
+    }
+
+    return NextResponse.json({ address: result.address });
+  } catch (err) {
+    console.error("createAddress failed:", err);
+    return NextResponse.json(
+      { error: err instanceof Error ? err.message : String(err) },
+      { status: 400 }
+    );
   }
-
-  return NextResponse.json({ address: result.address });
 }
 
 export async function PUT(request: Request) {
@@ -68,13 +76,21 @@ export async function PUT(request: Request) {
   }
 
   const body: AddressInput = await request.json();
-  const result = await updateAddress(tokens.accessToken, id, body);
+  try {
+    const result = await updateAddress(tokens.accessToken, id, body);
 
-  if (result.errors.length > 0) {
-    return NextResponse.json({ error: result.errors.join(", ") }, { status: 400 });
+    if (result.errors.length > 0) {
+      return NextResponse.json({ error: result.errors.join(", ") }, { status: 400 });
+    }
+
+    return NextResponse.json({ address: result.address });
+  } catch (err) {
+    console.error("updateAddress failed:", err);
+    return NextResponse.json(
+      { error: err instanceof Error ? err.message : String(err) },
+      { status: 400 }
+    );
   }
-
-  return NextResponse.json({ address: result.address });
 }
 
 export async function DELETE(request: Request) {
@@ -92,11 +108,19 @@ export async function DELETE(request: Request) {
     return NextResponse.json({ error: "Missing address ID" }, { status: 400 });
   }
 
-  const result = await deleteAddress(tokens.accessToken, id);
+  try {
+    const result = await deleteAddress(tokens.accessToken, id);
 
-  if (result.errors.length > 0) {
-    return NextResponse.json({ error: result.errors.join(", ") }, { status: 400 });
+    if (result.errors.length > 0) {
+      return NextResponse.json({ error: result.errors.join(", ") }, { status: 400 });
+    }
+
+    return NextResponse.json({ success: true });
+  } catch (err) {
+    console.error("deleteAddress failed:", err);
+    return NextResponse.json(
+      { error: err instanceof Error ? err.message : String(err) },
+      { status: 400 }
+    );
   }
-
-  return NextResponse.json({ success: true });
 }
