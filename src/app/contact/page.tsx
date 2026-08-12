@@ -60,7 +60,7 @@ const reachItems = [
   {
     title: "Store",
     icon: <MapPinIcon />,
-    lines: ["Shop No. 6673, Khari Baoli Road,", "Fatehpuri, Chandni Chowk,", "New Delhi – 110006"],
+    lines: ["Shop No. 6673, Khari Baoli Road,", "Fatehpuri, Chandni Chowk, New Delhi – 110006"],
     action: {
       label: "Get Directions",
       href: "https://www.google.com/maps/search/?api=1&query=Prince+Achar+Khari+Baoli+Delhi",
