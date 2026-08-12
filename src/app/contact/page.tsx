@@ -186,7 +186,7 @@ export default function ContactPage() {
     const body = encodeURIComponent(
       `Name: ${form.name}\nPhone: ${form.phone}\nEmail: ${form.email}\nSubject: ${form.subject}\n\n${form.message}`
     );
-    window.location.href = `mailto:info@princeachar.com?subject=${encodeURIComponent(
+    window.location.href = `mailto:hi@acaditya10.tech?subject=${encodeURIComponent(
       form.subject || "Contact Inquiry"
     )}&body=${body}`;
     setSubmitted(true);
