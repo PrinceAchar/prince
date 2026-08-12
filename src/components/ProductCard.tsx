@@ -47,14 +47,7 @@ export default function ProductCard({ product, onImageClick }: ProductCardProps)
       onImageClick(product);
       return;
     }
-    await addItem(
-      variant.id,
-      product.title,
-      variant.title,
-      variant.price.amount,
-      variant.price.currencyCode,
-      images[0]?.url || "/logo.jpeg"
-    );
+    await addItem(variant.id);
     openCart();
   };
 

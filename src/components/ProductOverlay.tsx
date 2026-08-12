@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
-import { type ShopifyProduct, formatPrice, getProductSize, isProductSoldOut } from "@/lib/shopify";
+import { type ShopifyProduct, formatPrice, isProductSoldOut } from "@/lib/shopify";
 import { useCart } from "./CartProvider";
 
 interface VariantSelectorProps {
@@ -107,8 +107,7 @@ export default function ProductOverlay({ product, onClose }: ProductOverlayProps
     selectedVariant?.price.amount ?? product.priceRange.minVariantPrice.amount,
     selectedVariant?.price.currencyCode ?? product.priceRange.minVariantPrice.currencyCode
   );
-  const size = getProductSize(product);
-  const tag = product.tags[0] || product.productType;
+
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
@@ -130,14 +129,7 @@ export default function ProductOverlay({ product, onClose }: ProductOverlayProps
 
   const handleAddToCart = async () => {
     if (!selectedVariant || selectedVariantSoldOut) return;
-    await addItem(
-      selectedVariant.id,
-      product.title,
-      selectedVariant.title,
-      selectedVariant.price.amount,
-      selectedVariant.price.currencyCode,
-      mainImage?.url || "/logo.jpeg"
-    );
+    await addItem(selectedVariant.id);
     openCart();
   };
 

@@ -25,7 +25,7 @@ interface CartContextType {
   items: CartItem[];
   isOpen: boolean;
   checkoutUrl: string;
-  addItem: (variantId: string, productTitle: string, variantTitle: string, price: string, currencyCode: string, image: string) => Promise<void>;
+  addItem: (variantId: string) => Promise<void>;
   removeItem: (lineId: string) => Promise<void>;
   updateQuantity: (lineId: string, quantity: number) => Promise<void>;
   clearCart: () => void;
@@ -129,7 +129,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const addItem = useCallback(
-    async (variantId: string, _productTitle: string, _variantTitle: string, _price: string, _currencyCode: string, _image: string) => {
+    async (variantId: string) => {
       setIsLoading(true);
       try {
         if (!cartId) {
