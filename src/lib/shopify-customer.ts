@@ -287,7 +287,7 @@ export async function getCustomerOrThrow(
 // --- Address Mutations ---
 
 const CUSTOMER_ADDRESS_CREATE_MUTATION = `
-  mutation CustomerAddressCreate($address: MailingAddressInput!) {
+  mutation CustomerAddressCreate($address: CustomerAddressInput!) {
     customerAddressCreate(address: $address) {
       customerAddress {
         id
@@ -310,7 +310,7 @@ const CUSTOMER_ADDRESS_CREATE_MUTATION = `
 `;
 
 const CUSTOMER_ADDRESS_UPDATE_MUTATION = `
-  mutation CustomerAddressUpdate($id: ID!, $address: MailingAddressInput!) {
+  mutation CustomerAddressUpdate($id: ID!, $address: CustomerAddressInput!) {
     customerAddressUpdate(id: $id, address: $address) {
       customerAddress {
         id
