@@ -1,6 +1,12 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
+export const metadata = {
+  title: "Returns & Refunds | Prince Achar",
+  description:
+    "Our policy for damaged, defective, or incorrect items — how to report an issue and receive a replacement or refund from Prince Achar.",
+};
+
 const sections = [
   {
     icon: (

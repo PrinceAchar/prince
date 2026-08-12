@@ -1,6 +1,12 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
+export const metadata = {
+  title: "Shipping Policy | Prince Achar",
+  description:
+    "Shipping across India with free delivery on orders above ₹500. Processing time, delivery estimates, and charges for Prince Achar pickles and preserves.",
+};
+
 const sections = [
   {
     icon: (

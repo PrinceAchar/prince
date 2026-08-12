@@ -1,6 +1,12 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
+export const metadata = {
+  title: "Privacy Policy | Prince Achar",
+  description:
+    "How Prince Achar collects, uses, and protects your personal information when you order or contact us.",
+};
+
 const sections = [
   {
     icon: (

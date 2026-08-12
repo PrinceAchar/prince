@@ -4,6 +4,7 @@ import ProductGrid from "@/components/ProductGrid";
 import { shopifyFetch, type CollectionByHandleData, type ShopifyProduct } from "@/lib/shopify";
 import { PRODUCTS_BY_COLLECTION_QUERY } from "@/lib/queries";
 import { Suspense } from "react";
+import { productsJsonLd } from "@/lib/jsonld";
 
 async function getMurabbaProducts(): Promise<ShopifyProduct[]> {
   try {
@@ -28,6 +29,12 @@ export default async function MurabbaPage() {
 
   return (
     <>
+      {products.length > 0 && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(productsJsonLd(products)) }}
+        />
+      )}
       <Navbar />
 
       {/* HERO */}
