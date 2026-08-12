@@ -342,7 +342,7 @@ export default function ContactPage() {
       <section className="bg-white pb-10 md:pb-14">
         <div className="max-w-[1150px] mx-auto px-6">
           <div className="bg-yellow rounded-[14px] border border-brand-black/8 px-5 md:px-7 py-6 md:py-7">
-            <div className="grid grid-cols-2 md:grid-cols-[2fr_1fr_1fr_1fr] gap-x-6 gap-y-6 md:gap-x-0 md:divide-x md:divide-brand-black/10">
+            <div className="grid grid-cols-2 md:grid-cols-[1.4fr_1fr_1fr_1fr] gap-x-6 gap-y-6 md:gap-x-0 md:divide-x md:divide-brand-black/10">
               {reachItems.map((item, i) => (
                 <div key={i} className="flex gap-3 md:px-6">
                   <div className="flex-shrink-0 w-9 h-9 rounded-full bg-red/10 text-red flex items-center justify-center mt-0.5">
