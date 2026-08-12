@@ -72,22 +72,6 @@ export default async function AcharPage() {
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="bg-yellow py-12 md:py-16 text-center px-6">
-        <h2 className="font-heading text-[26px] md:text-[30px] font-bold text-brand-black mb-4">
-          Can&apos;t decide? Try our Mixed Pickle.
-        </h2>
-        <p className="text-[14px] text-gray mb-6 max-w-[500px] mx-auto">
-          A curated blend of our finest pickles in one jar — the perfect way to experience the full range of Prince Achar.
-        </p>
-        <a
-          href="/contact"
-          className="inline-block px-8 py-3 border-2 border-red text-red text-[13px] font-semibold uppercase tracking-[1px] hover:bg-red hover:text-white transition-colors"
-        >
-          Get in Touch
-        </a>
-      </section>
-
       <Footer />
     </>
   );
