@@ -215,7 +215,7 @@ export default function ContactPage() {
 
       {/* Slideshow + Form */}
       <section className="bg-white pb-8">
-        <div className="max-w-[1150px] mx-auto px-6">
+        <div className="max-w-[1200px] mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-6 md:gap-7 lg:items-stretch">
             <Slideshow />
 
