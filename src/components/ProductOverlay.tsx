@@ -307,7 +307,7 @@ export default function ProductOverlay({ product, onClose }: ProductOverlayProps
       {/* Desktop: 3 columns layout (unchanged) */}
       <div className="relative z-10 hidden md:flex gap-3 w-fit max-w-[1200px] h-[80vh] items-stretch animate-overlay-panel">
         {/* Column 1: Thumbnails */}
-        <div className="flex-col gap-2.5 w-[64px] flex-shrink-0 justify-center">
+        <div className="flex flex-col gap-2.5 w-[64px] flex-shrink-0 justify-center">
           {images.length === 0 && (
             <div className="w-[60px] h-[60px] rounded-lg overflow-hidden flex-shrink-0 opacity-60">
               <Image
