@@ -284,6 +284,41 @@ export async function getCustomerOrThrow(
   return data.customer;
 }
 
+// --- Customer Mutations ---
+
+const CUSTOMER_UPDATE_MUTATION = `
+  mutation CustomerUpdate($input: CustomerUpdateInput!) {
+    customerUpdate(input: $input) {
+      customer {
+        firstName
+        lastName
+      }
+      userErrors {
+        field
+        message
+      }
+    }
+  }
+`;
+
+export async function updateCustomerName(
+  accessToken: string,
+  firstName: string,
+  lastName: string
+): Promise<{ customer: { firstName: string; lastName: string } | null; errors: string[] }> {
+  const data = await customerAccountFetch<{
+    customerUpdate: {
+      customer: { firstName: string; lastName: string } | null;
+      userErrors: { field: string; message: string }[];
+    };
+  }>(CUSTOMER_UPDATE_MUTATION, { input: { firstName, lastName } }, accessToken);
+
+  return {
+    customer: data.customerUpdate.customer,
+    errors: data.customerUpdate.userErrors.map((e) => e.message),
+  };
+}
+
 // --- Address Mutations ---
 
 const CUSTOMER_ADDRESS_CREATE_MUTATION = `

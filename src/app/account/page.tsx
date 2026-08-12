@@ -20,6 +20,10 @@ export default function AccountPage() {
   const [customer, setCustomer] = useState<Customer | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [editingName, setEditingName] = useState(false);
+  const [nameForm, setNameForm] = useState({ firstName: "", lastName: "" });
+  const [savingName, setSavingName] = useState(false);
+  const [nameError, setNameError] = useState("");
 
   useEffect(() => {
     fetch("/api/account/me")
@@ -42,6 +46,35 @@ export default function AccountPage() {
       .catch(() => setError("Failed to load account"))
       .finally(() => setLoading(false));
   }, [router]);
+
+  const handleNameSave = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSavingName(true);
+    setNameError("");
+
+    try {
+      const res = await fetch("/api/account/me", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(nameForm),
+      });
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok) {
+        setNameError(data?.error || data?.message || "Failed to update name");
+        return;
+      }
+
+      if (data?.customer) {
+        setCustomer({ ...customer!, ...data.customer });
+      }
+      setEditingName(false);
+    } catch {
+      setNameError("Failed to update name");
+    } finally {
+      setSavingName(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -96,16 +129,80 @@ export default function AccountPage() {
 
           {/* Profile Card */}
           <div className="bg-white rounded-2xl shadow-[0_2px_20px_rgba(0,0,0,0.06)] p-6 md:p-8 mb-6">
-            <h2 className="font-heading text-[20px] font-bold text-[#1A1A1A] mb-4">
-              Profile
-            </h2>
-            <div className="space-y-3 text-[14px]">
-              <div className="flex justify-between">
-                <span className="text-[#1A1A1A]/50">Name</span>
-                <span className="text-[#1A1A1A]">
-                  {customer.firstName} {customer.lastName}
-                </span>
-              </div>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="font-heading text-[20px] font-bold text-[#1A1A1A]">
+                Profile
+              </h2>
+              {!editingName && (
+                <button
+                  onClick={() => {
+                    setNameForm({
+                      firstName: customer.firstName,
+                      lastName: customer.lastName,
+                    });
+                    setNameError("");
+                    setEditingName(true);
+                  }}
+                  className="text-[12px] text-[#C21A33] underline underline-offset-2 hover:opacity-70 transition-opacity"
+                >
+                  Edit
+                </button>
+              )}
+            </div>
+            {editingName ? (
+              <form onSubmit={handleNameSave} className="space-y-3">
+                {nameError && (
+                  <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-[13px] text-red-700">
+                    {nameError}
+                  </div>
+                )}
+                <div className="grid grid-cols-2 gap-4">
+                  <input
+                    type="text"
+                    value={nameForm.firstName}
+                    onChange={(e) =>
+                      setNameForm({ ...nameForm, firstName: e.target.value })
+                    }
+                    placeholder="First name"
+                    className="w-full px-3 py-2.5 bg-[#FAF5E4] border border-[#1A1A1A]/10 rounded-lg text-[14px] text-[#1A1A1A] placeholder:text-[#1A1A1A]/30 focus:outline-none focus:border-[#C21A33] transition-colors"
+                    required
+                  />
+                  <input
+                    type="text"
+                    value={nameForm.lastName}
+                    onChange={(e) =>
+                      setNameForm({ ...nameForm, lastName: e.target.value })
+                    }
+                    placeholder="Last name"
+                    className="w-full px-3 py-2.5 bg-[#FAF5E4] border border-[#1A1A1A]/10 rounded-lg text-[14px] text-[#1A1A1A] placeholder:text-[#1A1A1A]/30 focus:outline-none focus:border-[#C21A33] transition-colors"
+                    required
+                  />
+                </div>
+                <div className="flex gap-3 pt-1">
+                  <button
+                    type="submit"
+                    disabled={savingName}
+                    className="px-6 py-2 bg-[#C21A33] text-white text-[12px] font-semibold uppercase tracking-[1px] rounded-lg hover:bg-[#C21A33]/90 transition-colors disabled:opacity-50"
+                  >
+                    {savingName ? "Saving..." : "Save"}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setEditingName(false)}
+                    className="px-6 py-2 border border-[#1A1A1A]/15 text-[#1A1A1A] text-[12px] font-semibold uppercase tracking-[1px] rounded-lg hover:bg-[#1A1A1A]/5 transition-colors"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            ) : (
+              <div className="space-y-3 text-[14px]">
+                <div className="flex justify-between">
+                  <span className="text-[#1A1A1A]/50">Name</span>
+                  <span className="text-[#1A1A1A]">
+                    {customer.firstName} {customer.lastName}
+                  </span>
+                </div>
               <div className="flex justify-between">
                 <span className="text-[#1A1A1A]/50">Email</span>
                 <span className="text-[#1A1A1A]">
@@ -118,7 +215,8 @@ export default function AccountPage() {
                   <span className="text-[#1A1A1A]">{customer.phoneNumber.phoneNumber}</span>
                 </div>
               )}
-            </div>
+              </div>
+            )}
           </div>
 
           {/* Quick Links */}
