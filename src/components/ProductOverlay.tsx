@@ -5,51 +5,6 @@ import Image from "next/image";
 import { type ShopifyProduct, formatPrice, getProductSize, isProductSoldOut } from "@/lib/shopify";
 import { useCart } from "./CartProvider";
 
-function getCosmeticRating(handle: string) {
-  const seed = handle.split("").reduce((a, c) => a + c.charCodeAt(0), 0);
-  const rating = 4.3 + (seed % 7) / 10;
-  const reviews = 50 + (seed % 200);
-  return { rating: Math.min(rating, 4.9), reviews };
-}
-
-function StarRating({ rating, reviews }: { rating: number; reviews: number }) {
-  const full = Math.floor(rating);
-  const partial = rating - full;
-  const empty = 5 - full - (partial > 0 ? 1 : 0);
-
-  return (
-    <div className="flex items-center gap-2">
-      <div className="flex items-center gap-0.5">
-        {Array.from({ length: full }).map((_, i) => (
-          <svg key={`full-${i}`} className="w-4 h-4 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-          </svg>
-        ))}
-        {partial > 0 && (
-          <div className="relative w-4 h-4">
-            <svg className="absolute w-4 h-4 text-gray-300" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-            </svg>
-            <div className="absolute overflow-hidden" style={{ width: `${partial * 100}%` }}>
-              <svg className="w-4 h-4 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-              </svg>
-            </div>
-          </div>
-        )}
-        {Array.from({ length: empty }).map((_, i) => (
-          <svg key={`empty-${i}`} className="w-4 h-4 text-gray-300" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-          </svg>
-        ))}
-      </div>
-      <span className="text-[13px] text-gray">
-        {rating.toFixed(1)} ({reviews} reviews)
-      </span>
-    </div>
-  );
-}
-
 interface VariantSelectorProps {
   groups: { name: string; values: string[] }[];
   selected: Record<string, string>;
@@ -154,7 +109,6 @@ export default function ProductOverlay({ product, onClose }: ProductOverlayProps
   );
   const size = getProductSize(product);
   const tag = product.tags[0] || product.productType;
-  const { rating, reviews } = getCosmeticRating(product.handle);
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
@@ -302,28 +256,17 @@ export default function ProductOverlay({ product, onClose }: ProductOverlayProps
 
         {/* Mobile description */}
         <div className="bg-[#FAF5E4] rounded-t-2xl -mt-2 relative z-10 p-6">
-          {/* Tag + Size */}
-          <div className="flex items-center gap-2 mb-3">
-            <span className="text-[10px] font-semibold uppercase tracking-wider px-2.5 py-1 rounded-full bg-red/10 text-red">
-              {tag}
-            </span>
+          <h2 className="font-heading text-[22px] font-bold text-brand-black mb-3 leading-tight">
+            {product.title}
+          </h2>
+
+          <div className="mb-5 flex items-center gap-3">
+            <span className="text-[26px] font-bold text-red">{price}</span>
             {size && (
               <span className="text-[11px] text-gray bg-brand-black/5 px-2 py-0.5 rounded-full">
                 {size}
               </span>
             )}
-          </div>
-
-          <h2 className="font-heading text-[22px] font-bold text-brand-black mb-3 leading-tight">
-            {product.title}
-          </h2>
-
-          <div className="mb-4">
-            <StarRating rating={rating} reviews={reviews} />
-          </div>
-
-          <div className="mb-5">
-            <span className="text-[26px] font-bold text-red">{price}</span>
           </div>
 
           {optionsByGroup.length > 0 && (
@@ -481,7 +424,7 @@ export default function ProductOverlay({ product, onClose }: ProductOverlayProps
         </div>
 
         {/* Column 3: Product info */}
-        <div className="relative w-[420px] flex-shrink-0 p-8 overflow-y-auto bg-[#FAF5E4] rounded-2xl">
+        <div className="relative w-[420px] flex-shrink-0 p-8 bg-[#FAF5E4] rounded-2xl flex flex-col">
           <div className="absolute top-4 right-4 flex items-center gap-2">
             <button
               onClick={handleShare}
@@ -509,27 +452,17 @@ export default function ProductOverlay({ product, onClose }: ProductOverlayProps
             </button>
           </div>
 
-          <div className="flex items-center gap-2 mb-3">
-            <span className="text-[10px] font-semibold uppercase tracking-wider px-2.5 py-1 rounded-full bg-red/10 text-red">
-              {tag}
-            </span>
+          <h2 className="font-heading text-[26px] font-bold text-brand-black mb-3 leading-tight">
+            {product.title}
+          </h2>
+
+          <div className="mb-5 flex items-center gap-3">
+            <span className="text-[26px] font-bold text-red">{price}</span>
             {size && (
               <span className="text-[11px] text-gray bg-brand-black/5 px-2 py-0.5 rounded-full">
                 {size}
               </span>
             )}
-          </div>
-
-          <h2 className="font-heading text-[26px] font-bold text-brand-black mb-3 leading-tight">
-            {product.title}
-          </h2>
-
-          <div className="mb-4">
-            <StarRating rating={rating} reviews={reviews} />
-          </div>
-
-          <div className="mb-5">
-            <span className="text-[26px] font-bold text-red">{price}</span>
           </div>
 
           {optionsByGroup.length > 0 && (
