@@ -100,27 +100,36 @@ export default function AccountMenu() {
 
       {open && (
         <div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-[0_4px_30px_rgba(0,0,0,0.12)] py-2 z-[1001]">
-          <a
-            href="/account"
-            className="block px-4 py-2.5 text-[13px] text-[#1A1A1A] hover:bg-[#FAF5E4] transition-colors"
-            onClick={() => setOpen(false)}
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              setOpen(false);
+              router.push("/account");
+            }}
+            className="block w-full text-left px-4 py-2.5 text-[13px] text-[#1A1A1A] hover:bg-[#FAF5E4] transition-colors"
           >
             My Account
-          </a>
-          <a
-            href="/account/orders"
-            className="block px-4 py-2.5 text-[13px] text-[#1A1A1A] hover:bg-[#FAF5E4] transition-colors"
-            onClick={() => setOpen(false)}
+          </button>
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              setOpen(false);
+              router.push("/account/orders");
+            }}
+            className="block w-full text-left px-4 py-2.5 text-[13px] text-[#1A1A1A] hover:bg-[#FAF5E4] transition-colors"
           >
             My Orders
-          </a>
-          <a
-            href="/account/addresses"
-            className="block px-4 py-2.5 text-[13px] text-[#1A1A1A] hover:bg-[#FAF5E4] transition-colors"
-            onClick={() => setOpen(false)}
+          </button>
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              setOpen(false);
+              router.push("/account/addresses");
+            }}
+            className="block w-full text-left px-4 py-2.5 text-[13px] text-[#1A1A1A] hover:bg-[#FAF5E4] transition-colors"
           >
             Addresses
-          </a>
+          </button>
           <hr className="my-1 border-[#1A1A1A]/5" />
           <button
             onClick={handleLogout}
