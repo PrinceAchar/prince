@@ -23,18 +23,20 @@ export default function AccountPage() {
 
   useEffect(() => {
     fetch("/api/account/me")
-      .then((res) => {
-        if (!res.ok) {
+      .then(async (res) => {
+        const data = await res.json().catch(() => ({}));
+        if (res.status === 401) {
           router.push("/account/login");
           return;
         }
-        return res.json();
-      })
-      .then((data) => {
+        if (!res.ok) {
+          setError(data?.message || data?.error || "Failed to load account");
+          return;
+        }
         if (data?.customer) {
           setCustomer(data.customer);
         } else {
-          setError(data?.error || "Failed to load account");
+          setError("Failed to load account");
         }
       })
       .catch(() => setError("Failed to load account"))

@@ -262,11 +262,17 @@ export async function getCustomer(
   accessToken: string
 ): Promise<CustomerData["customer"] | null> {
   try {
-    const data = await customerAccountFetch<CustomerData>(CUSTOMER_QUERY, undefined, accessToken);
-    return data.customer;
+    return await getCustomerOrThrow(accessToken);
   } catch {
     return null;
   }
+}
+
+export async function getCustomerOrThrow(
+  accessToken: string
+): Promise<CustomerData["customer"]> {
+  const data = await customerAccountFetch<CustomerData>(CUSTOMER_QUERY, undefined, accessToken);
+  return data.customer;
 }
 
 // --- Address Mutations ---

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { getSessionTokensFromCookies } from "@/lib/auth-helpers";
 import {
-  getCustomer,
+  getCustomerOrThrow,
   createAddress,
   updateAddress,
   deleteAddress,
@@ -11,22 +11,35 @@ import {
 export async function GET(request: Request) {
   const tokens = getSessionTokensFromCookies(request);
   if (!tokens) {
-    return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+    return NextResponse.json(
+      { error: "not_authenticated", message: "No active session" },
+      { status: 401 }
+    );
   }
 
-  const customer = await getCustomer(tokens.accessToken);
-  if (!customer) {
-    return NextResponse.json({ error: "Failed to fetch customer" }, { status: 401 });
+  try {
+    const customer = await getCustomerOrThrow(tokens.accessToken);
+    const addresses = customer.addresses.edges.map((e) => e.node);
+    return NextResponse.json({ addresses });
+  } catch (err) {
+    console.error("getCustomer failed:", err);
+    return NextResponse.json(
+      {
+        error: "customer_fetch_failed",
+        message: err instanceof Error ? err.message : String(err),
+      },
+      { status: 500 }
+    );
   }
-
-  const addresses = customer.addresses.edges.map((e) => e.node);
-  return NextResponse.json({ addresses });
 }
 
 export async function POST(request: Request) {
   const tokens = getSessionTokensFromCookies(request);
   if (!tokens) {
-    return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+    return NextResponse.json(
+      { error: "not_authenticated", message: "No active session" },
+      { status: 401 }
+    );
   }
 
   const body: AddressInput = await request.json();
@@ -42,7 +55,10 @@ export async function POST(request: Request) {
 export async function PUT(request: Request) {
   const tokens = getSessionTokensFromCookies(request);
   if (!tokens) {
-    return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+    return NextResponse.json(
+      { error: "not_authenticated", message: "No active session" },
+      { status: 401 }
+    );
   }
 
   const url = new URL(request.url);
@@ -64,7 +80,10 @@ export async function PUT(request: Request) {
 export async function DELETE(request: Request) {
   const tokens = getSessionTokensFromCookies(request);
   if (!tokens) {
-    return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+    return NextResponse.json(
+      { error: "not_authenticated", message: "No active session" },
+      { status: 401 }
+    );
   }
 
   const url = new URL(request.url);

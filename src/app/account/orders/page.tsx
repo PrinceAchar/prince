@@ -48,18 +48,20 @@ export default function OrdersPage() {
 
   useEffect(() => {
     fetch("/api/account/orders")
-      .then((res) => {
-        if (!res.ok) {
+      .then(async (res) => {
+        const data = await res.json().catch(() => ({}));
+        if (res.status === 401) {
           router.push("/account/login");
           return;
         }
-        return res.json();
-      })
-      .then((data) => {
+        if (!res.ok) {
+          setError(data?.message || data?.error || "Failed to load orders");
+          return;
+        }
         if (data?.orders) {
           setOrders(data.orders);
         } else {
-          setError(data?.error || "Failed to load orders");
+          setError("Failed to load orders");
         }
       })
       .catch(() => setError("Failed to load orders"))

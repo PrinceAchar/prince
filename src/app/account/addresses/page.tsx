@@ -60,7 +60,11 @@ export default function AddressesPage() {
         router.push("/account/login");
         return;
       }
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setError(data?.message || data?.error || "Failed to load addresses");
+        return;
+      }
       setAddresses(data.addresses || []);
     } catch {
       setError("Failed to load addresses");
