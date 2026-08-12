@@ -140,6 +140,14 @@ export function getProductSize(product: ShopifyProduct): string {
   return "";
 }
 
+export function getAvailableVariants(product: ShopifyProduct): ShopifyProduct["variants"]["edges"][number]["node"][] {
+  return product.variants.edges.filter((e) => e.node.availableForSale).map((e) => e.node);
+}
+
+export function isProductSoldOut(product: ShopifyProduct): boolean {
+  return product.variants.edges.length > 0 && product.variants.edges.every((e) => !e.node.availableForSale);
+}
+
 // Cart API types and functions
 
 export interface CartLine {

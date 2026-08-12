@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { formatPrice } from "@/lib/shopify";
@@ -25,6 +25,12 @@ interface Order {
   lineItems: { edges: { node: OrderLineItem }[] };
 }
 
+interface OrdersPage {
+  orders: Order[];
+  hasNextPage: boolean;
+  endCursor: string | null;
+}
+
 function getStatusColor(status: string): string {
   switch (status) {
     case "PAID":
@@ -44,11 +50,15 @@ function getStatusColor(status: string): string {
 export default function OrdersPage() {
   const router = useRouter();
   const [orders, setOrders] = useState<Order[]>([]);
+  const [hasNextPage, setHasNextPage] = useState(false);
+  const [endCursor, setEndCursor] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    fetch("/api/account/orders")
+  const fetchOrders = useCallback((cursor: string | null, append: boolean) => {
+    const url = cursor ? `/api/account/orders?cursor=${encodeURIComponent(cursor)}` : "/api/account/orders";
+    return fetch(url)
       .then(async (res) => {
         const data = await res.json().catch(() => ({}));
         if (res.status === 401) {
@@ -60,14 +70,26 @@ export default function OrdersPage() {
           return;
         }
         if (data?.orders) {
-          setOrders(data.orders);
+          setOrders((prev) => (append ? [...prev, ...data.orders] : data.orders));
+          setHasNextPage(!!data.hasNextPage);
+          setEndCursor(data.endCursor || null);
         } else {
           setError("Failed to load orders");
         }
       })
-      .catch(() => setError("Failed to load orders"))
-      .finally(() => setLoading(false));
+      .catch(() => setError("Failed to load orders"));
   }, [router]);
+
+  useEffect(() => {
+    fetchOrders(null, false).finally(() => setLoading(false));
+  }, [fetchOrders]);
+
+  const handleLoadMore = async () => {
+    if (!endCursor || loadingMore) return;
+    setLoadingMore(true);
+    await fetchOrders(endCursor, true);
+    setLoadingMore(false);
+  };
 
   if (loading) {
     return (
@@ -222,6 +244,18 @@ export default function OrdersPage() {
             </div>
           )}
         </div>
+
+        {hasNextPage && (
+          <div className="text-center mt-6">
+            <button
+              onClick={handleLoadMore}
+              disabled={loadingMore}
+              className="px-6 py-2.5 border border-[#C21A33] text-[#C21A33] text-[12px] font-semibold uppercase tracking-[1px] rounded-lg hover:bg-[#C21A33] hover:text-white transition-colors disabled:opacity-50"
+            >
+              {loadingMore ? "Loading..." : "Load More Orders"}
+            </button>
+          </div>
+        )}
       </main>
 
       <Footer />

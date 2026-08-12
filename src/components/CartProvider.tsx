@@ -8,7 +8,6 @@ import {
   removeCartItem,
   getCart,
   type Cart,
-  type CartLine,
 } from "@/lib/shopify";
 
 export interface CartItem {
@@ -30,6 +29,7 @@ interface CartContextType {
   removeItem: (lineId: string) => Promise<void>;
   updateQuantity: (lineId: string, quantity: number) => Promise<void>;
   clearCart: () => void;
+  beginCheckout: () => void;
   openCart: () => void;
   closeCart: () => void;
   totalItems: number;
@@ -71,6 +71,21 @@ function setCartId(cartId: string | null) {
   }
 }
 
+const CHECKOUT_INITIATED_KEY = "shopify_checkout_initiated_at";
+// After this much time since checkout was initiated, treat the saved cart as
+// stale (the order was likely completed or abandoned) and start fresh.
+const CHECKOUT_RETURN_MS = 10 * 60 * 1000;
+
+export function hasPendingCheckout(): boolean {
+  if (typeof window === "undefined") return false;
+  const raw = localStorage.getItem(CHECKOUT_INITIATED_KEY);
+  if (!raw) return false;
+  const startedAt = parseInt(raw, 10);
+  if (Number.isNaN(startedAt)) return false;
+  // Only stale if checkout was initiated a while ago — recent starts keep the cart.
+  return Date.now() - startedAt > CHECKOUT_RETURN_MS;
+}
+
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
   const [isOpen, setIsOpen] = useState(false);
@@ -81,8 +96,14 @@ export function CartProvider({ children }: { children: ReactNode }) {
   // Load cart from localStorage on mount
   useEffect(() => {
     const savedCartId = getCartId();
+    // Returning from a completed checkout — discard the stale saved cart.
+    if (savedCartId && hasPendingCheckout()) {
+      localStorage.removeItem(CHECKOUT_INITIATED_KEY);
+      localStorage.removeItem("shopify_cart_id");
+      return;
+    }
     if (savedCartId) {
-      setCartIdState(savedCartId);
+      Promise.resolve().then(() => setCartIdState(savedCartId));
       getCart(savedCartId)
         .then((cart) => {
           if (cart) {
@@ -108,7 +129,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const addItem = useCallback(
-    async (variantId: string, productTitle: string, variantTitle: string, price: string, currencyCode: string, image: string) => {
+    async (variantId: string, _productTitle: string, _variantTitle: string, _price: string, _currencyCode: string, _image: string) => {
       setIsLoading(true);
       try {
         if (!cartId) {
@@ -178,6 +199,15 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setCheckoutUrl("");
   }, []);
 
+  // Called when the user clicks Checkout. Marks the cart so that on their
+  // next visit the completed/abandoned cart is not restored from localStorage.
+  const beginCheckout = useCallback(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem(CHECKOUT_INITIATED_KEY, String(Date.now()));
+    }
+    clearCart();
+  }, [clearCart]);
+
   const openCart = useCallback(() => setIsOpen(true), []);
   const closeCart = useCallback(() => setIsOpen(false), []);
 
@@ -196,6 +226,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         removeItem,
         updateQuantity,
         clearCart,
+        beginCheckout,
         openCart,
         closeCart,
         totalItems,

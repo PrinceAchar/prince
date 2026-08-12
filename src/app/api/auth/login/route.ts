@@ -7,7 +7,6 @@ import {
 } from "@/lib/auth";
 
 const CLIENT_ID = process.env.SHOPIFY_CUSTOMER_ACCOUNT_CLIENT_ID!;
-const STORE_DOMAIN = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN!;
 
 const PKCE_COOKIE = "__pkce_state";
 const PKCE_MAX_AGE = 60 * 5; // 5 minutes

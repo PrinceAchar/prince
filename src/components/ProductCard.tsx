@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { type ShopifyProduct, formatPrice, getProductSize } from "@/lib/shopify";
+import { type ShopifyProduct, formatPrice, getProductSize, isProductSoldOut } from "@/lib/shopify";
 import { useCart } from "./CartProvider";
 
 const tagColors: Record<string, string> = {
@@ -24,13 +24,12 @@ export default function ProductCard({ product, onImageClick }: ProductCardProps)
   const images = product.images.edges.map((e) => e.node);
   const hasMultipleImages = images.length > 1;
 
-  // Desktop: show image[1] on hover if available, else image[0]
   // Mobile: tap to cycle
-  const desktopImage = isHovered && hasMultipleImages ? images[1] : images[0];
   const mobileImage = images[mobileImageIndex] || images[0];
-  const displayImage = typeof window !== "undefined" && window.innerWidth < 768 ? mobileImage : desktopImage;
 
   const variant = product.variants.edges[0]?.node;
+  const soldOut = isProductSoldOut(product);
+  const hasMultipleVariants = product.variants.edges.length > 1;
   const price = formatPrice(
     product.priceRange.minVariantPrice.amount,
     product.priceRange.minVariantPrice.currencyCode
@@ -41,7 +40,13 @@ export default function ProductCard({ product, onImageClick }: ProductCardProps)
 
   const handleAddToCart = async (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (!variant) return;
+    if (!variant || soldOut) return;
+    // If the product has multiple variants, open the overlay so the
+    // customer can pick their size rather than silently adding the first.
+    if (hasMultipleVariants) {
+      onImageClick(product);
+      return;
+    }
     await addItem(
       variant.id,
       product.title,
@@ -158,6 +163,13 @@ export default function ProductCard({ product, onImageClick }: ProductCardProps)
             </span>
           </div>
         )}
+
+        {/* Sold out badge */}
+        {soldOut && (
+          <div className="absolute top-3 left-3 z-20 bg-brand-black/80 text-white text-[10px] font-semibold uppercase tracking-wider px-3 py-1.5 rounded-full">
+            Sold Out
+          </div>
+        )}
       </div>
 
       <div className="p-5 md:p-6">
@@ -177,10 +189,14 @@ export default function ProductCard({ product, onImageClick }: ProductCardProps)
           <span className="text-[18px] font-bold text-red">{price}</span>
           <button
             onClick={handleAddToCart}
-            disabled={isLoading}
-            className="px-4 py-2 bg-red text-white text-[12px] font-semibold uppercase tracking-wider rounded-full hover:bg-red-dark transition-colors disabled:opacity-50 z-20 relative"
+            disabled={isLoading || soldOut}
+            className={`px-4 py-2 text-[12px] font-semibold uppercase tracking-wider rounded-full transition-colors z-20 relative ${
+              soldOut
+                ? "bg-brand-black/10 text-gray cursor-not-allowed"
+                : "bg-red text-white hover:bg-red-dark disabled:opacity-50"
+            }`}
           >
-            {isLoading ? "Adding..." : "Add to Cart"}
+            {soldOut ? "Sold Out" : hasMultipleVariants ? "Choose Size" : isLoading ? "Adding..." : "Add to Cart"}
           </button>
         </div>
       </div>

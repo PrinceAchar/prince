@@ -72,7 +72,7 @@ const sections = [
       </svg>
     ),
     title: "Contact Us",
-    text: "If you have questions about this Privacy Policy, please reach out to us at info@princeachar.com or +91 98100 00000.",
+    text: "If you have questions about this Privacy Policy, please reach out to us at info@princeachar.com or +91 98110 56593.",
   },
 ];
 

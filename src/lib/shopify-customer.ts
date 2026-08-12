@@ -181,6 +181,10 @@ export interface CustomerData {
           };
         };
       }[];
+      pageInfo: {
+        hasNextPage: boolean;
+        endCursor: string | null;
+      };
     };
     addresses: {
       edges: {
@@ -199,6 +203,75 @@ export interface CustomerData {
       }[];
     };
     defaultAddress: { id: string } | null;
+  };
+}
+
+const ORDERS_PAGE_SIZE = 10;
+
+export const ORDERS_QUERY = `
+  query Orders($first: Int!, $after: String) {
+    customer {
+      orders(first: $first, after: $after, sortKey: PROCESSED_AT, reverse: true) {
+        edges {
+          node {
+            id
+            number
+            processedAt
+            financialStatus
+            fulfillments(first: 1) {
+              nodes {
+                status
+              }
+            }
+            totalPrice {
+              amount
+              currencyCode
+            }
+            lineItems(first: 10) {
+              edges {
+                node {
+                  title
+                  quantity
+                  price {
+                    amount
+                    currencyCode
+                  }
+                  image {
+                    url
+                    altText
+                  }
+                }
+              }
+            }
+          }
+        }
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
+      }
+    }
+  }
+`;
+
+export interface OrdersPage {
+  orders: CustomerData["customer"]["orders"]["edges"][number]["node"][];
+  hasNextPage: boolean;
+  endCursor: string | null;
+}
+
+export async function getCustomerOrdersPage(
+  accessToken: string,
+  after?: string | null
+): Promise<OrdersPage> {
+  const data = await customerAccountFetch<{
+    customer: { orders: CustomerData["customer"]["orders"] } | null;
+  }>(ORDERS_QUERY, { first: ORDERS_PAGE_SIZE, after }, accessToken);
+  const orders = data.customer?.orders;
+  return {
+    orders: orders?.edges.map((e) => e.node) ?? [],
+    hasNextPage: orders?.pageInfo.hasNextPage ?? false,
+    endCursor: orders?.pageInfo.endCursor ?? null,
   };
 }
 

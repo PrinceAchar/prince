@@ -76,7 +76,7 @@ export default function AddressesPage() {
   }, [router]);
 
   useEffect(() => {
-    fetchAddresses();
+    Promise.resolve().then(fetchAddresses);
   }, [fetchAddresses]);
 
   const handleSubmit = async (e: React.FormEvent) => {

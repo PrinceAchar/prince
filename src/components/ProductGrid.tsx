@@ -22,7 +22,7 @@ export default function ProductGrid({ products }: { products: ShopifyProduct[] }
     const match = products.find((p) => p.handle === handle);
     if (match) {
       lastHandleRef.current = handle;
-      setSelectedProduct(match);
+      Promise.resolve().then(() => setSelectedProduct(match));
     }
   }, [searchParams, products]);
 
@@ -57,6 +57,7 @@ export default function ProductGrid({ products }: { products: ShopifyProduct[] }
 
       {selectedProduct && (
         <ProductOverlay
+          key={selectedProduct.id}
           product={selectedProduct}
           onClose={handleClose}
         />

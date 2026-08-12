@@ -19,11 +19,11 @@ const faqs = [
   },
   {
     q: "Do you offer bulk or wholesale orders?",
-    a: "Yes. We work with distributors, retailers, and food businesses across India. Contact us at info@princeachar.com or call +91 98100 00000 for bulk pricing.",
+    a: "Yes. We work with distributors, retailers, and food businesses across India. Contact us at info@princeachar.com or call +91 98110 56593 for bulk pricing.",
   },
   {
     q: "Where can I buy Prince Achar products?",
-    a: "Our products are available at leading grocery stores and supermarkets across Delhi NCR and select cities. You can also order directly by contacting us.",
+    a: "Our products are available at leading grocery stores and supermarkets across Delhi NCR and select cities. You can also visit our store at Shop No. 6673, Khari Baoli Road, Fatehpuri, Chandni Chowk, New Delhi, or order directly by contacting us.",
   },
   {
     q: "Are your pickles made in traditional style?",

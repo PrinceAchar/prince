@@ -1,5 +1,7 @@
 import Image from "next/image";
 
+import Link from "next/link";
+
 export default function Footer() {
   return (
     <footer className="bg-yellow text-brand-black pt-10 md:pt-[50px]">
@@ -20,11 +22,12 @@ export default function Footer() {
             <h4 className="text-[11px] md:text-[12px] font-semibold uppercase tracking-[1.5px] mb-3 md:mb-4 text-red">
               Quick Links
             </h4>
-            <div className="space-y-1.5">
-              <a href="/" className="block text-[13px] text-brand-black/60 hover:text-brand-black transition-colors">Home</a>
-              <a href="/achar" className="block text-[13px] text-brand-black/60 hover:text-brand-black transition-colors">Achar</a>
-              <a href="/murabba" className="block text-[13px] text-brand-black/60 hover:text-brand-black transition-colors">Murabba</a>
-              <a href="/contact" className="block text-[13px] text-brand-black/60 hover:text-brand-black transition-colors">Contact</a>
+            <div className="flex flex-col gap-2">
+              <Link href="/" className="block text-[13px] text-brand-black/60 hover:text-brand-black transition-colors">Home</Link>
+              <Link href="/achar" className="block text-[13px] text-brand-black/60 hover:text-brand-black transition-colors">Achar</Link>
+              <Link href="/murabba" className="block text-[13px] text-brand-black/60 hover:text-brand-black transition-colors">Murabba</Link>
+              <Link href="/store-locator" className="block text-[13px] text-brand-black/60 hover:text-brand-black transition-colors">Store Locator</Link>
+              <Link href="/contact" className="block text-[13px] text-brand-black/60 hover:text-brand-black transition-colors">Contact</Link>
             </div>
           </div>
 
@@ -33,11 +36,11 @@ export default function Footer() {
             <h4 className="text-[11px] md:text-[12px] font-semibold uppercase tracking-[1.5px] mb-3 md:mb-4 text-red">
               Support
             </h4>
-            <div className="space-y-1.5">
-              <a href="/faq" className="block text-[13px] text-brand-black/60 hover:text-brand-black transition-colors">FAQ</a>
-              <a href="/shipping" className="block text-[13px] text-brand-black/60 hover:text-brand-black transition-colors">Shipping</a>
-              <a href="/returns" className="block text-[13px] text-brand-black/60 hover:text-brand-black transition-colors">Returns</a>
-              <a href="/privacy" className="block text-[13px] text-brand-black/60 hover:text-brand-black transition-colors">Privacy Policy</a>
+            <div className="flex flex-col gap-2">
+              <Link href="/faq" className="block text-[13px] text-brand-black/60 hover:text-brand-black transition-colors">FAQ</Link>
+              <Link href="/shipping" className="block text-[13px] text-brand-black/60 hover:text-brand-black transition-colors">Shipping</Link>
+              <Link href="/returns" className="block text-[13px] text-brand-black/60 hover:text-brand-black transition-colors">Returns</Link>
+              <Link href="/privacy" className="block text-[13px] text-brand-black/60 hover:text-brand-black transition-colors">Privacy Policy</Link>
             </div>
           </div>
 

@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useCart } from "./CartProvider";
 
 export default function CartDrawer() {
-  const { items, isOpen, closeCart, removeItem, updateQuantity, totalItems, totalPrice, checkoutUrl, isLoading } = useCart();
+  const { items, isOpen, closeCart, removeItem, updateQuantity, totalItems, totalPrice, checkoutUrl, isLoading, beginCheckout } = useCart();
 
   if (!isOpen) return null;
 
@@ -122,6 +122,7 @@ export default function CartDrawer() {
               href={checkoutUrl || "#"}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={beginCheckout}
               className={`block w-full py-3 bg-red text-white text-[13px] font-semibold uppercase tracking-wider text-center rounded-full hover:bg-red-dark transition-colors ${!checkoutUrl ? "opacity-50 pointer-events-none" : ""}`}
             >
               {isLoading ? "Loading..." : "Checkout"}

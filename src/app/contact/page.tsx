@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -33,12 +34,28 @@ export default function ContactPage() {
             {/* Left: Info */}
             <div className="md:w-[35%] space-y-6">
               <div>
-                <h3 className="text-[11px] font-semibold uppercase tracking-[2px] text-red mb-1.5">Address</h3>
-                <p className="text-[14px] text-gray leading-snug">Prince Achar, Old Delhi, India</p>
+                <h3 className="text-[11px] font-semibold uppercase tracking-[2px] text-red mb-1.5">Visit Our Store</h3>
+                <p className="text-[14px] text-gray leading-snug">
+                  Shop No. 6673, Khari Baoli Road,<br />
+                  Fatehpuri, Chandni Chowk,<br />
+                  New Delhi – 110006
+                </p>
+                <a
+                  href="https://www.google.com/maps?q=28.6570235,77.2212014"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 mt-3 text-[12px] font-semibold uppercase tracking-wider text-red hover:opacity-70 transition-opacity"
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+                  </svg>
+                  Get Directions
+                </a>
               </div>
               <div>
                 <h3 className="text-[11px] font-semibold uppercase tracking-[2px] text-red mb-1.5">Phone</h3>
-                <a href="tel:+919810000000" className="text-[14px] text-gray hover:text-red transition-colors">+91 98100 00000</a>
+                <a href="tel:+919811056593" className="text-[14px] text-gray hover:text-red transition-colors">+91 98110 56593</a>
               </div>
               <div>
                 <h3 className="text-[11px] font-semibold uppercase tracking-[2px] text-red mb-1.5">Email</h3>
@@ -100,6 +117,76 @@ export default function ContactPage() {
                 </form>
               )}
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* STORE */}
+      <section className="bg-[#FAF5E4] py-12 md:py-16">
+        <div className="max-w-[1200px] mx-auto px-6">
+          <div className="text-center mb-8 md:mb-10">
+            <span className="inline-block text-[11px] font-semibold uppercase tracking-[3px] text-red mb-3">
+              Our Store
+            </span>
+            <h2 className="font-heading text-[26px] md:text-[32px] font-bold text-brand-black mb-3">
+              Find Us in Khari Baoli
+            </h2>
+            <p className="text-[13px] md:text-[14px] text-gray max-w-[560px] mx-auto">
+              Drop by our shop in the heart of Old Delhi&apos;s famous spice market,
+              just a short walk from Fatehpuri Masjid.
+            </p>
+          </div>
+
+          {/* Photos */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 mb-8">
+            <div className="relative aspect-[4/3] rounded-xl overflow-hidden">
+              <Image
+                src="/store/store-front.png"
+                alt="Prince Achar storefront in Khari Baoli, Chandni Chowk"
+                fill
+                className="object-cover"
+                sizes="(max-width: 640px) 100vw, 50vw"
+              />
+            </div>
+            <div className="relative aspect-[4/3] rounded-xl overflow-hidden">
+              <Image
+                src="/store/store-2.png"
+                alt="Inside Prince Achar store, Khari Baoli"
+                fill
+                className="object-cover"
+                sizes="(max-width: 640px) 100vw, 50vw"
+              />
+            </div>
+            <div className="relative aspect-[4/3] rounded-xl overflow-hidden">
+              <Image
+                src="/store/store-3.png"
+                alt="Prince Achar pickles display"
+                fill
+                className="object-cover"
+                sizes="(max-width: 640px) 100vw, 50vw"
+              />
+            </div>
+            <div className="relative aspect-[4/3] rounded-xl overflow-hidden">
+              <Image
+                src="/store/store-4.png"
+                alt="Prince Achar products at the Khari Baoli store"
+                fill
+                className="object-cover"
+                sizes="(max-width: 640px) 100vw, 50vw"
+              />
+            </div>
+          </div>
+
+          {/* Map */}
+          <div className="relative aspect-[16/7] rounded-xl overflow-hidden border border-brand-black/10">
+            <iframe
+              title="Prince Achar location on Google Maps"
+              src="https://www.google.com/maps?q=28.6570235,77.2212014&z=17&output=embed"
+              className="absolute inset-0 w-full h-full"
+              loading="lazy"
+              allowFullScreen
+              referrerPolicy="no-referrer-when-downgrade"
+            />
           </div>
         </div>
       </section>

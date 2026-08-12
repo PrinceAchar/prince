@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
-import { type ShopifyProduct, formatPrice, getProductSize } from "@/lib/shopify";
+import { type ShopifyProduct, formatPrice, getProductSize, isProductSoldOut } from "@/lib/shopify";
 import { useCart } from "./CartProvider";
 
 function getCosmeticRating(handle: string) {
@@ -50,6 +50,45 @@ function StarRating({ rating, reviews }: { rating: number; reviews: number }) {
   );
 }
 
+interface VariantSelectorProps {
+  groups: { name: string; values: string[] }[];
+  selected: Record<string, string>;
+  onSelect: (name: string, value: string) => void;
+}
+
+function VariantSelector({ groups, selected, onSelect }: VariantSelectorProps) {
+  return (
+    <div className="space-y-4 mb-5">
+      {groups.map((group) => (
+        <div key={group.name}>
+          <h3 className="text-[11px] font-semibold uppercase tracking-wider text-brand-black/40 mb-2">
+            {group.name}
+          </h3>
+          <div className="flex flex-wrap gap-2">
+            {group.values.map((value) => {
+              const active = selected[group.name] === value;
+              return (
+                <button
+                  key={value}
+                  type="button"
+                  onClick={() => onSelect(group.name, value)}
+                  className={`px-4 py-2 text-[12px] font-semibold uppercase tracking-wider rounded-full border transition-colors ${
+                    active
+                      ? "bg-red border-red text-white"
+                      : "border-brand-black/15 text-brand-black hover:border-red hover:text-red"
+                  }`}
+                >
+                  {value}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 interface ProductOverlayProps {
   product: ShopifyProduct;
   onClose: () => void;
@@ -79,10 +118,39 @@ export default function ProductOverlay({ product, onClose }: ProductOverlayProps
 
   const images = product.images.edges.map((e) => e.node);
   const mainImage = images[selectedIndex] || images[0];
-  const variant = product.variants.edges[0]?.node;
+  const variants = product.variants.edges.map((e) => e.node);
+  const soldOut = isProductSoldOut(product);
+
+  // Build option groups from variants (e.g. Size: 250g / 500g / 1kg)
+  const optionNames = Array.from(
+    new Set(variants.flatMap((v) => v.selectedOptions.map((o) => o.name)))
+  );
+  const optionsByGroup = optionNames.map((name) => ({
+    name,
+    values: Array.from(
+      new Set(
+        variants.map((v) => v.selectedOptions.find((o) => o.name === name)?.value)
+      )
+    ).filter((v): v is string => Boolean(v)),
+  }));
+
+  const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>(() => {
+    const preferred = variants.find((v) => v.availableForSale) || variants[0];
+    if (preferred) {
+      return Object.fromEntries(preferred.selectedOptions.map((o) => [o.name, o.value]));
+    }
+    return {};
+  });
+
+  const selectedVariant =
+    variants.find((v) =>
+      v.selectedOptions.every((o) => selectedOptions[o.name] === o.value)
+    ) || null;
+
+  const selectedVariantSoldOut = selectedVariant ? !selectedVariant.availableForSale : false;
   const price = formatPrice(
-    product.priceRange.minVariantPrice.amount,
-    product.priceRange.minVariantPrice.currencyCode
+    selectedVariant?.price.amount ?? product.priceRange.minVariantPrice.amount,
+    selectedVariant?.price.currencyCode ?? product.priceRange.minVariantPrice.currencyCode
   );
   const size = getProductSize(product);
   const tag = product.tags[0] || product.productType;
@@ -107,13 +175,13 @@ export default function ProductOverlay({ product, onClose }: ProductOverlayProps
   }, [handleKeyDown]);
 
   const handleAddToCart = async () => {
-    if (!variant) return;
+    if (!selectedVariant || selectedVariantSoldOut) return;
     await addItem(
-      variant.id,
+      selectedVariant.id,
       product.title,
-      variant.title,
-      variant.price.amount,
-      variant.price.currencyCode,
+      selectedVariant.title,
+      selectedVariant.price.amount,
+      selectedVariant.price.currencyCode,
       mainImage?.url || "/logo.jpeg"
     );
     openCart();
@@ -258,6 +326,16 @@ export default function ProductOverlay({ product, onClose }: ProductOverlayProps
             <span className="text-[26px] font-bold text-red">{price}</span>
           </div>
 
+          {optionsByGroup.length > 0 && (
+            <VariantSelector
+              groups={optionsByGroup}
+              selected={selectedOptions}
+              onSelect={(name, value) =>
+                setSelectedOptions((prev) => ({ ...prev, [name]: value }))
+              }
+            />
+          )}
+
           <div className="mb-5">
             <h3 className="text-[11px] font-semibold uppercase tracking-wider text-brand-black/40 mb-2">
               Description
@@ -291,10 +369,18 @@ export default function ProductOverlay({ product, onClose }: ProductOverlayProps
           {/* Add to Cart */}
           <button
             onClick={handleAddToCart}
-            disabled={isLoading}
-            className="w-full py-3.5 bg-red text-white text-[12px] font-semibold uppercase tracking-wider rounded-full hover:bg-red-dark transition-colors disabled:opacity-50"
+            disabled={isLoading || selectedVariantSoldOut || soldOut}
+            className={`w-full py-3.5 text-white text-[12px] font-semibold uppercase tracking-wider rounded-full transition-colors disabled:opacity-50 ${
+              selectedVariantSoldOut || soldOut ? "bg-brand-black/40 cursor-not-allowed" : "bg-red hover:bg-red-dark"
+            }`}
           >
-            {isLoading ? "Adding..." : "Add to Cart"}
+            {soldOut
+              ? "Sold Out"
+              : selectedVariantSoldOut
+                ? "This Size Sold Out"
+                : isLoading
+                  ? "Adding..."
+                  : "Add to Cart"}
           </button>
 
           <p className="text-[10px] text-gray text-center mt-3">
@@ -446,6 +532,16 @@ export default function ProductOverlay({ product, onClose }: ProductOverlayProps
             <span className="text-[26px] font-bold text-red">{price}</span>
           </div>
 
+          {optionsByGroup.length > 0 && (
+            <VariantSelector
+              groups={optionsByGroup}
+              selected={selectedOptions}
+              onSelect={(name, value) =>
+                setSelectedOptions((prev) => ({ ...prev, [name]: value }))
+              }
+            />
+          )}
+
           <div className="mb-5">
             <h3 className="text-[11px] font-semibold uppercase tracking-wider text-brand-black/40 mb-2">
               Description
@@ -478,10 +574,18 @@ export default function ProductOverlay({ product, onClose }: ProductOverlayProps
 
           <button
             onClick={handleAddToCart}
-            disabled={isLoading}
-            className="w-full py-3.5 bg-red text-white text-[12px] font-semibold uppercase tracking-wider rounded-full hover:bg-red-dark transition-colors disabled:opacity-50"
+            disabled={isLoading || selectedVariantSoldOut || soldOut}
+            className={`w-full py-3.5 text-white text-[12px] font-semibold uppercase tracking-wider rounded-full transition-colors disabled:opacity-50 ${
+              selectedVariantSoldOut || soldOut ? "bg-brand-black/40 cursor-not-allowed" : "bg-red hover:bg-red-dark"
+            }`}
           >
-            {isLoading ? "Adding..." : "Add to Cart"}
+            {soldOut
+              ? "Sold Out"
+              : selectedVariantSoldOut
+                ? "This Size Sold Out"
+                : isLoading
+                  ? "Adding..."
+                  : "Add to Cart"}
           </button>
 
           <p className="text-[10px] text-gray text-center mt-3">
