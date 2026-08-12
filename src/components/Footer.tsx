@@ -32,7 +32,7 @@ export default function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="bg-[#EFE3CC] text-brand-black relative overflow-hidden">
+    <footer className="bg-[#FAF5E4] text-brand-black relative overflow-hidden">
       <FooterDivider />
 
       <div className="max-w-[1150px] mx-auto px-6 pb-10 relative">
