@@ -198,6 +198,7 @@ export interface CustomerData {
         };
       }[];
     };
+    defaultAddress: { id: string } | null;
   };
 }
 
@@ -263,9 +264,116 @@ export const CUSTOMER_QUERY = `
           }
         }
       }
+      defaultAddress {
+        id
+      }
     }
   }
 `;
+
+export const ORDER_QUERY = `
+  query Order($id: ID!) {
+    order(id: $id) {
+      id
+      name
+      number
+      processedAt
+      financialStatus
+      fulfillmentStatus
+      statusPageUrl
+      subtotal {
+        amount
+        currencyCode
+      }
+      totalShipping {
+        amount
+        currencyCode
+      }
+      totalTax {
+        amount
+        currencyCode
+      }
+      totalPrice {
+        amount
+        currencyCode
+      }
+      shippingAddress {
+        id
+        firstName
+        lastName
+        address1
+        address2
+        city
+        zoneCode
+        zip
+        territoryCode
+        phoneNumber
+      }
+      lineItems(first: 20) {
+        edges {
+          node {
+            title
+            quantity
+            price {
+              amount
+              currencyCode
+            }
+            image {
+              url
+              altText
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+export interface OrderData {
+  order: {
+    id: string;
+    name: string;
+    number: number;
+    processedAt: string;
+    financialStatus: string;
+    fulfillmentStatus: string;
+    statusPageUrl: string;
+    subtotal: { amount: string; currencyCode: string } | null;
+    totalShipping: { amount: string; currencyCode: string };
+    totalTax: { amount: string; currencyCode: string } | null;
+    totalPrice: { amount: string; currencyCode: string };
+    shippingAddress: {
+      id: string;
+      firstName: string;
+      lastName: string;
+      address1: string;
+      address2: string | null;
+      city: string;
+      zoneCode: string | null;
+      zip: string | null;
+      territoryCode: string | null;
+      phoneNumber: string | null;
+    } | null;
+    lineItems: {
+      edges: {
+        node: {
+          title: string;
+          quantity: number;
+          price: { amount: string; currencyCode: string };
+          image: { url: string; altText: string | null } | null;
+        };
+      }[];
+    };
+  } | null;
+}
+
+export async function getOrder(
+  accessToken: string,
+  id: string
+): Promise<OrderData["order"]> {
+  const data = await customerAccountFetch<OrderData>(ORDER_QUERY, { id }, accessToken);
+  return data.order;
+}
 
 export async function getCustomer(
   accessToken: string
@@ -322,8 +430,8 @@ export async function updateCustomerName(
 // --- Address Mutations ---
 
 const CUSTOMER_ADDRESS_CREATE_MUTATION = `
-  mutation CustomerAddressCreate($address: CustomerAddressInput!) {
-    customerAddressCreate(address: $address) {
+  mutation CustomerAddressCreate($address: CustomerAddressInput!, $defaultAddress: Boolean) {
+    customerAddressCreate(address: $address, defaultAddress: $defaultAddress) {
       customerAddress {
         id
         firstName
@@ -345,8 +453,8 @@ const CUSTOMER_ADDRESS_CREATE_MUTATION = `
 `;
 
 const CUSTOMER_ADDRESS_UPDATE_MUTATION = `
-  mutation CustomerAddressUpdate($id: ID!, $address: CustomerAddressInput!) {
-    customerAddressUpdate(id: $id, address: $address) {
+  mutation CustomerAddressUpdate($addressId: ID!, $address: CustomerAddressInput, $defaultAddress: Boolean) {
+    customerAddressUpdate(addressId: $addressId, address: $address, defaultAddress: $defaultAddress) {
       customerAddress {
         id
         firstName
@@ -406,14 +514,15 @@ export interface Address {
 
 export async function createAddress(
   accessToken: string,
-  address: AddressInput
+  address: AddressInput,
+  defaultAddress = false
 ): Promise<{ address: Address | null; errors: string[] }> {
   const data = await customerAccountFetch<{
     customerAddressCreate: {
       customerAddress: Address | null;
       userErrors: { field: string; message: string }[];
     };
-  }>(CUSTOMER_ADDRESS_CREATE_MUTATION, { address }, accessToken);
+  }>(CUSTOMER_ADDRESS_CREATE_MUTATION, { address, defaultAddress }, accessToken);
 
   return {
     address: data.customerAddressCreate.customerAddress,
@@ -424,17 +533,37 @@ export async function createAddress(
 export async function updateAddress(
   accessToken: string,
   id: string,
-  address: AddressInput
+  address: AddressInput,
+  defaultAddress = false
 ): Promise<{ address: Address | null; errors: string[] }> {
   const data = await customerAccountFetch<{
     customerAddressUpdate: {
       customerAddress: Address | null;
       userErrors: { field: string; message: string }[];
     };
-  }>(CUSTOMER_ADDRESS_UPDATE_MUTATION, { id, address }, accessToken);
+  }>(
+    CUSTOMER_ADDRESS_UPDATE_MUTATION,
+    { addressId: id, address, defaultAddress },
+    accessToken
+  );
 
   return {
     address: data.customerAddressUpdate.customerAddress,
+    errors: data.customerAddressUpdate.userErrors.map((e) => e.message),
+  };
+}
+
+export async function setDefaultAddress(
+  accessToken: string,
+  id: string
+): Promise<{ errors: string[] }> {
+  const data = await customerAccountFetch<{
+    customerAddressUpdate: {
+      userErrors: { field: string; message: string }[];
+    };
+  }>(CUSTOMER_ADDRESS_UPDATE_MUTATION, { addressId: id, defaultAddress: true }, accessToken);
+
+  return {
     errors: data.customerAddressUpdate.userErrors.map((e) => e.message),
   };
 }

@@ -2,9 +2,9 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import AccountNav from "@/components/AccountNav";
 
 interface Address {
   id: string;
@@ -46,6 +46,7 @@ const emptyForm: AddressForm = {
 export default function AddressesPage() {
   const router = useRouter();
   const [addresses, setAddresses] = useState<Address[]>([]);
+  const [defaultAddressId, setDefaultAddressId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -66,6 +67,7 @@ export default function AddressesPage() {
         return;
       }
       setAddresses(data.addresses || []);
+      setDefaultAddressId(data.defaultAddressId ?? null);
     } catch {
       setError("Failed to load addresses");
     } finally {
@@ -140,6 +142,25 @@ export default function AddressesPage() {
     }
   };
 
+  const handleSetDefault = async (id: string) => {
+    setError("");
+    try {
+      const res = await fetch(`/api/account/addresses?id=${encodeURIComponent(id)}`, {
+        method: "PATCH",
+      });
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        setError(data?.error || "Failed to set default address");
+        return;
+      }
+
+      await fetchAddresses();
+    } catch {
+      setError("Failed to set default address");
+    }
+  };
+
   const handleEdit = (addr: Address) => {
     setForm({
       firstName: addr.firstName,
@@ -167,29 +188,9 @@ export default function AddressesPage() {
         <div className="max-w-[800px] mx-auto px-4 py-12 md:py-16">
           {/* Header */}
           <div className="flex items-center justify-between mb-8">
-            <div className="flex items-center gap-3">
-              <Link
-                href="/account"
-                className="text-[#C21A33] hover:opacity-70 transition-opacity"
-              >
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={2}
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M15.75 19.5L8.25 12l7.5-7.5"
-                  />
-                </svg>
-              </Link>
-              <h1 className="font-heading text-[28px] md:text-[32px] font-bold text-[#1A1A1A]">
-                Addresses
-              </h1>
-            </div>
+            <h1 className="font-heading text-[28px] md:text-[32px] font-bold text-[#1A1A1A]">
+              Addresses
+            </h1>
             {!showForm && (
               <button
                 onClick={() => {
@@ -203,6 +204,8 @@ export default function AddressesPage() {
               </button>
             )}
           </div>
+
+          <AccountNav />
 
           {error && (
             <div className="mb-6 p-3 bg-red-50 border border-red-200 rounded-lg text-[13px] text-red-700">
@@ -327,8 +330,13 @@ export default function AddressesPage() {
                 >
                   <div className="flex items-start justify-between">
                     <div className="text-[14px] text-[#1A1A1A] leading-relaxed">
-                      <p className="font-medium">
+                      <p className="font-medium flex items-center gap-2">
                         {addr.firstName} {addr.lastName}
+                        {defaultAddressId === addr.id && (
+                          <span className="text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 bg-[#C21A33]/10 text-[#C21A33] rounded-full">
+                            Default
+                          </span>
+                        )}
                       </p>
                       <p>{addr.address1}</p>
                       {addr.address2 && <p>{addr.address2}</p>}
@@ -339,6 +347,14 @@ export default function AddressesPage() {
                       </p>
                       <p>{addr.territoryCode}</p>
                       {addr.phoneNumber && <p className="mt-1">{addr.phoneNumber}</p>}
+                      {defaultAddressId !== addr.id && (
+                        <button
+                          onClick={() => handleSetDefault(addr.id)}
+                          className="mt-3 text-[12px] text-[#1A1A1A]/50 underline underline-offset-2 hover:text-[#C21A33] transition-colors"
+                        >
+                          Set as default
+                        </button>
+                      )}
                     </div>
                     <div className="flex gap-2">
                       <button

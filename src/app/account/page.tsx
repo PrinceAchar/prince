@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import AccountNav from "@/components/AccountNav";
 
 interface Customer {
   firstName: string;
@@ -126,6 +127,8 @@ export default function AccountPage() {
               Welcome back, {customer.firstName || "there"}
             </p>
           </div>
+
+          <AccountNav />
 
           {/* Profile Card */}
           <div className="bg-white rounded-2xl shadow-[0_2px_20px_rgba(0,0,0,0.06)] p-6 md:p-8 mb-6">

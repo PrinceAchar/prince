@@ -6,6 +6,7 @@ import Link from "next/link";
 import { formatPrice } from "@/lib/shopify";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import AccountNav from "@/components/AccountNav";
 
 interface OrderLineItem {
   title: string;
@@ -104,29 +105,13 @@ export default function OrdersPage() {
       <main className="min-h-screen bg-[#FAF5E4] pt-[70px] md:pt-[80px]">
         <div className="max-w-[800px] mx-auto px-4 py-12 md:py-16">
           {/* Header */}
-          <div className="flex items-center gap-3 mb-8">
-            <Link
-              href="/account"
-              className="text-[#C21A33] hover:opacity-70 transition-opacity"
-            >
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={2}
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M15.75 19.5L8.25 12l7.5-7.5"
-                />
-              </svg>
-            </Link>
+          <div className="mb-8">
             <h1 className="font-heading text-[28px] md:text-[32px] font-bold text-[#1A1A1A]">
               My Orders
             </h1>
           </div>
+
+          <AccountNav />
 
           {orders.length === 0 ? (
             <div className="bg-white rounded-2xl shadow-[0_2px_20px_rgba(0,0,0,0.06)] p-8 text-center">
@@ -150,9 +135,12 @@ export default function OrdersPage() {
                   {/* Order Header */}
                   <div className="flex flex-wrap items-start justify-between gap-3 mb-4">
                     <div>
-                      <p className="text-[13px] text-[#1A1A1A]/50">
+                      <Link
+                        href={`/account/orders/${encodeURIComponent(order.id)}`}
+                        className="text-[13px] text-[#C21A33] font-medium hover:opacity-70 transition-opacity"
+                      >
                         Order #{order.number}
-                      </p>
+                      </Link>
                       <p className="text-[13px] text-[#1A1A1A]/50">
                         {new Date(order.processedAt).toLocaleDateString("en-IN", {
                           day: "numeric",
@@ -214,7 +202,13 @@ export default function OrdersPage() {
                   </div>
 
                   {/* Order Total */}
-                  <div className="border-t border-[#1A1A1A]/5 pt-4 mt-4 flex justify-end">
+                  <div className="border-t border-[#1A1A1A]/5 pt-4 mt-4 flex justify-between items-center">
+                    <Link
+                      href={`/account/orders/${encodeURIComponent(order.id)}`}
+                      className="text-[12px] text-[#C21A33] underline underline-offset-2 hover:opacity-70 transition-opacity"
+                    >
+                      View details
+                    </Link>
                     <p className="text-[14px] font-semibold text-[#1A1A1A]">
                       Total:{" "}
                       {formatPrice(
