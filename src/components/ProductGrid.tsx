@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { type ShopifyProduct } from "@/lib/shopify";
 import ProductCard from "./ProductCard";
@@ -12,17 +12,22 @@ export default function ProductGrid({ products }: { products: ShopifyProduct[] }
   const router = useRouter();
 
   // Deep link: open overlay from ?product=handle
+  // Track last seen URL handle so the overlay only reacts to URL changes,
+  // never to its own selectedProduct state (prevents it re-opening on close).
+  const lastHandleRef = useRef<string | null>(null);
   useEffect(() => {
     const handle = searchParams.get("product");
-    if (handle && !selectedProduct) {
-      const match = products.find((p) => p.handle === handle);
-      if (match) {
-        setSelectedProduct(match);
-      }
+    if (!handle) return;
+    if (handle === lastHandleRef.current) return;
+    const match = products.find((p) => p.handle === handle);
+    if (match) {
+      lastHandleRef.current = handle;
+      setSelectedProduct(match);
     }
-  }, [searchParams, products, selectedProduct]);
+  }, [searchParams, products]);
 
   const handleClose = () => {
+    lastHandleRef.current = null;
     setSelectedProduct(null);
     // Remove ?product= from URL without reload
     const url = new URL(window.location.href);
