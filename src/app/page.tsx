@@ -51,7 +51,7 @@ export default function Home() {
               alt="Our Story"
               width={800}
               height={800}
-              className="w-full aspect-square object-cover rounded-lg"
+              className="w-[75%] mx-auto max-w-[300px] aspect-square object-cover rounded-lg"
             />
           </div>
 
