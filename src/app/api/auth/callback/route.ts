@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
 import { exchangeCodeForAccessToken } from "@/lib/shopify-customer";
-import { getAndClearPkceState } from "@/lib/auth";
+import { getPkceStateFromCookies } from "@/lib/auth-helpers";
 
 const SESSION_COOKIE = "__customer_session";
+const PKCE_COOKIE = "__pkce_state";
 const SESSION_MAX_AGE = 60 * 60 * 24 * 7; // 7 days
 
 export async function GET(request: Request) {
@@ -23,7 +24,7 @@ export async function GET(request: Request) {
     );
   }
 
-  const pkceState = await getAndClearPkceState();
+  const pkceState = getPkceStateFromCookies(request);
 
   if (!pkceState || pkceState.state !== state) {
     return NextResponse.redirect(
@@ -51,6 +52,13 @@ export async function GET(request: Request) {
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       maxAge: SESSION_MAX_AGE,
+      path: "/",
+    });
+    response.cookies.set(PKCE_COOKIE, "", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 0,
       path: "/",
     });
 

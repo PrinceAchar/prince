@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
 import { refreshAccessToken } from "@/lib/shopify-customer";
-import { getSessionTokens } from "@/lib/auth";
+import { getSessionTokensFromCookies } from "@/lib/auth-helpers";
 
 const SESSION_COOKIE = "__customer_session";
 const SESSION_MAX_AGE = 60 * 60 * 24 * 7; // 7 days
 
-export async function POST() {
-  const tokens = await getSessionTokens();
+export async function POST(request: Request) {
+  const tokens = getSessionTokensFromCookies(request);
 
   if (!tokens) {
     return NextResponse.json({ error: "Not authenticated" }, { status: 401 });

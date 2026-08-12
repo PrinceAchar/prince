@@ -8,21 +8,8 @@ import {
   type AddressInput,
 } from "@/lib/shopify-customer";
 
-function parseCookies(request: Request): Map<string, string> {
-  const cookies = request.headers.get("cookie");
-  const cookieMap = new Map<string, string>();
-  if (cookies) {
-    cookies.split(";").forEach((c) => {
-      const [key, ...value] = c.trim().split("=");
-      cookieMap.set(key, value.join("="));
-    });
-  }
-  return cookieMap;
-}
-
 export async function GET(request: Request) {
-  const cookieMap = parseCookies(request);
-  const tokens = getSessionTokensFromCookies(cookieMap);
+  const tokens = getSessionTokensFromCookies(request);
   if (!tokens) {
     return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
   }
@@ -37,8 +24,7 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const cookieMap = parseCookies(request);
-  const tokens = getSessionTokensFromCookies(cookieMap);
+  const tokens = getSessionTokensFromCookies(request);
   if (!tokens) {
     return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
   }
@@ -54,8 +40,7 @@ export async function POST(request: Request) {
 }
 
 export async function PUT(request: Request) {
-  const cookieMap = parseCookies(request);
-  const tokens = getSessionTokensFromCookies(cookieMap);
+  const tokens = getSessionTokensFromCookies(request);
   if (!tokens) {
     return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
   }
@@ -77,8 +62,7 @@ export async function PUT(request: Request) {
 }
 
 export async function DELETE(request: Request) {
-  const cookieMap = parseCookies(request);
-  const tokens = getSessionTokensFromCookies(cookieMap);
+  const tokens = getSessionTokensFromCookies(request);
   if (!tokens) {
     return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
   }
