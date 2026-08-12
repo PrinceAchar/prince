@@ -12,7 +12,7 @@ export default function HeroDialog() {
 
   return (
     <div
-      className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[260px] h-[260px] sm:w-[340px] sm:h-[340px] md:w-[450px] md:h-[450px] bg-yellow/92 backdrop-blur-sm flex items-center justify-center border-2 border-red transition-opacity duration-1000 ${
+      className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[260px] h-[260px] sm:w-[340px] sm:h-[340px] md:w-[450px] md:h-[450px] flex items-center justify-center border-2 border-red transition-opacity duration-1000 ${
         fadeOut ? "hero-dialog-fade-out" : "opacity-100"
       }`}
     >
