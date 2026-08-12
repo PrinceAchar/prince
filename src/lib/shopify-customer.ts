@@ -122,7 +122,10 @@ export async function customerAccountFetch<T>(
   });
 
   if (!res.ok) {
-    throw new Error(`Customer Account API error: ${res.status} ${res.statusText}`);
+    const text = await res.text();
+    throw new Error(
+      `Customer Account API error: ${res.status} ${res.statusText} - ${text.slice(0, 500)}`
+    );
   }
 
   const json = await res.json();
