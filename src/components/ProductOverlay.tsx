@@ -161,22 +161,6 @@ export default function ProductOverlay({ product, onClose }: ProductOverlayProps
           </svg>
         </button>
 
-        {/* Mobile share button - fixed top-right */}
-        <button
-          onClick={handleShare}
-          className="fixed top-4 right-4 z-30 w-10 h-10 rounded-full bg-yellow flex items-center justify-center shadow-lg"
-        >
-          {copied ? (
-            <svg className="w-5 h-5 text-brand-black" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-            </svg>
-          ) : (
-            <svg className="w-5 h-5 text-brand-black" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186l9.566-5.314m-9.566 7.5l9.566 5.314m0 0a2.25 2.25 0 103.935 2.186 2.25 2.25 0 00-3.935-2.186zm0-12.814a2.25 2.25 0 103.933-2.185 2.25 2.25 0 00-3.933 2.185z" />
-            </svg>
-          )}
-        </button>
-
         {/* Mobile image section */}
         <div className="relative w-full bg-black">
           {/* Main image */}
@@ -214,19 +198,35 @@ export default function ProductOverlay({ product, onClose }: ProductOverlayProps
                     </svg>
                   </button>
                 )}
-                {selectedIndex < images.length - 1 && (
-                  <button
-                    onClick={() => setSelectedIndex(selectedIndex + 1)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 shadow-lg flex items-center justify-center"
-                  >
-                    <svg className="w-5 h-5 text-brand-black" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                    </svg>
-                  </button>
+{selectedIndex < images.length - 1 && (
+                    <button
+                      onClick={() => setSelectedIndex(selectedIndex + 1)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 shadow-lg flex items-center justify-center"
+                    >
+                      <svg className="w-5 h-5 text-brand-black" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                      </svg>
+                    </button>
+                  )}
+                </>
+              )}
+
+              {/* Share button - bottom right of image */}
+              <button
+                onClick={handleShare}
+                className="absolute bottom-3 right-3 z-20 w-10 h-10 rounded-full bg-yellow flex items-center justify-center shadow-lg"
+              >
+                {copied ? (
+                  <svg className="w-5 h-5 text-brand-black" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                  </svg>
+                ) : (
+                  <svg className="w-5 h-5 text-brand-black" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186l9.566-5.314m-9.566 7.5l9.566 5.314m0 0a2.25 2.25 0 103.935 2.186 2.25 2.25 0 00-3.935-2.186zm0-12.814a2.25 2.25 0 103.933-2.185 2.25 2.25 0 00-3.933 2.185z" />
+                  </svg>
                 )}
-              </>
-            )}
-          </div>
+              </button>
+            </div>
 
           {/* Mobile thumbnails strip */}
           {images.length > 1 && (
@@ -255,7 +255,7 @@ export default function ProductOverlay({ product, onClose }: ProductOverlayProps
         </div>
 
         {/* Mobile description */}
-        <div className="bg-[#FAF5E4] rounded-t-2xl -mt-2 relative z-10 p-6">
+        <div className="bg-[#FAF5E4] -mt-2 relative z-10 p-6">
           <h2 className="font-heading text-[22px] font-bold text-brand-black mb-3 leading-tight">
             {product.title}
           </h2>
