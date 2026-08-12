@@ -146,15 +146,19 @@ export interface CustomerData {
     firstName: string;
     lastName: string;
     emailAddress: { emailAddress: string };
-    phone: string | null;
+    phoneNumber: { phoneNumber: string } | null;
     orders: {
       edges: {
         node: {
           id: string;
-          orderNumber: number;
+          number: number;
           processedAt: string;
           financialStatus: string;
-          fulfillmentStatus: string;
+          fulfillments: {
+            nodes: {
+              status: string;
+            }[];
+          };
           totalPrice: {
             amount: string;
             currencyCode: string;
@@ -168,11 +172,9 @@ export interface CustomerData {
                   amount: string;
                   currencyCode: string;
                 };
-                variant: {
-                  image: {
-                    url: string;
-                    altText: string | null;
-                  } | null;
+                image: {
+                  url: string;
+                  altText: string | null;
                 } | null;
               };
             }[];
@@ -189,10 +191,10 @@ export interface CustomerData {
           address1: string;
           address2: string | null;
           city: string;
-          province: string | null;
+          zoneCode: string | null;
           zip: string | null;
-          country: string;
-          phone: string | null;
+          territoryCode: string | null;
+          phoneNumber: string | null;
         };
       }[];
     };
@@ -207,15 +209,21 @@ export const CUSTOMER_QUERY = `
       emailAddress {
         emailAddress
       }
-      phone
+      phoneNumber {
+        phoneNumber
+      }
       orders(first: 20) {
         edges {
           node {
             id
-            orderNumber
+            number
             processedAt
             financialStatus
-            fulfillmentStatus
+            fulfillments(first: 1) {
+              nodes {
+                status
+              }
+            }
             totalPrice {
               amount
               currencyCode
@@ -229,11 +237,9 @@ export const CUSTOMER_QUERY = `
                     amount
                     currencyCode
                   }
-                  variant {
-                    image {
-                      url
-                      altText
-                    }
+                  image {
+                    url
+                    altText
                   }
                 }
               }
@@ -250,10 +256,10 @@ export const CUSTOMER_QUERY = `
             address1
             address2
             city
-            province
+            zoneCode
             zip
-            country
-            phone
+            territoryCode
+            phoneNumber
           }
         }
       }
@@ -290,10 +296,10 @@ const CUSTOMER_ADDRESS_CREATE_MUTATION = `
         address1
         address2
         city
-        province
+        zoneCode
         zip
-        country
-        phone
+        territoryCode
+        phoneNumber
       }
       userErrors {
         field
@@ -313,10 +319,10 @@ const CUSTOMER_ADDRESS_UPDATE_MUTATION = `
         address1
         address2
         city
-        province
+        zoneCode
         zip
-        country
-        phone
+        territoryCode
+        phoneNumber
       }
       userErrors {
         field
@@ -344,10 +350,10 @@ export interface AddressInput {
   address1: string;
   address2?: string;
   city: string;
-  province?: string;
+  zoneCode?: string;
   zip?: string;
-  country: string;
-  phone?: string;
+  territoryCode?: string;
+  phoneNumber?: string;
 }
 
 export interface Address {
@@ -357,10 +363,10 @@ export interface Address {
   address1: string;
   address2: string | null;
   city: string;
-  province: string | null;
+  zoneCode: string | null;
   zip: string | null;
-  country: string;
-  phone: string | null;
+  territoryCode: string | null;
+  phoneNumber: string | null;
 }
 
 export async function createAddress(

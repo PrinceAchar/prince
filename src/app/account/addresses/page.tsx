@@ -13,10 +13,10 @@ interface Address {
   address1: string;
   address2: string | null;
   city: string;
-  province: string | null;
+  zoneCode: string | null;
   zip: string | null;
-  country: string;
-  phone: string | null;
+  territoryCode: string | null;
+  phoneNumber: string | null;
 }
 
 interface AddressForm {
@@ -91,7 +91,17 @@ export default function AddressesPage() {
       const res = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({
+          firstName: form.firstName,
+          lastName: form.lastName,
+          address1: form.address1,
+          address2: form.address2,
+          city: form.city,
+          zoneCode: form.province,
+          zip: form.zip,
+          territoryCode: form.country,
+          phoneNumber: form.phone,
+        }),
       });
 
       if (!res.ok) {
@@ -137,10 +147,10 @@ export default function AddressesPage() {
       address1: addr.address1,
       address2: addr.address2 || "",
       city: addr.city,
-      province: addr.province || "",
+      province: addr.zoneCode || "",
       zip: addr.zip || "",
-      country: addr.country,
-      phone: addr.phone || "",
+      country: addr.territoryCode || "IN",
+      phone: addr.phoneNumber || "",
     });
     setEditingId(addr.id);
     setShowForm(true);
@@ -324,11 +334,11 @@ export default function AddressesPage() {
                       {addr.address2 && <p>{addr.address2}</p>}
                       <p>
                         {addr.city}
-                        {addr.province ? `, ${addr.province}` : ""}
+                        {addr.zoneCode ? `, ${addr.zoneCode}` : ""}
                         {addr.zip ? ` - ${addr.zip}` : ""}
                       </p>
-                      <p>{addr.country}</p>
-                      {addr.phone && <p className="mt-1">{addr.phone}</p>}
+                      <p>{addr.territoryCode}</p>
+                      {addr.phoneNumber && <p className="mt-1">{addr.phoneNumber}</p>}
                     </div>
                     <div className="flex gap-2">
                       <button

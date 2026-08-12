@@ -11,15 +11,15 @@ interface OrderLineItem {
   title: string;
   quantity: number;
   price: { amount: string; currencyCode: string };
-  variant: { image: { url: string; altText: string | null } | null } | null;
+  image: { url: string; altText: string | null } | null;
 }
 
 interface Order {
   id: string;
-  orderNumber: number;
+  number: number;
   processedAt: string;
   financialStatus: string;
-  fulfillmentStatus: string;
+  fulfillments: { nodes: { status: string }[] };
   totalPrice: { amount: string; currencyCode: string };
   lineItems: { edges: { node: OrderLineItem }[] };
 }
@@ -151,7 +151,7 @@ export default function OrdersPage() {
                   <div className="flex flex-wrap items-start justify-between gap-3 mb-4">
                     <div>
                       <p className="text-[13px] text-[#1A1A1A]/50">
-                        Order #{order.orderNumber}
+                        Order #{order.number}
                       </p>
                       <p className="text-[13px] text-[#1A1A1A]/50">
                         {new Date(order.processedAt).toLocaleDateString("en-IN", {
@@ -169,13 +169,13 @@ export default function OrdersPage() {
                       >
                         {order.financialStatus}
                       </span>
-                      {order.fulfillmentStatus && (
+                      {order.fulfillments.nodes[0]?.status && (
                         <span
                           className={`text-[11px] font-semibold uppercase tracking-wide px-2.5 py-1 rounded-full ${getStatusColor(
-                            order.fulfillmentStatus
+                            order.fulfillments.nodes[0].status
                           )}`}
                         >
-                          {order.fulfillmentStatus}
+                          {order.fulfillments.nodes[0].status}
                         </span>
                       )}
                     </div>
@@ -185,12 +185,12 @@ export default function OrdersPage() {
                   <div className="border-t border-[#1A1A1A]/5 pt-4 space-y-3">
                     {order.lineItems.edges.map((item, i) => (
                       <div key={i} className="flex items-center gap-3">
-                        {item.node.variant?.image && (
+                        {item.node.image && (
                           <div className="w-12 h-12 rounded-lg overflow-hidden bg-[#FAF5E4] flex-shrink-0">
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img
-                              src={item.node.variant.image.url}
-                              alt={item.node.variant.image.altText || item.node.title}
+                              src={item.node.image.url}
+                              alt={item.node.image.altText || item.node.title}
                               className="w-full h-full object-cover"
                             />
                           </div>

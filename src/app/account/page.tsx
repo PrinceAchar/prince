@@ -10,7 +10,7 @@ interface Customer {
   firstName: string;
   lastName: string;
   emailAddress: { emailAddress: string };
-  phone: string | null;
+  phoneNumber: { phoneNumber: string } | null;
   orders: { edges: { node: unknown }[] };
   addresses: { edges: { node: unknown }[] };
 }
@@ -112,10 +112,10 @@ export default function AccountPage() {
                   {customer.emailAddress.emailAddress}
                 </span>
               </div>
-              {customer.phone && (
+              {customer.phoneNumber?.phoneNumber && (
                 <div className="flex justify-between">
                   <span className="text-[#1A1A1A]/50">Phone</span>
-                  <span className="text-[#1A1A1A]">{customer.phone}</span>
+                  <span className="text-[#1A1A1A]">{customer.phoneNumber.phoneNumber}</span>
                 </div>
               )}
             </div>
