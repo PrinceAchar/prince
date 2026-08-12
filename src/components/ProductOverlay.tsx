@@ -260,13 +260,8 @@ export default function ProductOverlay({ product, onClose }: ProductOverlayProps
             {product.title}
           </h2>
 
-          <div className="mb-5 flex items-center gap-3">
+          <div className="mb-5">
             <span className="text-[26px] font-bold text-red">{price}</span>
-            {size && (
-              <span className="text-[11px] text-gray bg-brand-black/5 px-2 py-0.5 rounded-full">
-                {size}
-              </span>
-            )}
           </div>
 
           {optionsByGroup.length > 0 && (
@@ -456,13 +451,8 @@ export default function ProductOverlay({ product, onClose }: ProductOverlayProps
             {product.title}
           </h2>
 
-          <div className="mb-5 flex items-center gap-3">
+          <div className="mb-5">
             <span className="text-[26px] font-bold text-red">{price}</span>
-            {size && (
-              <span className="text-[11px] text-gray bg-brand-black/5 px-2 py-0.5 rounded-full">
-                {size}
-              </span>
-            )}
           </div>
 
           {optionsByGroup.length > 0 && (
