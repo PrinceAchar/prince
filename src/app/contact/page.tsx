@@ -12,104 +12,155 @@ const STORE_IMAGES = [
   "/store/store-4.png",
 ];
 
+const SUBJECTS = [
+  "Wholesale & Distribution",
+  "Retail / Stocking Inquiry",
+  "Product Feedback",
+  "Order Support",
+  "Press & Media",
+  "Other",
+];
+
+function MapPinIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+      <circle cx="12" cy="10" r="3" />
+    </svg>
+  );
+}
+
+function PhoneIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z" />
+    </svg>
+  );
+}
+
+function MailIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2" y="4" width="20" height="16" rx="2" />
+      <path d="m22 7-10 6L2 7" />
+    </svg>
+  );
+}
+
+function ClockIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 7v5l3 2" />
+    </svg>
+  );
+}
+
 const reachItems = [
   {
-    title: "Visit Our Store",
-    lines: [
-      "Shop No. 6673, Khari Baoli Road,",
-      "Fatehpuri, Chandni Chowk,",
-      "New Delhi – 110006",
-    ],
+    title: "Store",
+    icon: <MapPinIcon />,
+    lines: ["Shop No. 6673, Khari Baoli Road,", "Fatehpuri, Chandni Chowk,", "New Delhi – 110006"],
     action: {
       label: "Get Directions",
-      href: "https://www.google.com/maps?q=28.6570235,77.2212014",
+      href: "https://www.google.com/maps/search/?api=1&query=Prince+Achar+Khari+Baoli+Delhi",
+      external: true,
     },
-    icon: (
-      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-        <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
-      </svg>
-    ),
   },
   {
     title: "Phone",
+    icon: <PhoneIcon />,
     lines: ["+91 98110 56593"],
-    href: "tel:+919811056593",
-    icon: (
-      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" />
-      </svg>
-    ),
+    action: { label: "Call Now", href: "tel:+919811056593" },
   },
   {
     title: "Email",
+    icon: <MailIcon />,
     lines: ["info@princeachar.com"],
-    href: "mailto:info@princeachar.com",
-    icon: (
-      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
-      </svg>
-    ),
+    action: { label: "Email Us", href: "mailto:info@princeachar.com" },
   },
   {
     title: "Hours",
-    lines: ["Mon – Sat: 9 AM – 6 PM"],
-    icon: (
-      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-      </svg>
-    ),
+    icon: <ClockIcon />,
+    lines: ["Mon–Sat: 9:00 AM – 6:00 PM", "Sunday: Closed"],
   },
 ];
 
-const SUBJECTS = [
-  "General Inquiry",
-  "Distribution Partnership",
-  "Bulk / Wholesale Order",
-  "Product Information",
-  "Feedback",
-];
+function HeritageDivider() {
+  return (
+    <div className="flex items-center justify-center gap-3 my-5">
+      <span className="h-px w-20 md:w-24 bg-brand-black/15" />
+      <svg className="w-2.5 h-2.5 text-red" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M12 2l2.2 7.8L22 12l-7.8 2.2L12 22l-2.2-7.8L2 12l7.8-2.2z" />
+      </svg>
+      <span className="h-px w-20 md:w-24 bg-brand-black/15" />
+    </div>
+  );
+}
 
 const fieldClass =
-  "w-full px-4 py-3 bg-white border border-brand-black/10 rounded-xl text-[14px] text-brand-black placeholder:text-gray/60 focus:outline-none focus:ring-2 focus:ring-red/30 focus:border-red transition-colors";
+  "w-full px-4 py-3 bg-white border border-brand-black/12 rounded-xl text-[14px] text-brand-black placeholder:text-gray/70 outline-none focus:border-red/50 focus:ring-2 focus:ring-red/15 transition-colors";
 
 function Slideshow() {
   const [idx, setIdx] = useState(0);
+  const go = (dir: number) =>
+    setIdx((i) => (i + dir + STORE_IMAGES.length) % STORE_IMAGES.length);
 
   useEffect(() => {
-    const t = setInterval(() => setIdx((i) => (i + 1) % STORE_IMAGES.length), 4500);
+    const t = setInterval(
+      () => setIdx((i) => (i + 1) % STORE_IMAGES.length),
+      5000
+    );
     return () => clearInterval(t);
   }, []);
 
   return (
-    <div className="relative h-full min-h-[340px] lg:min-h-0 rounded-2xl overflow-hidden bg-yellow/30">
+    <div className="relative h-full min-h-[380px] lg:min-h-0 rounded-[16px] overflow-hidden bg-[#F3E9D6]">
       {STORE_IMAGES.map((src, i) => (
         <Image
           key={src}
           src={src}
-          alt="Prince Achar store in Khari Baoli, Chandni Chowk"
+          alt="Prince Achar store in Khari Baoli, Delhi"
           fill
-          sizes="58vw"
+          sizes="(max-width: 1024px) 100vw, 58vw"
           className={`object-cover transition-opacity duration-700 ${
             i === idx ? "opacity-100" : "opacity-0"
           }`}
         />
       ))}
-      <div className="absolute bottom-4 left-4 text-white text-[12px] tracking-[0.2em] font-medium drop-shadow-sm">
-        {String(idx + 1).padStart(2, "0")} / {String(STORE_IMAGES.length).padStart(2, "0")}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-black/5 to-transparent" />
+      <div className="absolute bottom-4 left-4">
+        <span className="text-white text-[11px] font-semibold uppercase tracking-[2px] drop-shadow-sm">
+          Khari Baoli, Delhi
+        </span>
       </div>
-      <div className="absolute bottom-4 right-4 flex gap-1.5">
-        {STORE_IMAGES.map((src, i) => (
+      <div className="absolute bottom-4 right-4 flex items-center gap-3">
+        <span className="text-white text-[12px] tracking-[0.2em] tabular-nums drop-shadow-sm">
+          {String(idx + 1).padStart(2, "0")} /{" "}
+          {String(STORE_IMAGES.length).padStart(2, "0")}
+        </span>
+        <div className="flex gap-1.5">
           <button
-            key={src}
             type="button"
-            aria-label={`Show slide ${i + 1}`}
-            onClick={() => setIdx(i)}
-            className={`h-1.5 rounded-full transition-all ${
-              i === idx ? "w-5 bg-white" : "w-1.5 bg-white/50 hover:bg-white/80"
-            }`}
-          />
-        ))}
+            onClick={() => go(-1)}
+            aria-label="Previous photo"
+            className="w-7 h-7 rounded-full border border-white/60 text-white flex items-center justify-center transition-colors hover:bg-white/15"
+          >
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="m15 18-6-6 6-6" />
+            </svg>
+          </button>
+          <button
+            type="button"
+            onClick={() => go(1)}
+            aria-label="Next photo"
+            className="w-7 h-7 rounded-full border border-white/60 text-white flex items-center justify-center transition-colors hover:bg-white/15"
+          >
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="m9 18 6-6-6-6" />
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -120,23 +171,24 @@ export default function ContactPage() {
     name: "",
     phone: "",
     email: "",
-    subject: SUBJECTS[0],
+    subject: "",
     message: "",
   });
   const [submitted, setSubmitted] = useState(false);
 
   const update =
-    (key: string) =>
+    (key: keyof typeof form) =>
     (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
       setForm((f) => ({ ...f, [key]: e.target.value }));
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const subject = encodeURIComponent(`Prince Achar — ${form.subject}`);
     const body = encodeURIComponent(
-      `Name: ${form.name}\nPhone: ${form.phone}\nEmail: ${form.email}\n\n${form.message}`
+      `Name: ${form.name}\nPhone: ${form.phone}\nEmail: ${form.email}\nSubject: ${form.subject}\n\n${form.message}`
     );
-    window.location.href = `mailto:info@princeachar.com?subject=${subject}&body=${body}`;
+    window.location.href = `mailto:info@princeachar.com?subject=${encodeURIComponent(
+      form.subject || "Contact Inquiry"
+    )}&body=${body}`;
     setSubmitted(true);
   };
 
@@ -144,146 +196,181 @@ export default function ContactPage() {
     <>
       <Navbar />
 
-      {/* HERO */}
-      <section className="pt-[60px] md:pt-[70px] bg-yellow">
-        <div className="max-w-[1100px] mx-auto px-6 py-8 md:py-10 text-center">
+      {/* Hero */}
+      <section className="pt-[60px] md:pt-[70px] bg-[#FAF4E5]">
+        <div className="max-w-[1150px] mx-auto px-6 pt-10 md:pt-12 pb-2 text-center">
           <span className="inline-block text-[11px] font-semibold uppercase tracking-[3px] text-red mb-3">
             Get in Touch
           </span>
-          <h1 className="font-heading text-[34px] md:text-[48px] font-bold text-brand-black mb-3 leading-tight">
+          <h1 className="font-heading text-[36px] md:text-[42px] font-bold text-brand-black leading-tight">
             Contact Us
           </h1>
-          <p className="text-[13px] md:text-[15px] text-gray max-w-[480px] mx-auto leading-relaxed">
-            Distributors, retailers, or pickle lovers — we&apos;re here for you. Reach out and
-            we&apos;ll get back to you shortly.
+          <p className="text-[13px] md:text-[15px] text-gray max-w-[460px] mx-auto leading-relaxed mt-3">
+            Distributors, retailers, or pickle lovers — we&apos;re here for you.
+            Reach out and we&apos;ll get back to you shortly.
           </p>
+          <HeritageDivider />
         </div>
       </section>
 
-      {/* MAIN: SLIDESHOW + FORM */}
-      <section className="bg-[#FAF5E4] py-8 md:py-10">
-        <div className="max-w-[1100px] mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-6 md:gap-8 lg:items-stretch">
+      {/* Slideshow + Form */}
+      <section className="bg-[#FAF4E5] pb-8">
+        <div className="max-w-[1150px] mx-auto px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-6 md:gap-7 lg:items-stretch">
             <Slideshow />
 
-            <div className="bg-white rounded-2xl shadow-[0_2px_20px_rgba(0,0,0,0.06)] p-6 md:p-8">
+            <div className="bg-[#FFFDF8] rounded-[22px] border border-brand-black/10 shadow-[0_2px_18px_rgba(0,0,0,0.04)] p-6 md:p-8">
               {submitted ? (
-                <div className="h-full min-h-[340px] flex flex-col items-center justify-center text-center">
-                  <div className="w-14 h-14 bg-red/10 rounded-full flex items-center justify-center mb-4">
-                    <svg className="w-7 h-7 text-red" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                <div className="h-full min-h-[360px] flex flex-col items-center justify-center text-center py-6">
+                  <div className="w-12 h-12 rounded-full bg-red/10 flex items-center justify-center mb-4">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C21A33" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M20 6 9 17l-5-5" />
                     </svg>
                   </div>
-                  <h3 className="font-heading text-[20px] font-bold text-brand-black mb-2">Thank You!</h3>
-                  <p className="text-[13px] text-gray max-w-[260px]">
-                    Your email client should have opened with your message. We&apos;ll get back to you shortly.
+                  <h3 className="font-heading text-[20px] font-bold text-brand-black mb-2">
+                    Message Sent
+                  </h3>
+                  <p className="text-[13px] text-gray max-w-[280px] leading-relaxed">
+                    Thanks for reaching out — we&apos;ll get back to you within one
+                    business day.
                   </p>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="h-full flex flex-col">
+                  <div className="mb-6">
+                    <span className="block text-[11px] font-semibold uppercase tracking-[2px] text-red mb-1.5">
+                      Get in Touch
+                    </span>
+                    <h2 className="font-heading text-[22px] md:text-[26px] font-bold text-brand-black leading-snug">
+                      We&apos;d love to hear from you.
+                    </h2>
+                  </div>
+
+                  <form onSubmit={handleSubmit} className="space-y-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-[12px] font-medium text-brand-black mb-1.5">
+                          Name
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          value={form.name}
+                          onChange={update("name")}
+                          placeholder="Your name"
+                          className={fieldClass}
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[12px] font-medium text-brand-black mb-1.5">
+                          Phone
+                        </label>
+                        <input
+                          type="tel"
+                          required
+                          value={form.phone}
+                          onChange={update("phone")}
+                          placeholder="Your phone"
+                          className={fieldClass}
+                        />
+                      </div>
+                    </div>
+
                     <div>
-                      <label className="block text-[11px] font-semibold uppercase tracking-[1px] text-brand-black mb-1.5">Name</label>
+                      <label className="block text-[12px] font-medium text-brand-black mb-1.5">
+                        Email
+                      </label>
                       <input
-                        type="text"
+                        type="email"
                         required
-                        value={form.name}
-                        onChange={update("name")}
+                        value={form.email}
+                        onChange={update("email")}
+                        placeholder="you@example.com"
                         className={fieldClass}
-                        placeholder="Your name"
                       />
                     </div>
+
                     <div>
-                      <label className="block text-[11px] font-semibold uppercase tracking-[1px] text-brand-black mb-1.5">Phone</label>
-                      <input
-                        type="tel"
-                        value={form.phone}
-                        onChange={update("phone")}
-                        className={fieldClass}
-                        placeholder="+91"
+                      <label className="block text-[12px] font-medium text-brand-black mb-1.5">
+                        Subject
+                      </label>
+                      <select
+                        required
+                        value={form.subject}
+                        onChange={update("subject")}
+                        className={`${fieldClass} appearance-none`}
+                      >
+                        <option value="" disabled>
+                          Select a subject
+                        </option>
+                        {SUBJECTS.map((s) => (
+                          <option key={s} value={s}>
+                            {s}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-[12px] font-medium text-brand-black mb-1.5">
+                        Message
+                      </label>
+                      <textarea
+                        required
+                        value={form.message}
+                        onChange={update("message")}
+                        placeholder="Tell us how we can help..."
+                        className={`${fieldClass} min-h-[110px] resize-none`}
                       />
                     </div>
-                  </div>
-                  <div>
-                    <label className="block text-[11px] font-semibold uppercase tracking-[1px] text-brand-black mb-1.5">Email</label>
-                    <input
-                      type="email"
-                      required
-                      value={form.email}
-                      onChange={update("email")}
-                      className={fieldClass}
-                      placeholder="you@example.com"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[11px] font-semibold uppercase tracking-[1px] text-brand-black mb-1.5">Subject</label>
-                    <select value={form.subject} onChange={update("subject")} className={fieldClass}>
-                      {SUBJECTS.map((s) => (
-                        <option key={s}>{s}</option>
-                      ))}
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-[11px] font-semibold uppercase tracking-[1px] text-brand-black mb-1.5">Message</label>
-                    <textarea
-                      required
-                      rows={4}
-                      value={form.message}
-                      onChange={update("message")}
-                      className={`${fieldClass} resize-none`}
-                      placeholder="Tell us how we can help..."
-                    />
-                  </div>
-                  <button
-                    type="submit"
-                    className="w-full py-3.5 bg-red text-white text-[13px] font-semibold uppercase tracking-[1px] rounded-xl hover:bg-red/90 transition-colors"
-                  >
-                    Send Message
-                  </button>
-                </form>
+
+                    <button
+                      type="submit"
+                      className="w-full bg-red hover:bg-red-dark text-white text-[13px] font-semibold uppercase tracking-[1px] rounded-xl py-3.5 transition-colors"
+                    >
+                      Send Message
+                    </button>
+                  </form>
+                </div>
               )}
             </div>
           </div>
         </div>
       </section>
 
-      {/* REACH US STRIP */}
-      <section className="bg-[#FAF5E4] pb-8 md:pb-10">
-        <div className="max-w-[1100px] mx-auto px-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-6 border-t border-brand-black/10 pt-8">
-            {reachItems.map((item) => (
-              <div key={item.title} className="flex gap-3">
-                <div className="flex-shrink-0 w-9 h-9 rounded-full bg-red/10 text-red flex items-center justify-center mt-0.5">
-                  {item.icon}
+      {/* Reach Us strip */}
+      <section className="bg-[#FAF4E5] pb-10 md:pb-14">
+        <div className="max-w-[1150px] mx-auto px-6">
+          <div className="bg-[#F3E9D6] rounded-[14px] border border-brand-black/8 px-5 md:px-7 py-6 md:py-7">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-6 md:divide-x md:divide-brand-black/10">
+              {reachItems.map((item, i) => (
+                <div key={i} className="flex gap-3">
+                  <div className="flex-shrink-0 w-9 h-9 rounded-full bg-red/10 text-red flex items-center justify-center mt-0.5">
+                    {item.icon}
+                  </div>
+                  <div className="min-w-0">
+                    <h3 className="text-[10px] font-semibold uppercase tracking-[1.5px] text-gray mb-1">
+                      {item.title}
+                    </h3>
+                    {item.lines.map((l, li) => (
+                      <p key={li} className="text-[13px] text-brand-black leading-snug">
+                        {l}
+                      </p>
+                    ))}
+                    {item.action && (
+                      <a
+                        href={item.action.href}
+                        target={item.action.external ? "_blank" : undefined}
+                        rel={item.action.external ? "noopener noreferrer" : undefined}
+                        className="inline-block mt-1.5 text-[11px] font-semibold uppercase tracking-wider text-red hover:opacity-70 transition-opacity"
+                      >
+                        {item.action.label}
+                      </a>
+                    )}
+                  </div>
                 </div>
-                <div>
-                  <h3 className="text-[10px] font-semibold uppercase tracking-[1.5px] text-brand-black/50 mb-1">
-                    {item.title}
-                  </h3>
-                  {item.lines.map((line) => (
-                    <p key={line} className="text-[13px] text-brand-black leading-snug">
-                      {item.href ? (
-                        <a href={item.href} className="hover:text-red transition-colors">
-                          {line}
-                        </a>
-                      ) : (
-                        line
-                      )}
-                    </p>
-                  ))}
-                  {item.action && (
-                    <a
-                      href={item.action.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-block mt-1.5 text-[11px] font-semibold uppercase tracking-wider text-red hover:opacity-70 transition-opacity"
-                    >
-                      {item.action.label}
-                    </a>
-                  )}
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </section>
