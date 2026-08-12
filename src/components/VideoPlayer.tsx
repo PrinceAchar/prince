@@ -31,7 +31,7 @@ export default function VideoPlayer() {
           muted
           playsInline
         />
-        <div className="absolute inset-0 flex items-center justify-center bg-black/30 transition-opacity group-hover:bg-black/40">
+        <div className="absolute inset-0 flex items-center justify-center">
           <div className="w-14 h-14 md:w-20 md:h-20 rounded-full bg-red/90 flex items-center justify-center shadow-lg">
             <svg className="w-6 h-6 md:w-8 md:h-8 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24">
               <path d="M8 5v14l11-7z" />
