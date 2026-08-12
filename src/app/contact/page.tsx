@@ -197,7 +197,7 @@ export default function ContactPage() {
       <Navbar />
 
       {/* Hero */}
-      <section className="pt-[60px] md:pt-[70px] bg-[#FAF4E5]">
+      <section className="pt-[60px] md:pt-[70px] bg-white">
         <div className="max-w-[1150px] mx-auto px-6 pt-10 md:pt-12 pb-2 text-center">
           <span className="inline-block text-[11px] font-semibold uppercase tracking-[3px] text-red mb-3">
             Get in Touch
@@ -214,7 +214,7 @@ export default function ContactPage() {
       </section>
 
       {/* Slideshow + Form */}
-      <section className="bg-[#FAF4E5] pb-8">
+      <section className="bg-white pb-8">
         <div className="max-w-[1150px] mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-6 md:gap-7 lg:items-stretch">
             <Slideshow />
@@ -339,7 +339,7 @@ export default function ContactPage() {
       </section>
 
       {/* Reach Us strip */}
-      <section className="bg-[#FAF4E5] pb-10 md:pb-14">
+      <section className="bg-white pb-10 md:pb-14">
         <div className="max-w-[1150px] mx-auto px-6">
           <div className="bg-[#F3E9D6] rounded-[14px] border border-brand-black/8 px-5 md:px-7 py-6 md:py-7">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-6 md:divide-x md:divide-brand-black/10">
