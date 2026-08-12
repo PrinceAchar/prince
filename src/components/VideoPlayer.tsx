@@ -26,7 +26,7 @@ export default function VideoPlayer() {
         <video
           ref={thumbRef}
           src="/reel.mp4"
-          poster="https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=600&h=600&fit=crop"
+          poster="/video-cover.jpg"
           className="w-full h-full object-cover"
           muted
           playsInline
