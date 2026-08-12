@@ -68,6 +68,11 @@ const reachItems = [
     },
   },
   {
+    title: "Hours",
+    icon: <ClockIcon />,
+    lines: ["Mon–Sat: 9:00 AM – 6:00 PM", "Sunday: Closed"],
+  },
+  {
     title: "Phone",
     icon: <PhoneIcon />,
     lines: ["+91 98110 56593"],
@@ -78,11 +83,6 @@ const reachItems = [
     icon: <MailIcon />,
     lines: ["info@princeachar.com"],
     action: { label: "Email Us", href: "mailto:info@princeachar.com" },
-  },
-  {
-    title: "Hours",
-    icon: <ClockIcon />,
-    lines: ["Mon–Sat: 9:00 AM – 6:00 PM", "Sunday: Closed"],
   },
 ];
 
