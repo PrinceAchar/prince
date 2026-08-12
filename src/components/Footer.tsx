@@ -40,15 +40,12 @@ export default function Footer() {
           {/* Brand */}
           <div className="col-span-2 md:col-span-1 md:px-6">
             <Image
-              src="/logo-transparent.png"
+              src="/logo.jpeg"
               alt="Prince Achar"
               width={150}
               height={56}
-              className="h-12 w-auto mb-3"
+              className="h-12 w-auto"
             />
-            <p className="text-[13px] text-gray leading-relaxed max-w-[240px]">
-              Authentic Delhi flavors, handcrafted with love since 1980.
-            </p>
           </div>
 
           {/* Quick Links */}
