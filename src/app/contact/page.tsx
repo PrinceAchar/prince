@@ -340,7 +340,7 @@ export default function ContactPage() {
 
       {/* Reach Us strip */}
       <section className="bg-white pb-10 md:pb-14">
-        <div className="max-w-[1150px] mx-auto px-6">
+        <div className="max-w-[1200px] mx-auto px-6">
           <div className="bg-yellow rounded-[14px] border border-brand-black/8 px-5 md:px-7 py-6 md:py-7">
             <div className="grid grid-cols-2 md:grid-cols-[1.4fr_1fr_1fr_1fr] gap-x-6 gap-y-6 md:gap-x-0 md:divide-x md:divide-brand-black/10">
               {reachItems.map((item, i) => (
