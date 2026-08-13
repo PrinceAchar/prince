@@ -28,9 +28,9 @@ export default function Footer() {
             <Image
               src="/logo.jpeg"
               alt="Prince Achar"
-              width={150}
-              height={56}
-              className="h-10 md:h-12 w-auto mb-2 md:mb-3"
+              width={200}
+              height={75}
+              className="h-12 md:h-16 w-auto mb-2 md:mb-3"
             />
             <p className="text-[12px] md:text-[13px] text-gray leading-relaxed max-w-[240px]">
               Authentic Delhi flavors, handcrafted with love since 1980.
