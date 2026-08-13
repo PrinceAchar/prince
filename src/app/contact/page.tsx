@@ -6,7 +6,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 const STORE_IMAGES = [
-  "/store/store-front.png",
+  "/store/store-front.webp",
   "/store/store-2.png",
   "/store/store-3.png",
   "/store/store-4.png",
@@ -342,9 +342,9 @@ export default function ContactPage() {
       <section className="bg-white pb-10 md:pb-14">
         <div className="max-w-[1200px] mx-auto px-6">
           <div className="bg-yellow rounded-[14px] border border-brand-black/8 px-5 md:px-7 py-6 md:py-7">
-            <div className="grid grid-cols-2 md:grid-cols-[auto_auto_auto_auto] gap-x-4 gap-y-6 md:gap-x-0 md:divide-x md:divide-brand-black/10">
+            <div className="grid grid-cols-1 md:grid-cols-[auto_auto_auto_auto] divide-y divide-brand-black/10 md:divide-y-0 md:divide-x">
               {reachItems.map((item, i) => (
-                <div key={i} className="flex gap-3 md:px-3">
+                <div key={i} className="flex gap-3 md:px-3 py-5 first:pt-0 last:pb-0 md:py-0">
                   <div className="flex-shrink-0 w-9 h-9 rounded-full bg-red/10 text-red flex items-center justify-center mt-0.5">
                     {item.icon}
                   </div>
