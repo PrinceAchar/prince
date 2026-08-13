@@ -17,7 +17,13 @@ export default function ProductGrid({ products }: { products: ShopifyProduct[] }
   const lastHandleRef = useRef<string | null>(null);
   useEffect(() => {
     const handle = searchParams.get("product");
-    if (!handle) return;
+    if (!handle) {
+      if (lastHandleRef.current !== null) {
+        lastHandleRef.current = null;
+        setSelectedProduct(null);
+      }
+      return;
+    }
     if (handle === lastHandleRef.current) return;
     const match = products.find((p) => p.handle === handle);
     if (match) {
@@ -40,7 +46,7 @@ export default function ProductGrid({ products }: { products: ShopifyProduct[] }
     // Update URL with ?product=handle for shareable link
     const url = new URL(window.location.href);
     url.searchParams.set("product", product.handle);
-    router.replace(url.pathname + url.search, { scroll: false });
+    router.push(url.pathname + url.search, { scroll: false });
   };
 
   return (
