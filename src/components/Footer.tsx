@@ -105,11 +105,11 @@ export default function Footer() {
 
       {/* Copyright strip */}
       <div className="bg-red">
-        <div className="max-w-[1150px] mx-auto px-6 py-3 flex items-center justify-between">
-          <p className="text-[11px] text-white/90">
+        <div className="max-w-[1150px] mx-auto px-6 py-3 flex flex-col md:flex-row items-center justify-between gap-1 md:gap-0">
+          <p className="text-[11px] text-white/90 text-center md:text-left">
             &copy; {year} Prince Achar. All rights reserved.
           </p>
-          <span className="text-[11px] text-white/80 hidden sm:block">
+          <span className="text-[11px] text-white/80 hidden md:block">
             Handcrafted in Delhi since 1980
           </span>
         </div>
