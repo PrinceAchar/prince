@@ -32,7 +32,7 @@ export default function AwardsCarousel() {
         <p className="text-[13px] md:text-[14px] text-gray mb-8 md:mb-12 max-w-[600px] mx-auto">
           All awards featured are First Prize recognitions, celebrating our excellence in crafting authentic Pickles &amp; Murabbas.
         </p>
-        <div className="w-full overflow-hidden relative">
+        <div className="w-full overflow-hidden relative animate-fade-in-up">
           <div className="flex gap-4 md:gap-6 w-max animate-[carousel-scroll_40s_linear_infinite] hover:[animation-play-state:paused]">
             {awardsLoop.map((award, i) => (
               <button

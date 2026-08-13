@@ -49,7 +49,7 @@ export default function Navbar() {
     <>
       <nav
         className={`fixed top-0 left-0 w-full h-[60px] md:h-[70px] bg-yellow flex items-center justify-between px-4 md:px-10 z-[1000] transition-transform duration-[350ms] ease-in-out ${
-          hidden ? "navbar-hidden" : ""
+          hidden ? "navbar-hidden" : "animate-slide-in-down"
         }`}
       >
         {/* Left: Hamburger (mobile) / Nav links (desktop) */}
@@ -76,9 +76,6 @@ export default function Navbar() {
             </Link>
             <Link href="/murabba" className="text-[14px] font-medium text-red uppercase tracking-[0.5px] hover:opacity-70 transition-opacity">
               Murabba
-            </Link>
-            <Link href="/store-locator" className="text-[14px] font-medium text-red uppercase tracking-[0.5px] hover:opacity-70 transition-opacity">
-              Find Us
             </Link>
             <Link href="/contact" className="text-[14px] font-medium text-red uppercase tracking-[0.5px] hover:opacity-70 transition-opacity">
               Contact
@@ -153,7 +150,6 @@ export default function Navbar() {
             <Link href="/" onClick={() => setMenuOpen(false)} className="text-[14px] font-medium text-red uppercase tracking-[0.5px]">Home</Link>
             <Link href="/achar" onClick={() => setMenuOpen(false)} className="text-[14px] font-medium text-red uppercase tracking-[0.5px]">Achar</Link>
             <Link href="/murabba" onClick={() => setMenuOpen(false)} className="text-[14px] font-medium text-red uppercase tracking-[0.5px]">Murabba</Link>
-            <Link href="/store-locator" onClick={() => setMenuOpen(false)} className="text-[14px] font-medium text-red uppercase tracking-[0.5px]">Find Us</Link>
             <Link href="/contact" onClick={() => setMenuOpen(false)} className="text-[14px] font-medium text-red uppercase tracking-[0.5px]">Contact</Link>
           </div>
         </div>

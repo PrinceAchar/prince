@@ -8,19 +8,20 @@ import Footer from "@/components/Footer";
 export default function Home() {
   return (
     <>
-      <Navbar />
+      <Navbar className="animate-slide-in-down" />
 
       {/* HERO */}
       <section id="home" className="pt-[60px] md:pt-[70px] bg-yellow">
-        <div className="relative w-full aspect-[16/9] overflow-hidden">
+        <div className="relative w-full aspect-[16/9] overflow-hidden animate-fade-in-up">
           <Image
             src="/hero.png"
             alt="Prince Achar Hero"
             fill
             priority
             sizes="100vw"
-            className="object-cover"
+            className="object-cover animate-hero-image"
           />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-transparent" />
           <HeroDialog />
         </div>
 
@@ -42,7 +43,7 @@ export default function Home() {
       </section>
 
       {/* OUR STORY */}
-      <section id="story" className="bg-white">
+      <section id="story" className="bg-white animate-fade-in-up">
         <div className="flex flex-col md:flex-row">
           {/* Mobile: image first */}
           <div className="md:hidden px-6 pt-12 pb-2">
@@ -51,12 +52,12 @@ export default function Home() {
               alt="Our Story"
               width={800}
               height={800}
-              className="w-[75%] mx-auto max-w-[300px] aspect-square object-cover rounded-lg"
+              className="w-[75%] mx-auto max-w-[300px] aspect-square object-cover rounded-lg animate-fade-in-up"
             />
           </div>
 
           {/* Text */}
-          <div className="flex-1 py-12 md:py-16 px-6 md:px-16 lg:pl-[120px] lg:pr-12">
+          <div className="flex-1 py-12 md:py-16 px-6 md:px-16 lg:pl-[120px] lg:pr-12 animate-fade-in-up">
             <span className="inline-block text-[11px] font-semibold uppercase tracking-[3px] text-red mb-4">
               About Us
             </span>
@@ -91,7 +92,7 @@ export default function Home() {
           </div>
 
           {/* Desktop: image right, edge-to-edge */}
-          <div className="hidden md:block relative w-[35%]">
+          <div className="hidden md:block relative w-[35%] animate-fade-in-up">
             <Image
               src="/about-us.jpg"
               alt="Our Story"
@@ -104,15 +105,15 @@ export default function Home() {
       </section>
 
       {/* AWARDS */}
-      <AwardsCarousel />
+      <AwardsCarousel className="animate-fade-in-up" />
 
       {/* VIDEO */}
-      <section id="video" className="py-12 md:py-[100px] px-6 md:px-16 lg:px-[60px] bg-white">
+      <section id="video" className="py-12 md:py-[100px] px-6 md:px-16 lg:px-[60px] bg-white animate-fade-in-up">
         <div className="flex flex-col md:flex-row gap-8 md:gap-[60px] max-w-[1200px] mx-auto items-center">
-          <div className="w-full max-w-[300px] md:max-w-none md:w-[320px] rounded-lg overflow-hidden">
+          <div className="w-full max-w-[300px] md:max-w-none md:w-[320px] rounded-lg overflow-hidden animate-fade-in-up">
             <VideoPlayer />
           </div>
-          <div className="flex-1 text-center md:text-left">
+          <div className="flex-1 text-center md:text-left animate-fade-in-up">
             <span className="inline-block text-[11px] font-semibold uppercase tracking-[3px] text-red mb-4">
               Watch Our Story
             </span>
@@ -126,7 +127,7 @@ export default function Home() {
             </p>
             <a
               href="#shop"
-              className="inline-block px-6 md:px-8 py-2.5 md:py-3 border-2 border-red text-red text-[12px] md:text-[13px] font-semibold uppercase tracking-[1px] hover:bg-red hover:text-white transition-colors"
+              className="inline-block px-6 md:px-8 py-2.5 md:py-3 border-2 border-red text-red text-[12px] md:text-[13px] font-semibold uppercase tracking-[1px] hover:bg-red hover:text-white transition-colors hover:scale-105 animate-fade-in-scale"
             >
               Shop Now
             </a>
