@@ -50,7 +50,7 @@ export default async function MurabbaPage() {
       <section className="pt-[60px] md:pt-[70px]">
         <div
           className="relative w-full bg-yellow bg-cover bg-center aspect-[6/1] min-h-[280px]"
-          style={{ backgroundImage: "url(/murabba-banner.jpg)" }}
+          style={{ backgroundImage: "url(/murabba-banner.webp)" }}
         >
           <div className="absolute inset-0 bg-black/45" />
           <div className="relative h-full flex flex-col items-center justify-center text-center px-6 py-10">

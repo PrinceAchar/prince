@@ -4,15 +4,15 @@ import { useState } from "react";
 import Image from "next/image";
 
 const awards = [
-  { year: "1983", awardedBy: "Shri Jagmohan", title: "Lieutenant Governor of Delhi", desc: "First Prize — Excellence in Pickles & Murabbas", img: "/1983.png" },
-  { year: "1985", awardedBy: "Ram Venkataraman", title: "Former Vice President of India", desc: "First Prize — Excellence in Pickles & Murabbas", img: "/1985.png" },
-  { year: "1986", awardedBy: "Mr. Kapoor", title: "Representative of the Lt. Governor of Delhi", desc: "First Prize — Excellence in Pickles & Murabbas", img: "/1986.png" },
-  { year: "1987", awardedBy: "Mrs. Hidayatullah", title: "Wife of Former Vice President of India", desc: "First Prize — Excellence in Pickles & Murabbas", img: "/1987.png" },
-  { year: "1988", awardedBy: "Shri S.K. Mishra", title: "Personal Secretary to the Prime Minister", desc: "First Prize — Excellence in Pickles & Murabbas", img: "/1988.png" },
-  { year: "1995", awardedBy: "Shri Madan Lal Khurana", title: "Chief Minister of Delhi — Mango Festival", desc: "First Prize — Excellence in Pickles & Murabbas", img: "/1995.png" },
-  { year: "2003", awardedBy: "Ms. Shailaja Chandra", title: "Chief Secretary, Government of Delhi", desc: "First Prize — Excellence in Pickles & Murabbas", img: "/2003-1.png" },
-  { year: "2003", awardedBy: "Hindustan Times", title: "Media Recognition", desc: "Featured for Legacy of Authentic Flavors", img: "/2003-2.png" },
-  { year: "2003–2012", awardedBy: "Smt. Sheila Dikshit", title: "Chief Minister of Delhi — Continuously Recognized", desc: "First Prize — Excellence in Pickles & Murabbas", img: "/2003-12.png" },
+  { year: "1983", awardedBy: "Shri Jagmohan", title: "Lieutenant Governor of Delhi", desc: "First Prize — Excellence in Pickles & Murabbas", img: "/1983.webp" },
+  { year: "1985", awardedBy: "Ram Venkataraman", title: "Former Vice President of India", desc: "First Prize — Excellence in Pickles & Murabbas", img: "/1985.webp" },
+  { year: "1986", awardedBy: "Mr. Kapoor", title: "Representative of the Lt. Governor of Delhi", desc: "First Prize — Excellence in Pickles & Murabbas", img: "/1986.webp" },
+  { year: "1987", awardedBy: "Mrs. Hidayatullah", title: "Wife of Former Vice President of India", desc: "First Prize — Excellence in Pickles & Murabbas", img: "/1987.webp" },
+  { year: "1988", awardedBy: "Shri S.K. Mishra", title: "Personal Secretary to the Prime Minister", desc: "First Prize — Excellence in Pickles & Murabbas", img: "/1988.webp" },
+  { year: "1995", awardedBy: "Shri Madan Lal Khurana", title: "Chief Minister of Delhi — Mango Festival", desc: "First Prize — Excellence in Pickles & Murabbas", img: "/1995.webp" },
+  { year: "2003", awardedBy: "Ms. Shailaja Chandra", title: "Chief Secretary, Government of Delhi", desc: "First Prize — Excellence in Pickles & Murabbas", img: "/2003-1.webp" },
+  { year: "2003", awardedBy: "Hindustan Times", title: "Media Recognition", desc: "Featured for Legacy of Authentic Flavors", img: "/2003-2.webp" },
+  { year: "2003–2012", awardedBy: "Smt. Sheila Dikshit", title: "Chief Minister of Delhi — Continuously Recognized", desc: "First Prize — Excellence in Pickles & Murabbas", img: "/2003-12.webp" },
 ];
 
 const awardsLoop = [...awards, ...awards];

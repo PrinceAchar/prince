@@ -27,7 +27,8 @@ export default function VideoPlayer() {
         <video
           ref={thumbRef}
           src="/reel.mp4"
-          poster="/video-cover.jpg"
+          poster="/video-cover.webp"
+          preload="none"
           className="w-full h-full object-cover"
           muted
           playsInline

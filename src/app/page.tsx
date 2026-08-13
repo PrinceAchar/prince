@@ -14,7 +14,7 @@ export default function Home() {
       <section id="home" className="pt-[60px] md:pt-[70px] bg-yellow">
         <div className="relative w-full aspect-[16/9] overflow-hidden animate-fade-in-up">
           <Image
-            src="/hero.png"
+            src="/hero.webp"
             alt="Prince Achar Hero"
             fill
             priority
@@ -48,7 +48,7 @@ export default function Home() {
           {/* Mobile: image first */}
           <div className="md:hidden px-6 pt-12 pb-2">
             <Image
-              src="/about-us.jpg"
+              src="/about-us.webp"
               alt="Our Story"
               width={800}
               height={800}
@@ -94,7 +94,7 @@ export default function Home() {
           {/* Desktop: image right, edge-to-edge */}
           <div className="hidden md:block relative w-[35%] animate-fade-in-up">
             <Image
-              src="/about-us.jpg"
+              src="/about-us.webp"
               alt="Our Story"
               fill
               sizes="35vw"
