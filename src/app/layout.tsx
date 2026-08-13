@@ -53,13 +53,13 @@ export const metadata: Metadata = {
     siteName: SITE_NAME,
     title: "Prince Achar | Authentic Delhi Flavors",
     description: SITE_DESCRIPTION,
-    images: [{ url: "/hero.png", width: 1200, height: 675, alt: SITE_NAME }],
+    images: [{ url: "/logo.jpeg", width: 1014, height: 507, alt: SITE_NAME }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Prince Achar | Authentic Delhi Flavors",
     description: SITE_DESCRIPTION,
-    images: ["/hero.png"],
+    images: ["/logo.jpeg"],
   },
   robots: { index: true, follow: true },
 };

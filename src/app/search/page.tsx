@@ -4,12 +4,21 @@ import Footer from "@/components/Footer";
 import SearchPage from "@/components/SearchPage";
 import { shopifyFetch, type ProductData, type ShopifyProduct } from "@/lib/shopify";
 import { ALL_PRODUCTS_QUERY } from "@/lib/queries";
+import { productPageMetadata } from "@/lib/metadata";
+import type { Metadata } from "next";
 
-export const metadata = {
-  title: "Search | Prince Achar",
-  description:
-    "Search Prince Achar's handcrafted pickles and preserves made in Old Delhi.",
-};
+const PAGE_TITLE = "Search | Prince Achar";
+const PAGE_DESCRIPTION =
+  "Search Prince Achar's handcrafted pickles and preserves made in Old Delhi.";
+
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: Promise<{ product?: string }>;
+}): Promise<Metadata> {
+  const { product } = await searchParams;
+  return productPageMetadata(product, PAGE_TITLE, PAGE_DESCRIPTION);
+}
 
 async function getAllProducts(): Promise<ShopifyProduct[]> {
   try {

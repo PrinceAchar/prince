@@ -1,3 +1,5 @@
+import { PRODUCT_BY_HANDLE_QUERY } from "./queries";
+
 const SHOPIFY_STORE_DOMAIN = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN!;
 const SHOPIFY_STOREFRONT_TOKEN = process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_TOKEN!;
 const SHOPIFY_API_VERSION = process.env.NEXT_PUBLIC_SHOPIFY_API_VERSION || "2024-10";
@@ -146,6 +148,19 @@ export function getAvailableVariants(product: ShopifyProduct): ShopifyProduct["v
 
 export function isProductSoldOut(product: ShopifyProduct): boolean {
   return product.variants.edges.length > 0 && product.variants.edges.every((e) => !e.node.availableForSale);
+}
+
+export interface ProductByHandleData {
+  productByHandle: ShopifyProduct | null;
+}
+
+export async function getProductByHandle(handle: string): Promise<ShopifyProduct | null> {
+  try {
+    const data = await shopifyFetch<ProductByHandleData>(PRODUCT_BY_HANDLE_QUERY, { handle });
+    return data.productByHandle;
+  } catch {
+    return null;
+  }
 }
 
 // Cart API types and functions

@@ -5,6 +5,8 @@ import { shopifyFetch, type CollectionByHandleData, type ShopifyProduct } from "
 import { PRODUCTS_BY_COLLECTION_QUERY } from "@/lib/queries";
 import { Suspense } from "react";
 import { productsJsonLd } from "@/lib/jsonld";
+import { productPageMetadata } from "@/lib/metadata";
+import type { Metadata } from "next";
 
 async function getMurabbaProducts(): Promise<ShopifyProduct[]> {
   try {
@@ -18,11 +20,18 @@ async function getMurabbaProducts(): Promise<ShopifyProduct[]> {
   }
 }
 
-export const metadata = {
-  title: "Murabbas | Prince Achar",
-  description:
-    "Slow-cooked fruit preserves made with time-honored recipes. Each murabba is a labor of love.",
-};
+const PAGE_TITLE = "Murabbas | Prince Achar";
+const PAGE_DESCRIPTION =
+  "Slow-cooked fruit preserves made with time-honored recipes. Each murabba is a labor of love.";
+
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: Promise<{ product?: string }>;
+}): Promise<Metadata> {
+  const { product } = await searchParams;
+  return productPageMetadata(product, PAGE_TITLE, PAGE_DESCRIPTION);
+}
 
 export default async function MurabbaPage() {
   const products = await getMurabbaProducts();

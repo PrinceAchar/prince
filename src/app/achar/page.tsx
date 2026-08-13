@@ -5,6 +5,8 @@ import { shopifyFetch, type CollectionByHandleData, type ShopifyProduct } from "
 import { PRODUCTS_BY_COLLECTION_QUERY } from "@/lib/queries";
 import { Suspense } from "react";
 import { productsJsonLd } from "@/lib/jsonld";
+import { productPageMetadata } from "@/lib/metadata";
+import type { Metadata } from "next";
 
 async function getAcharProducts(): Promise<ShopifyProduct[]> {
   try {
@@ -18,11 +20,18 @@ async function getAcharProducts(): Promise<ShopifyProduct[]> {
   }
 }
 
-export const metadata = {
-  title: "Authentic Pickles | Prince Achar",
-  description:
-    "Handcrafted pickles made in small batches using traditional Delhi recipes passed down since 1980.",
-};
+const PAGE_TITLE = "Authentic Pickles | Prince Achar";
+const PAGE_DESCRIPTION =
+  "Handcrafted pickles made in small batches using traditional Delhi recipes passed down since 1980.";
+
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: Promise<{ product?: string }>;
+}): Promise<Metadata> {
+  const { product } = await searchParams;
+  return productPageMetadata(product, PAGE_TITLE, PAGE_DESCRIPTION);
+}
 
 export default async function AcharPage() {
   const products = await getAcharProducts();
