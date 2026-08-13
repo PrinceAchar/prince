@@ -1,5 +1,13 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Shopify Configuration
+
+Copy `.env.example` to `.env.local` and fill in your Shopify credentials. The site uses the Storefront API for products and cart.
+
+### Featured products
+
+The landing page "Featured Bestsellers" section shows the products listed in `src/lib/featured.ts` (`FEATURED_PRODUCT_HANDLES`), in that exact order. A future admin panel will let the store owner pick and reorder these products from the Shopify catalog.
+
 ## Getting Started
 
 First, run the development server:

@@ -6,7 +6,13 @@ import { type ShopifyProduct } from "@/lib/shopify";
 import ProductCard from "./ProductCard";
 import ProductOverlay from "./ProductOverlay";
 
-export default function ProductGrid({ products }: { products: ShopifyProduct[] }) {
+export default function ProductGrid({
+  products,
+  featured = false,
+}: {
+  products: ShopifyProduct[];
+  featured?: boolean;
+}) {
   const [selectedProduct, setSelectedProduct] = useState<ShopifyProduct | null>(null);
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -51,12 +57,19 @@ export default function ProductGrid({ products }: { products: ShopifyProduct[] }
 
   return (
     <>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+      <div
+        className={
+          featured
+            ? "grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6"
+            : "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
+        }
+      >
         {products.map((product) => (
           <ProductCard
             key={product.id}
             product={product}
             onImageClick={handleSelect}
+            featured={featured}
           />
         ))}
       </div>

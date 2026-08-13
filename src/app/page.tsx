@@ -3,9 +3,15 @@ import Navbar from "@/components/Navbar";
 import HeroDialog from "@/components/HeroDialog";
 import VideoPlayer from "@/components/VideoPlayer";
 import AwardsCarousel from "@/components/AwardsCarousel";
+import BestsellersSection from "@/components/BestsellersSection";
 import Footer from "@/components/Footer";
+import { getFeaturedProducts } from "@/lib/featured";
 
-export default function Home() {
+export const revalidate = 3600;
+
+export default async function Home() {
+  const bestsellers = await getFeaturedProducts(4);
+
   return (
     <>
       <Navbar />
@@ -41,6 +47,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* FEATURED BESTSELLERS */}
+      <BestsellersSection products={bestsellers} />
 
       {/* OUR STORY */}
       <section id="story" className="bg-white animate-fade-in-up">
@@ -126,7 +135,7 @@ export default function Home() {
               seal of every jar, witness the passion and dedication that goes into every batch.
             </p>
             <a
-              href="#shop"
+              href="/achar"
               className="inline-block px-6 md:px-8 py-2.5 md:py-3 border-2 border-red text-red text-[12px] md:text-[13px] font-semibold uppercase tracking-[1px] hover:bg-red hover:text-white transition-colors hover:scale-105 animate-fade-in-scale"
             >
               Shop Now

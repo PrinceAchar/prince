@@ -24,7 +24,7 @@ export default function HeroDialog() {
           Experience the authentic flavors of Delhi, passed down through generations.
         </p>
         <a
-          href="#achar"
+          href="/achar"
           className="inline-block px-4 sm:px-6 md:px-7 py-1.5 sm:py-2 md:py-[10px] bg-red text-white text-[10px] sm:text-[12px] md:text-[13px] font-semibold uppercase tracking-[1px] hover:bg-red-dark transition-colors"
         >
           Explore Now

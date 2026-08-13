@@ -6,17 +6,21 @@ import { type ShopifyProduct, formatPrice, getProductSize, isProductSoldOut } fr
 import { useCart } from "./CartProvider";
 
 const tagColors: Record<string, string> = {
+  Pickle: "bg-red/10 text-red",
   Pickles: "bg-red/10 text-red",
   Murabba: "bg-yellow text-red",
+  Special: "bg-brand-black/10 text-brand-black",
   "Special Products": "bg-brand-black/10 text-brand-black",
+  Chutney: "bg-brand-black/10 text-brand-black",
 };
 
 interface ProductCardProps {
   product: ShopifyProduct;
   onImageClick: (product: ShopifyProduct) => void;
+  featured?: boolean;
 }
 
-export default function ProductCard({ product, onImageClick }: ProductCardProps) {
+export default function ProductCard({ product, onImageClick, featured = false }: ProductCardProps) {
   const { addItem, openCart, isLoading } = useCart();
   const [isHovered, setIsHovered] = useState(false);
   const [mobileImageIndex, setMobileImageIndex] = useState(0);
@@ -35,7 +39,7 @@ export default function ProductCard({ product, onImageClick }: ProductCardProps)
     product.priceRange.minVariantPrice.currencyCode
   );
   const size = getProductSize(product);
-  const tag = product.tags[0] || product.productType;
+  const tag = product.productType || product.tags[0];
   const tagClass = tagColors[tag] || "bg-brand-black/10 text-brand-black";
 
   const handleAddToCart = async (e: React.MouseEvent) => {
@@ -70,7 +74,9 @@ export default function ProductCard({ product, onImageClick }: ProductCardProps)
 
   return (
     <div
-      className="group bg-yellow/50 rounded-xl overflow-hidden border border-brand-black/5 hover:shadow-lg transition-shadow cursor-pointer"
+      className={`group rounded-xl overflow-hidden border border-brand-black/5 hover:shadow-lg transition-shadow cursor-pointer ${
+        featured ? "bg-white" : "bg-yellow/50"
+      }`}
       onClick={() => onImageClick(product)}
     >
       <div
