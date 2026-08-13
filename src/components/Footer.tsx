@@ -20,9 +20,9 @@ export default function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="bg-[#FAF5E4] text-brand-black relative overflow-hidden pt-10">
-      <div className="max-w-[1150px] mx-auto px-6 pb-10 relative">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-6 md:divide-x md:divide-brand-black/10">
+    <footer className="bg-[#FAF5E4] text-brand-black relative overflow-hidden pt-6 md:pt-10">
+      <div className="max-w-[1150px] mx-auto px-6 pb-6 md:pb-10 relative">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-5 md:gap-6 md:divide-x md:divide-brand-black/10">
           {/* Brand */}
           <div className="col-span-2 md:col-span-1 md:px-6">
             <Image
@@ -30,19 +30,19 @@ export default function Footer() {
               alt="Prince Achar"
               width={150}
               height={56}
-              className="h-12 w-auto mb-3"
+              className="h-10 md:h-12 w-auto mb-2 md:mb-3"
             />
-            <p className="text-[13px] text-gray leading-relaxed max-w-[240px]">
+            <p className="text-[12px] md:text-[13px] text-gray leading-relaxed max-w-[240px]">
               Authentic Delhi flavors, handcrafted with love since 1980.
             </p>
           </div>
 
           {/* Quick Links */}
           <div className="md:px-6">
-            <h4 className="text-[11px] md:text-[12px] font-semibold uppercase tracking-[1.5px] mb-3 md:mb-4 text-red">
+            <h4 className="text-[11px] md:text-[12px] font-semibold uppercase tracking-[1.5px] mb-2 md:mb-4 text-red">
               Quick Links
             </h4>
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-1.5 md:gap-2">
               {navLinks.map((l) => (
                 <Link
                   key={l.href}
@@ -57,10 +57,10 @@ export default function Footer() {
 
           {/* Support */}
           <div className="md:px-6">
-            <h4 className="text-[11px] md:text-[12px] font-semibold uppercase tracking-[1.5px] mb-3 md:mb-4 text-red">
+            <h4 className="text-[11px] md:text-[12px] font-semibold uppercase tracking-[1.5px] mb-2 md:mb-4 text-red">
               Support
             </h4>
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-1.5 md:gap-2">
               {supportLinks.map((l) => (
                 <Link
                   key={l.href}
@@ -75,7 +75,7 @@ export default function Footer() {
 
           {/* Follow Us */}
           <div className="md:px-6">
-            <h4 className="text-[11px] md:text-[12px] font-semibold uppercase tracking-[1.5px] mb-3 md:mb-4 text-red">
+            <h4 className="text-[11px] md:text-[12px] font-semibold uppercase tracking-[1.5px] mb-2 md:mb-4 text-red">
               Follow Us
             </h4>
             <div className="flex gap-4">
