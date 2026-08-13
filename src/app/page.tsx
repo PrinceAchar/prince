@@ -57,7 +57,7 @@ export default function Home() {
           </div>
 
           {/* Text */}
-          <div className="flex-1 py-12 md:py-16 px-6 md:px-16 lg:pl-[120px] lg:pr-12 animate-fade-in-up">
+          <div className="flex-1 py-12 md:py-16 px-6 md:px-16 lg:pl-[120px] lg:pr-12 text-center md:text-left">
             <span className="inline-block text-[11px] font-semibold uppercase tracking-[3px] text-red mb-4">
               About Us
             </span>

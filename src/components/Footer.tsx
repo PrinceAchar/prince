@@ -22,9 +22,9 @@ export default function Footer() {
   return (
     <footer className="bg-[#FAF5E4] text-brand-black relative overflow-hidden pt-6 md:pt-10">
       <div className="max-w-[1150px] mx-auto px-6 pb-6 md:pb-10 relative">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-5 md:gap-6 md:divide-x md:divide-brand-black/10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 md:gap-6 md:divide-x md:divide-brand-black/10 text-center md:text-left">
           {/* Brand */}
-          <div className="col-span-2 md:col-span-1 md:px-6">
+          <div className="col-span-1 sm:col-span-2 md:col-span-1 md:px-6 flex flex-col items-center md:items-start">
             <Image
               src="/logo.jpeg"
               alt="Prince Achar"
@@ -42,7 +42,7 @@ export default function Footer() {
             <h4 className="text-[11px] md:text-[12px] font-semibold uppercase tracking-[1.5px] mb-2 md:mb-4 text-red">
               Quick Links
             </h4>
-            <div className="flex flex-col gap-1.5 md:gap-2">
+            <div className="flex flex-col gap-1.5 md:gap-2 items-center md:items-start">
               {navLinks.map((l) => (
                 <Link
                   key={l.href}
@@ -60,7 +60,7 @@ export default function Footer() {
             <h4 className="text-[11px] md:text-[12px] font-semibold uppercase tracking-[1.5px] mb-2 md:mb-4 text-red">
               Support
             </h4>
-            <div className="flex flex-col gap-1.5 md:gap-2">
+            <div className="flex flex-col gap-1.5 md:gap-2 items-center md:items-start">
               {supportLinks.map((l) => (
                 <Link
                   key={l.href}
@@ -78,7 +78,7 @@ export default function Footer() {
             <h4 className="text-[11px] md:text-[12px] font-semibold uppercase tracking-[1.5px] mb-2 md:mb-4 text-red">
               Follow Us
             </h4>
-            <div className="flex gap-4">
+            <div className="flex gap-4 justify-center md:justify-start">
               <a
                 href="https://www.instagram.com/princeacharindia/"
                 target="_blank"
