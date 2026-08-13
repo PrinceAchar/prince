@@ -8,7 +8,7 @@ import Footer from "@/components/Footer";
 export default function Home() {
   return (
     <>
-      <Navbar className="animate-slide-in-down" />
+      <Navbar />
 
       {/* HERO */}
       <section id="home" className="pt-[60px] md:pt-[70px] bg-yellow">
@@ -19,7 +19,7 @@ export default function Home() {
             fill
             priority
             sizes="100vw"
-            className="object-cover animate-hero-image"
+            className="object-cover animate-hero-enter"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-transparent" />
           <HeroDialog />
@@ -105,7 +105,7 @@ export default function Home() {
       </section>
 
       {/* AWARDS */}
-      <AwardsCarousel className="animate-fade-in-up" />
+      <AwardsCarousel />
 
       {/* VIDEO */}
       <section id="video" className="py-12 md:py-[100px] px-6 md:px-16 lg:px-[60px] bg-white animate-fade-in-up">

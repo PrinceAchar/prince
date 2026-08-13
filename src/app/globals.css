@@ -218,15 +218,6 @@ body {
   animation: pulse-glow 2s ease-in-out infinite;
 }
 
-@keyframes pulse-glow {
-  0%, 100% {
-    box-shadow: 0 0 0 0 rgba(194, 26, 51, 0);
-  }
-  50% {
-    box-shadow: 0 0 12px 0 rgba(194, 26, 51, 0.25);
-  }
-}
-
 .animate-slide-in-bottom {
   animation: slide-in-bottom 0.5s ease-out forwards;
 }
