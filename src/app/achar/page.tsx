@@ -1,6 +1,7 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ProductGrid from "@/components/ProductGrid";
+import CollectionHero from "@/components/CollectionHero";
 import { shopifyFetch, type CollectionByHandleData, type ShopifyProduct } from "@/lib/shopify";
 import { PRODUCTS_BY_COLLECTION_QUERY } from "@/lib/queries";
 import { Suspense } from "react";
@@ -46,29 +47,10 @@ export default async function AcharPage() {
       )}
       <Navbar />
 
-      {/* HERO */}
       <section className="pt-[60px] md:pt-[70px]">
-        <div
-          className="relative w-full bg-yellow bg-cover bg-center aspect-[6/1] min-h-[280px]"
-          style={{ backgroundImage: "url(/achar-banner.webp)" }}
-        >
-          <div className="absolute inset-0 bg-black/45" />
-          <div className="relative h-full flex flex-col items-center justify-center text-center px-6 py-10">
-            <span className="inline-block text-[11px] font-semibold uppercase tracking-[3px] text-white/90 mb-4">
-              Our Collection
-            </span>
-            <h1 className="font-heading text-[34px] md:text-[48px] lg:text-[56px] font-bold text-white mb-5 leading-tight">
-              Authentic Pickles
-            </h1>
-            <p className="text-[14px] md:text-[16px] text-white/90 leading-[1.8] max-w-[600px] mx-auto">
-              Handcrafted in small batches using traditional Delhi recipes passed down since 1980.
-              Every jar is a promise of purity, flavor, and heritage.
-            </p>
-          </div>
-        </div>
+        <CollectionHero section="achar" />
       </section>
 
-      {/* PRODUCTS GRID */}
       <section className="bg-white py-12 md:py-20">
         <div className="max-w-[1200px] mx-auto px-6">
           {products.length > 0 ? (

@@ -1,8 +1,14 @@
+"use client";
+
 import { Suspense } from "react";
 import { type ShopifyProduct } from "@/lib/shopify";
 import ProductGrid from "./ProductGrid";
+import { useContent } from "@/lib/content";
 
 export default function BestsellersSection({ products }: { products: ShopifyProduct[] }) {
+  const content = useContent();
+  const bs = content.homepage.bestsellers;
+
   if (products.length === 0) return null;
 
   return (
@@ -10,14 +16,13 @@ export default function BestsellersSection({ products }: { products: ShopifyProd
       <div className="max-w-[1200px] mx-auto px-6">
         <div className="text-center mb-8 md:mb-12">
           <span className="inline-block text-[11px] font-semibold uppercase tracking-[3px] text-red mb-3">
-            Customer Favorites
+            {bs.label}
           </span>
           <h2 className="font-heading text-[26px] md:text-[34px] font-bold text-brand-black mb-3 leading-tight">
-            Featured Bestsellers
+            {bs.heading}
           </h2>
           <p className="text-[13px] md:text-[14px] text-gray max-w-[560px] mx-auto leading-relaxed">
-            Our most-loved jars, picked by the customers who keep coming back
-            for the authentic taste of Delhi.
+            {bs.text}
           </p>
         </div>
 
@@ -27,10 +32,10 @@ export default function BestsellersSection({ products }: { products: ShopifyProd
 
         <div className="text-center mt-8 md:mt-12">
           <a
-            href="/achar"
+            href={bs.ctaLink}
             className="inline-block px-8 py-3 border-2 border-red text-red text-[12px] md:text-[13px] font-semibold uppercase tracking-[1px] hover:bg-red hover:text-white transition-colors"
           >
-            Shop All Pickles
+            {bs.ctaText}
           </a>
         </div>
       </div>

@@ -1,18 +1,21 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useContent } from "@/lib/content";
 
 export default function HeroDialog() {
   const [fadeOut, setFadeOut] = useState(false);
   const [dismissed, setDismissed] = useState(false);
+  const content = useContent();
+  const dialog = content.homepage.heroDialog;
 
   useEffect(() => {
-    if (dismissed) return;
+    if (dismissed || !dialog.enabled) return;
     const timer = setTimeout(() => setFadeOut(true), 5000);
     return () => clearTimeout(timer);
-  }, [dismissed]);
+  }, [dismissed, dialog.enabled]);
 
-  if (dismissed) return null;
+  if (dismissed || !dialog.enabled) return null;
 
   return (
     <div
@@ -20,7 +23,6 @@ export default function HeroDialog() {
         fadeOut ? "hero-dialog-fade-out" : "opacity-100"
       }`}
     >
-      {/* Dismiss button */}
       <button
         onClick={() => setDismissed(true)}
         className="absolute top-2 right-2 sm:top-3 sm:right-3 w-7 h-7 rounded-full bg-brand-black/10 flex items-center justify-center hover:bg-brand-black/20 transition-colors z-10"
@@ -33,16 +35,16 @@ export default function HeroDialog() {
 
       <div className="text-center p-3 sm:p-8 md:p-10">
         <h2 className="font-heading text-[16px] sm:text-[24px] md:text-[28px] font-bold text-red mb-2 sm:mb-3 md:mb-4">
-          Handcrafted with Love
+          {dialog.heading}
         </h2>
         <p className="text-[11px] sm:text-[14px] md:text-[15px] text-gray leading-relaxed mb-3 sm:mb-4 md:mb-6">
-          Experience the authentic flavors of Delhi, passed down through generations.
+          {dialog.text}
         </p>
         <a
-          href="/achar"
+          href={dialog.ctaLink}
           className="inline-block px-4 sm:px-6 md:px-7 py-1.5 sm:py-2 md:py-[10px] bg-red text-white text-[10px] sm:text-[12px] md:text-[13px] font-semibold uppercase tracking-[1px] hover:bg-red-dark transition-colors"
         >
-          Explore Now
+          {dialog.ctaText}
         </a>
       </div>
     </div>

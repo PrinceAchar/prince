@@ -4,22 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-
-const STORE_IMAGES = [
-  "/store/store-front.webp",
-  "/store/store-2.png",
-  "/store/store-3.png",
-  "/store/store-4.png",
-];
-
-const SUBJECTS = [
-  "Wholesale & Distribution",
-  "Retail / Stocking Inquiry",
-  "Product Feedback",
-  "Order Support",
-  "Press & Media",
-  "Other",
-];
+import { useContent } from "@/lib/content";
 
 function MapPinIcon() {
   return (
@@ -56,36 +41,6 @@ function ClockIcon() {
   );
 }
 
-const reachItems = [
-  {
-    title: "Store",
-    icon: <MapPinIcon />,
-    lines: ["Shop No. 6673, Khari Baoli Road, Fatehpuri,", "Chandni Chowk, New Delhi – 110006"],
-    action: {
-      label: "Get Directions",
-      href: "https://www.google.com/maps/search/?api=1&query=Prince+Achar+Khari+Baoli+Delhi",
-      external: true,
-    },
-  },
-  {
-    title: "Hours",
-    icon: <ClockIcon />,
-    lines: ["Mon–Sat: 9:00 AM – 6:00 PM", "Sunday: Closed"],
-  },
-  {
-    title: "Phone",
-    icon: <PhoneIcon />,
-    lines: ["+91 98110 56593"],
-    action: { label: "Call Now", href: "tel:+919811056593" },
-  },
-  {
-    title: "Email",
-    icon: <MailIcon />,
-    lines: ["info@princeachar.com"],
-    action: { label: "Email Us", href: "mailto:info@princeachar.com" },
-  },
-];
-
 function HeritageDivider() {
   return (
     <div className="flex items-center justify-center gap-3 my-5">
@@ -101,20 +56,22 @@ function HeritageDivider() {
 const fieldClass =
   "w-full px-4 py-3 bg-white border border-brand-black/12 rounded-xl text-[14px] text-brand-black placeholder:text-gray/70 outline-none focus:border-red/50 focus:ring-2 focus:ring-red/15 transition-colors";
 
-function Slideshow() {
+function Slideshow({ images }: { images: string[] }) {
   const [idx, setIdx] = useState(0);
   const [paused, setPaused] = useState(false);
   const go = (dir: number) =>
-    setIdx((i) => (i + dir + STORE_IMAGES.length) % STORE_IMAGES.length);
+    setIdx((i) => (i + dir + images.length) % images.length);
 
   useEffect(() => {
-    if (paused) return;
+    if (paused || images.length <= 1) return;
     const t = setInterval(
-      () => setIdx((i) => (i + 1) % STORE_IMAGES.length),
+      () => setIdx((i) => (i + 1) % images.length),
       5000
     );
     return () => clearInterval(t);
-  }, [paused]);
+  }, [paused, images.length]);
+
+  if (images.length === 0) return null;
 
   return (
     <div
@@ -122,7 +79,7 @@ function Slideshow() {
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-      {STORE_IMAGES.map((src, i) => (
+      {images.map((src, i) => (
         <Image
           key={src}
           src={src}
@@ -140,39 +97,44 @@ function Slideshow() {
           Khari Baoli, Delhi
         </span>
       </div>
-      <div className="absolute bottom-4 right-4 flex items-center gap-3">
-        <span className="text-white text-[12px] tracking-[0.2em] tabular-nums drop-shadow-sm">
-          {String(idx + 1).padStart(2, "0")} /{" "}
-          {String(STORE_IMAGES.length).padStart(2, "0")}
-        </span>
-        <div className="flex gap-1.5">
-          <button
-            type="button"
-            onClick={() => go(-1)}
-            aria-label="Previous photo"
-            className="w-7 h-7 rounded-full border border-white/60 text-white flex items-center justify-center transition-colors hover:bg-white/15"
-          >
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="m15 18-6-6 6-6" />
-            </svg>
-          </button>
-          <button
-            type="button"
-            onClick={() => go(1)}
-            aria-label="Next photo"
-            className="w-7 h-7 rounded-full border border-white/60 text-white flex items-center justify-center transition-colors hover:bg-white/15"
-          >
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="m9 18 6-6-6-6" />
-            </svg>
-          </button>
+      {images.length > 1 && (
+        <div className="absolute bottom-4 right-4 flex items-center gap-3">
+          <span className="text-white text-[12px] tracking-[0.2em] tabular-nums drop-shadow-sm">
+            {String(idx + 1).padStart(2, "0")} /{" "}
+            {String(images.length).padStart(2, "0")}
+          </span>
+          <div className="flex gap-1.5">
+            <button
+              type="button"
+              onClick={() => go(-1)}
+              aria-label="Previous photo"
+              className="w-7 h-7 rounded-full border border-white/60 text-white flex items-center justify-center transition-colors hover:bg-white/15"
+            >
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="m15 18-6-6 6-6" />
+              </svg>
+            </button>
+            <button
+              type="button"
+              onClick={() => go(1)}
+              aria-label="Next photo"
+              className="w-7 h-7 rounded-full border border-white/60 text-white flex items-center justify-center transition-colors hover:bg-white/15"
+            >
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="m9 18 6-6-6-6" />
+              </svg>
+            </button>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
 
 export default function ContactPage() {
+  const content = useContent();
+  const c = content.contact;
+
   const [form, setForm] = useState({
     name: "",
     phone: "",
@@ -192,38 +154,61 @@ export default function ContactPage() {
     const body = encodeURIComponent(
       `Name: ${form.name}\nPhone: ${form.phone}\nEmail: ${form.email}\nSubject: ${form.subject}\n\n${form.message}`
     );
-    window.location.href = `mailto:info@princeachar.com?subject=${encodeURIComponent(
+    window.location.href = `mailto:${c.info.email.address}?subject=${encodeURIComponent(
       form.subject || "Contact Inquiry"
     )}&body=${body}`;
     setSubmitted(true);
   };
 
+  const reachItems = [
+    {
+      title: c.info.store.title,
+      icon: <MapPinIcon />,
+      lines: [c.info.store.address],
+      action: { label: c.info.store.ctaText, href: c.info.store.ctaLink, external: true },
+    },
+    {
+      title: "Hours",
+      icon: <ClockIcon />,
+      lines: [c.info.hours.weekday, c.info.hours.sunday],
+    },
+    {
+      title: "Phone",
+      icon: <PhoneIcon />,
+      lines: [c.info.phone.number],
+      action: { label: c.info.phone.ctaText, href: c.info.phone.ctaLink },
+    },
+    {
+      title: "Email",
+      icon: <MailIcon />,
+      lines: [c.info.email.address],
+      action: { label: c.info.email.ctaText, href: c.info.email.ctaLink },
+    },
+  ];
+
   return (
     <>
       <Navbar />
 
-      {/* Hero */}
       <section className="pt-[60px] md:pt-[70px] bg-white">
         <div className="max-w-[1150px] mx-auto px-6 pt-10 md:pt-12 pb-2 text-center">
           <span className="inline-block text-[11px] font-semibold uppercase tracking-[3px] text-red mb-3">
-            Get in Touch
+            {c.hero.label}
           </span>
           <h1 className="font-heading text-[36px] md:text-[42px] font-bold text-brand-black leading-tight">
-            Contact Us
+            {c.hero.title}
           </h1>
           <p className="text-[13px] md:text-[15px] text-gray max-w-[460px] mx-auto leading-relaxed mt-3">
-            Distributors, retailers, or pickle lovers — we&apos;re here for you.
-            Reach out and we&apos;ll get back to you shortly.
+            {c.hero.description}
           </p>
           <HeritageDivider />
         </div>
       </section>
 
-      {/* Slideshow + Form */}
       <section className="bg-white pb-8">
         <div className="max-w-[1200px] mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-6 md:gap-7 lg:items-stretch">
-            <Slideshow />
+            <Slideshow images={c.images} />
 
             <div className="bg-yellow rounded-[22px] border border-brand-black/10 shadow-[0_2px_18px_rgba(0,0,0,0.04)] p-6 md:p-8">
               {submitted ? (
@@ -246,95 +231,46 @@ export default function ContactPage() {
                 <div className="h-full flex flex-col">
                   <div className="mb-6">
                     <span className="block text-[11px] font-semibold uppercase tracking-[2px] text-red mb-1.5">
-                      Get in Touch
+                      {c.form.label}
                     </span>
                     <h2 className="font-heading text-[22px] md:text-[26px] font-bold text-brand-black leading-snug">
-                      We&apos;d love to hear from you.
+                      {c.form.heading}
                     </h2>
                   </div>
 
                   <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-[12px] font-medium text-brand-black mb-1.5">
-                          Name
-                        </label>
-                        <input
-                          type="text"
-                          required
-                          value={form.name}
-                          onChange={update("name")}
-                          placeholder="Your name"
-                          className={fieldClass}
-                        />
+                        <label className="block text-[12px] font-medium text-brand-black mb-1.5">Name</label>
+                        <input type="text" required value={form.name} onChange={update("name")} placeholder="Your name" className={fieldClass} />
                       </div>
                       <div>
-                        <label className="block text-[12px] font-medium text-brand-black mb-1.5">
-                          Phone
-                        </label>
-                        <input
-                          type="tel"
-                          required
-                          value={form.phone}
-                          onChange={update("phone")}
-                          placeholder="Your phone"
-                          className={fieldClass}
-                        />
+                        <label className="block text-[12px] font-medium text-brand-black mb-1.5">Phone</label>
+                        <input type="tel" required value={form.phone} onChange={update("phone")} placeholder="Your phone" className={fieldClass} />
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-[12px] font-medium text-brand-black mb-1.5">
-                        Email
-                      </label>
-                      <input
-                        type="email"
-                        required
-                        value={form.email}
-                        onChange={update("email")}
-                        placeholder="you@example.com"
-                        className={fieldClass}
-                      />
+                      <label className="block text-[12px] font-medium text-brand-black mb-1.5">Email</label>
+                      <input type="email" required value={form.email} onChange={update("email")} placeholder="you@example.com" className={fieldClass} />
                     </div>
 
                     <div>
-                      <label className="block text-[12px] font-medium text-brand-black mb-1.5">
-                        Subject
-                      </label>
-                      <select
-                        required
-                        value={form.subject}
-                        onChange={update("subject")}
-                        className={`${fieldClass} appearance-none`}
-                      >
-                        <option value="" disabled>
-                          Select a subject
-                        </option>
-                        {SUBJECTS.map((s) => (
-                          <option key={s} value={s}>
-                            {s}
-                          </option>
+                      <label className="block text-[12px] font-medium text-brand-black mb-1.5">Subject</label>
+                      <select required value={form.subject} onChange={update("subject")} className={`${fieldClass} appearance-none`}>
+                        <option value="" disabled>Select a subject</option>
+                        {c.form.subjects.map((s) => (
+                          <option key={s} value={s}>{s}</option>
                         ))}
                       </select>
                     </div>
 
                     <div>
-                      <label className="block text-[12px] font-medium text-brand-black mb-1.5">
-                        Message
-                      </label>
-                      <textarea
-                        required
-                        value={form.message}
-                        onChange={update("message")}
-                        placeholder="Tell us how we can help..."
-                        className={`${fieldClass} min-h-[110px] resize-none`}
-                      />
+                      <label className="block text-[12px] font-medium text-brand-black mb-1.5">Message</label>
+                      <textarea required value={form.message} onChange={update("message")} placeholder="Tell us how we can help..." className={`${fieldClass} min-h-[110px] resize-none`} />
                     </div>
 
-                    <button
-                      type="submit"
-                      className="w-full bg-red hover:bg-red-dark text-white text-[13px] font-semibold uppercase tracking-[1px] rounded-xl py-3.5 transition-colors"
-                    >
+                    <button type="submit" className="w-full bg-red hover:bg-red-dark text-white text-[13px] font-semibold uppercase tracking-[1px] rounded-xl py-3.5 transition-colors">
                       Send Message
                     </button>
                   </form>
@@ -345,7 +281,6 @@ export default function ContactPage() {
         </div>
       </section>
 
-      {/* Reach Us strip */}
       <section className="bg-white pb-10 md:pb-14">
         <div className="max-w-[1200px] mx-auto px-6">
           <div className="bg-yellow rounded-[14px] border border-brand-black/8 px-5 md:px-7 py-6 md:py-7">
@@ -356,13 +291,9 @@ export default function ContactPage() {
                     {item.icon}
                   </div>
                   <div className="min-w-0">
-                    <h3 className="text-[10px] font-semibold uppercase tracking-[1.5px] text-gray mb-1">
-                      {item.title}
-                    </h3>
+                    <h3 className="text-[10px] font-semibold uppercase tracking-[1.5px] text-gray mb-1">{item.title}</h3>
                     {item.lines.map((l, li) => (
-                      <p key={li} className="text-[13px] text-brand-black leading-snug">
-                        {l}
-                      </p>
+                      <p key={li} className="text-[13px] text-brand-black leading-snug">{l}</p>
                     ))}
                     {item.action && (
                       <a

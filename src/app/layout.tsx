@@ -4,6 +4,7 @@ import "./globals.css";
 import { CartProvider } from "@/components/CartProvider";
 import CartDrawer from "@/components/CartDrawer";
 import ScrollToTop from "@/components/ScrollToTop";
+import Providers from "./providers";
 import { SITE_URL, SITE_NAME } from "@/lib/site";
 
 const SITE_DESCRIPTION =
@@ -73,15 +74,17 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${cormorant.variable} ${outfit.variable}`}>
       <body>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
-        />
-        <CartProvider>
-          {children}
-          <CartDrawer />
-          <ScrollToTop />
-        </CartProvider>
+        <Providers>
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+          />
+          <CartProvider>
+            {children}
+            <CartDrawer />
+            <ScrollToTop />
+          </CartProvider>
+        </Providers>
       </body>
     </html>
   );
