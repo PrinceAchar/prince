@@ -6,6 +6,11 @@ import { getClientAuth } from "@/lib/firebase";
 import { onAuthStateChanged, type User } from "firebase/auth";
 import Link from "next/link";
 
+const ADMIN_EMAILS = [
+  "info@princeachar.com",
+  "acaditya10@gmail.com",
+];
+
 const NAV_ITEMS = [
   { label: "Dashboard", href: "/admin" },
   { label: "Homepage", href: "/admin#homepage" },
@@ -29,10 +34,13 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
     }
 
     const auth = getClientAuth();
-    const unsub = onAuthStateChanged(auth, (u) => {
+    const unsub = onAuthStateChanged(auth, async (u) => {
       setUser(u);
       setLoading(false);
       if (!u && pathname !== "/admin/login") {
+        router.push("/admin/login");
+      } else if (u && !ADMIN_EMAILS.includes(u.email ?? "")) {
+        await auth.signOut();
         router.push("/admin/login");
       }
     });
@@ -72,6 +80,9 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
           </Link>
         </div>
         <div className="flex items-center gap-3">
+          {user?.displayName && (
+            <span className="text-[12px] text-gray hidden sm:inline">{user.displayName}</span>
+          )}
           <Link
             href="/"
             target="_blank"
@@ -79,6 +90,14 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
           >
             View Site
           </Link>
+          {user?.photoURL && (
+            <img
+              src={user.photoURL}
+              alt=""
+              className="w-7 h-7 rounded-full border border-brand-black/10"
+              referrerPolicy="no-referrer"
+            />
+          )}
           <button
             onClick={() => getClientAuth().signOut()}
             className="text-[12px] text-red hover:text-red-dark transition-colors font-medium"
