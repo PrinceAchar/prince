@@ -3,6 +3,7 @@ import { Cormorant_Garamond, Outfit } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "@/components/CartProvider";
 import CartDrawer from "@/components/CartDrawer";
+import ScrollToTop from "@/components/ScrollToTop";
 import { SITE_URL, SITE_NAME } from "@/lib/site";
 
 const SITE_DESCRIPTION =
@@ -79,6 +80,7 @@ export default function RootLayout({
         <CartProvider>
           {children}
           <CartDrawer />
+          <ScrollToTop />
         </CartProvider>
       </body>
     </html>

@@ -103,19 +103,25 @@ const fieldClass =
 
 function Slideshow() {
   const [idx, setIdx] = useState(0);
+  const [paused, setPaused] = useState(false);
   const go = (dir: number) =>
     setIdx((i) => (i + dir + STORE_IMAGES.length) % STORE_IMAGES.length);
 
   useEffect(() => {
+    if (paused) return;
     const t = setInterval(
       () => setIdx((i) => (i + 1) % STORE_IMAGES.length),
       5000
     );
     return () => clearInterval(t);
-  }, []);
+  }, [paused]);
 
   return (
-    <div className="relative h-full min-h-[380px] lg:min-h-0 rounded-[16px] overflow-hidden bg-[#F3E9D6]">
+    <div
+      className="relative h-full min-h-[380px] lg:min-h-0 rounded-[16px] overflow-hidden bg-[#F3E9D6]"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
       {STORE_IMAGES.map((src, i) => (
         <Image
           key={src}
@@ -186,7 +192,7 @@ export default function ContactPage() {
     const body = encodeURIComponent(
       `Name: ${form.name}\nPhone: ${form.phone}\nEmail: ${form.email}\nSubject: ${form.subject}\n\n${form.message}`
     );
-    window.location.href = `mailto:hi@acaditya10.tech?subject=${encodeURIComponent(
+    window.location.href = `mailto:info@princeachar.com?subject=${encodeURIComponent(
       form.subject || "Contact Inquiry"
     )}&body=${body}`;
     setSubmitted(true);
@@ -231,7 +237,8 @@ export default function ContactPage() {
                     Message Sent
                   </h3>
                   <p className="text-[13px] text-gray max-w-[280px] leading-relaxed">
-                    Thanks for reaching out — we&apos;ll get back to you within one
+                    Your email client should open shortly — hit send to
+                    complete your message. We&apos;ll get back to you within one
                     business day.
                   </p>
                 </div>

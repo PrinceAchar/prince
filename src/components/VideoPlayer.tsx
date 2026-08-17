@@ -20,9 +20,10 @@ export default function VideoPlayer() {
   return (
     <>
       {/* 1:1 Thumbnail */}
-      <div
+      <button
         onClick={handleOpen}
         className="relative w-full aspect-square bg-brand-black rounded-lg overflow-hidden group cursor-pointer"
+        aria-label="Play video"
       >
         <video
           ref={thumbRef}
@@ -40,9 +41,7 @@ export default function VideoPlayer() {
                 </svg>
               </div>
         </div>
-      </div>
-
-      {/* Full-size overlay */}
+        </button>
       {overlayOpen &&
         createPortal(
           <div

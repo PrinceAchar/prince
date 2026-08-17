@@ -2,47 +2,8 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
-import { type ShopifyProduct, formatPrice, isProductSoldOut } from "@/lib/shopify";
-import { useCart } from "./CartProvider";
-
-interface VariantSelectorProps {
-  groups: { name: string; values: string[] }[];
-  selected: Record<string, string>;
-  onSelect: (name: string, value: string) => void;
-}
-
-function VariantSelector({ groups, selected, onSelect }: VariantSelectorProps) {
-  return (
-    <div className="space-y-4 mb-5">
-      {groups.map((group) => (
-        <div key={group.name}>
-          <h3 className="text-[11px] font-semibold uppercase tracking-wider text-brand-black/40 mb-2">
-            {group.name}
-          </h3>
-          <div className="flex flex-wrap gap-2">
-            {group.values.map((value) => {
-              const active = selected[group.name] === value;
-              return (
-                <button
-                  key={value}
-                  type="button"
-                  onClick={() => onSelect(group.name, value)}
-                  className={`px-4 py-2 text-[12px] font-semibold uppercase tracking-wider rounded-full border transition-colors ${
-                    active
-                      ? "bg-red border-red text-white"
-                      : "border-brand-black/15 text-brand-black hover:border-red hover:text-red"
-                  }`}
-                >
-                  {value}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
+import type { ShopifyProduct } from "@/lib/shopify";
+import ProductDetails from "./ProductDetails";
 
 interface ProductOverlayProps {
   product: ShopifyProduct;
@@ -52,7 +13,6 @@ interface ProductOverlayProps {
 export default function ProductOverlay({ product, onClose }: ProductOverlayProps) {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [copied, setCopied] = useState(false);
-  const { addItem, openCart, isLoading } = useCart();
 
   const handleShare = async () => {
     const url = window.location.href;
@@ -73,41 +33,6 @@ export default function ProductOverlay({ product, onClose }: ProductOverlayProps
 
   const images = product.images.edges.map((e) => e.node);
   const mainImage = images[selectedIndex] || images[0];
-  const variants = product.variants.edges.map((e) => e.node);
-  const soldOut = isProductSoldOut(product);
-
-  // Build option groups from variants (e.g. Size: 250g / 500g / 1kg)
-  const optionNames = Array.from(
-    new Set(variants.flatMap((v) => v.selectedOptions.map((o) => o.name)))
-  );
-  const optionsByGroup = optionNames.map((name) => ({
-    name,
-    values: Array.from(
-      new Set(
-        variants.map((v) => v.selectedOptions.find((o) => o.name === name)?.value)
-      )
-    ).filter((v): v is string => Boolean(v)),
-  }));
-
-  const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>(() => {
-    const preferred = variants.find((v) => v.availableForSale) || variants[0];
-    if (preferred) {
-      return Object.fromEntries(preferred.selectedOptions.map((o) => [o.name, o.value]));
-    }
-    return {};
-  });
-
-  const selectedVariant =
-    variants.find((v) =>
-      v.selectedOptions.every((o) => selectedOptions[o.name] === o.value)
-    ) || null;
-
-  const selectedVariantSoldOut = selectedVariant ? !selectedVariant.availableForSale : false;
-  const price = formatPrice(
-    selectedVariant?.price.amount ?? product.priceRange.minVariantPrice.amount,
-    selectedVariant?.price.currencyCode ?? product.priceRange.minVariantPrice.currencyCode
-  );
-
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
@@ -126,12 +51,6 @@ export default function ProductOverlay({ product, onClose }: ProductOverlayProps
       document.removeEventListener("keydown", handleKeyDown);
     };
   }, [handleKeyDown]);
-
-  const handleAddToCart = async () => {
-    if (!selectedVariant || selectedVariantSoldOut) return;
-    await addItem(selectedVariant.id);
-    openCart();
-  };
 
   return (
     <div className="fixed inset-0 z-[3000] flex items-center justify-center p-0 md:p-6 lg:p-12">
@@ -248,74 +167,12 @@ export default function ProductOverlay({ product, onClose }: ProductOverlayProps
 
         {/* Mobile description */}
         <div className="bg-[#FAF5E4] -mt-2 relative z-10 p-6">
-          <h2 className="font-heading text-[22px] font-bold text-brand-black mb-3 leading-tight">
-            {product.title}
-          </h2>
-
-          <div className="mb-5">
-            <span className="text-[26px] font-bold text-red">{price}</span>
-          </div>
-
-          {optionsByGroup.length > 0 && (
-            <VariantSelector
-              groups={optionsByGroup}
-              selected={selectedOptions}
-              onSelect={(name, value) =>
-                setSelectedOptions((prev) => ({ ...prev, [name]: value }))
-              }
-            />
-          )}
-
-          <div className="mb-5">
-            <h3 className="text-[11px] font-semibold uppercase tracking-wider text-brand-black/40 mb-2">
-              Description
-            </h3>
-            <p className="text-[13px] text-gray leading-relaxed">
-              {product.description}
-            </p>
-          </div>
-
-          <div className="mb-6 space-y-2">
-            <div className="flex items-center gap-2 text-[12px] text-gray">
-              <svg className="w-3.5 h-3.5 text-green-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <span>No artificial preservatives</span>
-            </div>
-            <div className="flex items-center gap-2 text-[12px] text-gray">
-              <svg className="w-3.5 h-3.5 text-green-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <span>Traditional homemade preparation</span>
-            </div>
-            <div className="flex items-center gap-2 text-[12px] text-gray">
-              <svg className="w-3.5 h-3.5 text-green-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <span>Premium quality ingredients</span>
-            </div>
-          </div>
-
-          {/* Add to Cart */}
-          <button
-            onClick={handleAddToCart}
-            disabled={isLoading || selectedVariantSoldOut || soldOut}
-            className={`w-full py-3.5 text-white text-[12px] font-semibold uppercase tracking-wider rounded-full transition-colors disabled:opacity-50 ${
-              selectedVariantSoldOut || soldOut ? "bg-brand-black/40 cursor-not-allowed" : "bg-red hover:bg-red-dark"
-            }`}
-          >
-            {soldOut
-              ? "Sold Out"
-              : selectedVariantSoldOut
-                ? "This Size Sold Out"
-                : isLoading
-                  ? "Adding..."
-                  : "Add to Cart"}
-          </button>
-
-          <p className="text-[10px] text-gray text-center mt-3">
-            Shipping & taxes calculated at checkout
-          </p>
+          <ProductDetails
+            product={product}
+            titleClassName="font-heading text-[22px] font-bold text-brand-black mb-3 leading-tight"
+            showViewDetails
+            onCloseDetails={onClose}
+          />
         </div>
 
       </div>
@@ -439,73 +296,7 @@ export default function ProductOverlay({ product, onClose }: ProductOverlayProps
             </button>
           </div>
 
-          <h2 className="font-heading text-[26px] font-bold text-brand-black mb-3 leading-tight">
-            {product.title}
-          </h2>
-
-          <div className="mb-5">
-            <span className="text-[26px] font-bold text-red">{price}</span>
-          </div>
-
-          {optionsByGroup.length > 0 && (
-            <VariantSelector
-              groups={optionsByGroup}
-              selected={selectedOptions}
-              onSelect={(name, value) =>
-                setSelectedOptions((prev) => ({ ...prev, [name]: value }))
-              }
-            />
-          )}
-
-          <div className="mb-5">
-            <h3 className="text-[11px] font-semibold uppercase tracking-wider text-brand-black/40 mb-2">
-              Description
-            </h3>
-            <p className="text-[13px] text-gray leading-relaxed">
-              {product.description}
-            </p>
-          </div>
-
-          <div className="mb-6 space-y-2">
-            <div className="flex items-center gap-2 text-[12px] text-gray">
-              <svg className="w-3.5 h-3.5 text-green-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <span>No artificial preservatives</span>
-            </div>
-            <div className="flex items-center gap-2 text-[12px] text-gray">
-              <svg className="w-3.5 h-3.5 text-green-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <span>Traditional homemade preparation</span>
-            </div>
-            <div className="flex items-center gap-2 text-[12px] text-gray">
-              <svg className="w-3.5 h-3.5 text-green-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <span>Premium quality ingredients</span>
-            </div>
-          </div>
-
-          <button
-            onClick={handleAddToCart}
-            disabled={isLoading || selectedVariantSoldOut || soldOut}
-            className={`w-full py-3.5 text-white text-[12px] font-semibold uppercase tracking-wider rounded-full transition-colors disabled:opacity-50 ${
-              selectedVariantSoldOut || soldOut ? "bg-brand-black/40 cursor-not-allowed" : "bg-red hover:bg-red-dark"
-            }`}
-          >
-            {soldOut
-              ? "Sold Out"
-              : selectedVariantSoldOut
-                ? "This Size Sold Out"
-                : isLoading
-                  ? "Adding..."
-                  : "Add to Cart"}
-          </button>
-
-          <p className="text-[10px] text-gray text-center mt-3">
-            Shipping & taxes calculated at checkout
-          </p>
+          <ProductDetails product={product} showViewDetails onCloseDetails={onClose} />
         </div>
       </div>
     </div>

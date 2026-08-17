@@ -1,4 +1,9 @@
-import { PRODUCT_BY_HANDLE_QUERY } from "./queries";
+import {
+  PRODUCT_BY_HANDLE_QUERY,
+  PRODUCTS_BY_TYPE_QUERY,
+  PRODUCTS_BY_COLLECTION_QUERY,
+  ALL_PRODUCT_HANDLES_QUERY,
+} from "./queries";
 
 const SHOPIFY_STORE_DOMAIN = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN!;
 const SHOPIFY_STOREFRONT_TOKEN = process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_TOKEN!;
@@ -53,6 +58,7 @@ export interface ShopifyProduct {
   title: string;
   handle: string;
   description: string;
+  descriptionHtml: string;
   productType: string;
   tags: string[];
   priceRange: {
@@ -85,6 +91,14 @@ export interface ShopifyProduct {
           name: string;
           value: string;
         }[];
+      };
+    }[];
+  };
+  collections?: {
+    edges: {
+      node: {
+        handle: string;
+        title: string;
       };
     }[];
   };
@@ -160,6 +174,45 @@ export async function getProductByHandle(handle: string): Promise<ShopifyProduct
     return data.productByHandle;
   } catch {
     return null;
+  }
+}
+
+export async function getProductsByType(productType: string): Promise<ShopifyProduct[]> {
+  try {
+    const data = await shopifyFetch<ProductData>(PRODUCTS_BY_TYPE_QUERY, {
+      first: 20,
+      query: `product_type:${productType}`,
+    });
+    return data.products.edges.map((e) => e.node);
+  } catch {
+    return [];
+  }
+}
+
+export async function getProductsByCollectionHandle(
+  handle: string,
+  first = 20
+): Promise<ShopifyProduct[]> {
+  try {
+    const data = await shopifyFetch<CollectionByHandleData>(PRODUCTS_BY_COLLECTION_QUERY, {
+      handle,
+      first,
+    });
+    return data.collectionByHandle?.products.edges.map((e) => e.node) || [];
+  } catch {
+    return [];
+  }
+}
+
+export async function getAllProductHandles(): Promise<string[]> {
+  try {
+    const data = await shopifyFetch<{ products: { edges: { node: { handle: string } }[] } }>(
+      ALL_PRODUCT_HANDLES_QUERY,
+      { first: 100 }
+    );
+    return data.products.edges.map((e) => e.node.handle);
+  } catch {
+    return [];
   }
 }
 

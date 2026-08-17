@@ -130,13 +130,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const addItem = useCallback(
     async (variantId: string) => {
-      setIsLoading(true);
       try {
         if (!cartId) {
           const cart = await createCart(variantId, 1);
           await syncCart(cart);
         } else {
-          // Check if item already in cart
           const existing = items.find((i) => i.variantId === variantId);
           if (existing) {
             const cart = await updateCartItem(cartId, existing.lineId, existing.quantity + 1);
@@ -148,8 +146,6 @@ export function CartProvider({ children }: { children: ReactNode }) {
         }
       } catch (err) {
         console.error("Failed to add to cart:", err);
-      } finally {
-        setIsLoading(false);
       }
     },
     [cartId, items, syncCart]
@@ -199,14 +195,15 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setCheckoutUrl("");
   }, []);
 
-  // Called when the user clicks Checkout. Marks the cart so that on their
-  // next visit the completed/abandoned cart is not restored from localStorage.
+  // Called when the user clicks Checkout. Marks the timestamp so that on their
+  // next visit the stale cart is discarded. Does NOT clear the cart here —
+  // Shopify clears the cart server-side after checkout completes, so getCart
+  // will return null/empty and the mount effect handles the fresh start.
   const beginCheckout = useCallback(() => {
     if (typeof window !== "undefined") {
       localStorage.setItem(CHECKOUT_INITIATED_KEY, String(Date.now()));
     }
-    clearCart();
-  }, [clearCart]);
+  }, []);
 
   const openCart = useCallback(() => setIsOpen(true), []);
   const closeCart = useCallback(() => setIsOpen(false), []);

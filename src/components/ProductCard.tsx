@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { type ShopifyProduct, formatPrice, getProductSize, isProductSoldOut } from "@/lib/shopify";
 import { useCart } from "./CartProvider";
 
@@ -21,9 +22,10 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product, onImageClick, featured = false }: ProductCardProps) {
-  const { addItem, openCart, isLoading } = useCart();
+  const { addItem, openCart } = useCart();
   const [isHovered, setIsHovered] = useState(false);
   const [mobileImageIndex, setMobileImageIndex] = useState(0);
+  const [isAdding, setIsAdding] = useState(false);
 
   const images = product.images.edges.map((e) => e.node);
   const hasMultipleImages = images.length > 1;
@@ -44,15 +46,18 @@ export default function ProductCard({ product, onImageClick, featured = false }:
 
   const handleAddToCart = async (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (!variant || soldOut) return;
-    // If the product has multiple variants, open the overlay so the
-    // customer can pick their size rather than silently adding the first.
+    if (!variant || soldOut || isAdding) return;
     if (hasMultipleVariants) {
       onImageClick(product);
       return;
     }
-    await addItem(variant.id);
-    openCart();
+    setIsAdding(true);
+    try {
+      await addItem(variant.id);
+      openCart();
+    } finally {
+      setIsAdding(false);
+    }
   };
 
   const handleMobileImageTap = (e: React.MouseEvent) => {
@@ -178,24 +183,45 @@ export default function ProductCard({ product, onImageClick, featured = false }:
           </span>
           {size && <span className="text-[11px] text-gray">{size}</span>}
         </div>
-        <h3 className="font-heading text-[17px] md:text-[18px] font-semibold text-brand-black mb-2">
-          {product.title}
+        <h3 className="font-heading text-[17px] md:text-[18px] font-semibold text-brand-black mb-2 leading-snug">
+          <Link
+            href={`/products/${product.handle}`}
+            onClick={(e) => e.stopPropagation()}
+            className="hover:text-red transition-colors"
+          >
+            {product.title}
+          </Link>
         </h3>
-        <p className="text-[13px] md:text-[14px] text-gray leading-relaxed mb-4 line-clamp-2">
-          {product.description}
-        </p>
+        <div className="rich-text text-[13px] md:text-[14px] text-gray leading-relaxed mb-2 line-clamp-2"
+          dangerouslySetInnerHTML={{ __html: product.descriptionHtml }}
+        />
+        <Link
+          href={`/products/${product.handle}`}
+          onClick={(e) => e.stopPropagation()}
+          className="inline-block text-[11px] font-semibold uppercase tracking-wider text-red hover:opacity-70 transition-opacity mb-4"
+        >
+          View Details →
+        </Link>
         <div className="flex items-center justify-between">
           <span className="text-[18px] font-bold text-red">{price}</span>
           <button
             onClick={handleAddToCart}
-            disabled={isLoading || soldOut}
+            disabled={isAdding || soldOut}
             className={`px-4 py-2 text-[12px] font-semibold uppercase tracking-wider rounded-full transition-colors z-20 relative ${
               soldOut
                 ? "bg-brand-black/10 text-gray cursor-not-allowed"
                 : "bg-red text-white hover:bg-red-dark disabled:opacity-50"
             }`}
           >
-            {soldOut ? "Sold Out" : hasMultipleVariants ? "Choose Size" : isLoading ? "Adding..." : "Add to Cart"}
+            {soldOut ? "Sold Out" : hasMultipleVariants ? "Choose Size" : isAdding ? (
+              <span className="flex items-center gap-2">
+                <svg className="animate-spin h-3.5 w-3.5" viewBox="0 0 24 24" fill="none">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                </svg>
+                Adding
+              </span>
+            ) : "Add to Cart"}
           </button>
         </div>
       </div>

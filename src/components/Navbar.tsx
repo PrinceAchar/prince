@@ -1,11 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCart } from "./CartProvider";
 import AccountMenu from "./AccountMenu";
+import { shopifyFetchClient, type ShopifyProduct, formatPrice, getProductSize } from "@/lib/shopify";
+import { ALL_PRODUCTS_QUERY } from "@/lib/queries";
 
 export default function Navbar() {
   const [hidden, setHidden] = useState(false);
@@ -13,6 +15,8 @@ export default function Navbar() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const searchContainerRef = useRef<HTMLDivElement>(null);
+  const productsCacheRef = useRef<ShopifyProduct[] | null>(null);
   const lastScroll = useRef(0);
   const router = useRouter();
   const { totalItems, openCart } = useCart();
@@ -21,11 +25,49 @@ export default function Navbar() {
     if (searchOpen) searchInputRef.current?.focus();
   }, [searchOpen]);
 
+  useEffect(() => {
+    if (!searchOpen) return;
+    const handleClickOutside = (e: MouseEvent) => {
+      if (searchContainerRef.current && !searchContainerRef.current.contains(e.target as Node)) {
+        setSearchOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [searchOpen]);
+
+  // Fetch products once when search opens for live preview
+  useEffect(() => {
+    if (!searchOpen || productsCacheRef.current) return;
+    shopifyFetchClient<{ products: { edges: { node: ShopifyProduct }[] } }>(ALL_PRODUCTS_QUERY, { first: 50 })
+      .then((data) => {
+        productsCacheRef.current = data.products.edges.map((e) => e.node);
+      })
+      .catch(() => {});
+  }, [searchOpen]);
+
+  const searchResults = useMemo(() => {
+    const products = productsCacheRef.current;
+    if (!products || !searchQuery.trim()) return [];
+    const terms = searchQuery.toLowerCase().trim().split(/\s+/).filter(Boolean);
+    return products
+      .filter((p) => {
+        const haystack = [p.title, p.description, p.productType, p.handle, ...p.tags].join(" ").toLowerCase();
+        return terms.every((t) => haystack.includes(t));
+      })
+      .slice(0, 6);
+  }, [searchQuery]);
+
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const q = searchQuery.trim();
     if (!q) return;
     router.push(`/search?q=${encodeURIComponent(q)}`);
+    setSearchQuery("");
+    setSearchOpen(false);
+  };
+
+  const handleResultClick = () => {
     setSearchQuery("");
     setSearchOpen(false);
   };
@@ -75,7 +117,7 @@ export default function Navbar() {
               Achar
             </Link>
             <Link href="/murabba" className="text-[14px] font-medium text-red uppercase tracking-[0.5px] hover:opacity-70 transition-opacity">
-              Murabba
+              Murabba & Chutney
             </Link>
             <Link href="/contact" className="text-[14px] font-medium text-red uppercase tracking-[0.5px] hover:opacity-70 transition-opacity">
               Contact
@@ -95,7 +137,7 @@ export default function Navbar() {
           <AccountMenu />
 
           {/* Search */}
-          <div className="relative flex items-center">
+          <div ref={searchContainerRef} className="relative flex items-center">
             <button
               onClick={() => setSearchOpen(!searchOpen)}
               className="text-red hover:opacity-70 transition-opacity"
@@ -106,11 +148,8 @@ export default function Navbar() {
               </svg>
             </button>
             {searchOpen && (
-              <form
-                onSubmit={handleSearchSubmit}
-                className="absolute right-0 top-[calc(100%+10px)] w-[260px] md:w-[320px] bg-white border border-brand-black/10 rounded-xl shadow-lg p-2 z-[1001]"
-              >
-                <div className="flex items-center gap-2">
+              <div className="absolute right-0 top-[calc(100%+10px)] w-[280px] md:w-[360px] bg-white border border-brand-black/10 rounded-xl shadow-lg z-[1001] overflow-hidden">
+                <form onSubmit={handleSearchSubmit} className="flex items-center gap-2 p-2">
                   <input
                     ref={searchInputRef}
                     type="search"
@@ -125,8 +164,79 @@ export default function Navbar() {
                   >
                     Go
                   </button>
-                </div>
-              </form>
+                </form>
+
+                {/* Live results */}
+                {searchQuery.trim() && searchResults.length > 0 && (
+                  <div className="border-t border-brand-black/5 px-2 pb-2">
+                    {searchResults.map((product) => {
+                      const img = product.images.edges[0]?.node;
+                      const price = formatPrice(
+                        product.priceRange.minVariantPrice.amount,
+                        product.priceRange.minVariantPrice.currencyCode
+                      );
+                      const size = getProductSize(product);
+                      return (
+                        <Link
+                          key={product.id}
+                          href={`/products/${product.handle}`}
+                          onClick={handleResultClick}
+                          className="flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-yellow/50 transition-colors"
+                        >
+                          <div className="relative w-10 h-10 rounded-lg overflow-hidden bg-brand-black/5 flex-shrink-0">
+                            {img ? (
+                              <Image
+                                src={img.url}
+                                alt={img.altText || product.title}
+                                fill
+                                className="object-cover"
+                                sizes="40px"
+                              />
+                            ) : (
+                              <Image
+                                src="/logo.jpeg"
+                                alt={product.title}
+                                width={40}
+                                height={40}
+                                className="w-full h-full object-contain opacity-30 p-1"
+                              />
+                            )}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-[12px] font-medium text-brand-black truncate">
+                              {product.title}
+                            </p>
+                            <div className="flex items-center gap-2">
+                              <span className="text-[11px] font-semibold text-red">{price}</span>
+                              {size && <span className="text-[10px] text-gray">{size}</span>}
+                            </div>
+                          </div>
+                        </Link>
+                      );
+                    })}
+                    <Link
+                      href={`/search?q=${encodeURIComponent(searchQuery.trim())}`}
+                      onClick={handleResultClick}
+                      className="block text-center text-[11px] font-semibold text-red py-2 mt-1 hover:opacity-70 transition-opacity"
+                    >
+                      See all results →
+                    </Link>
+                  </div>
+                )}
+
+                {searchQuery.trim() && searchResults.length === 0 && productsCacheRef.current && (
+                  <div className="border-t border-brand-black/5 px-4 py-4 text-center">
+                    <p className="text-[12px] text-gray">No products found</p>
+                    <Link
+                      href={`/search?q=${encodeURIComponent(searchQuery.trim())}`}
+                      onClick={handleResultClick}
+                      className="text-[11px] font-semibold text-red hover:opacity-70 transition-opacity"
+                    >
+                      Search full site →
+                    </Link>
+                  </div>
+                )}
+              </div>
             )}
           </div>
 
@@ -149,7 +259,7 @@ export default function Navbar() {
           <div className="flex flex-col px-6 py-4 gap-4">
             <Link href="/" onClick={() => setMenuOpen(false)} className="text-[14px] font-medium text-red uppercase tracking-[0.5px]">Home</Link>
             <Link href="/achar" onClick={() => setMenuOpen(false)} className="text-[14px] font-medium text-red uppercase tracking-[0.5px]">Achar</Link>
-            <Link href="/murabba" onClick={() => setMenuOpen(false)} className="text-[14px] font-medium text-red uppercase tracking-[0.5px]">Murabba</Link>
+            <Link href="/murabba" onClick={() => setMenuOpen(false)} className="text-[14px] font-medium text-red uppercase tracking-[0.5px]">Murabba & Chutney</Link>
             <Link href="/contact" onClick={() => setMenuOpen(false)} className="text-[14px] font-medium text-red uppercase tracking-[0.5px]">Contact</Link>
           </div>
         </div>

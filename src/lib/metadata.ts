@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { getProductByHandle } from "./shopify";
-import { SITE_NAME } from "./site";
+import { SITE_NAME, SITE_URL } from "./site";
 
 export async function productPageMetadata(
   handle: string | undefined,
@@ -16,10 +16,12 @@ export async function productPageMetadata(
   const title = `${product.title} | ${SITE_NAME}`;
   const description = product.description.trim() || fallbackDescription;
   const image = product.images.edges[0]?.node;
+  const url = `${SITE_URL}/products/${product.handle}`;
 
   return {
     title,
     description,
+    alternates: { canonical: url },
     openGraph: {
       title,
       description,

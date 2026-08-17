@@ -5,6 +5,7 @@ export const PRODUCT_BY_HANDLE_QUERY = `
       title
       handle
       description
+      descriptionHtml
       productType
       tags
       priceRange {
@@ -40,6 +41,14 @@ export const PRODUCT_BY_HANDLE_QUERY = `
           }
         }
       }
+      collections(first: 1) {
+        edges {
+          node {
+            handle
+            title
+          }
+        }
+      }
     }
   }
 `;
@@ -57,6 +66,7 @@ export const PRODUCTS_BY_COLLECTION_QUERY = `
             title
             handle
             description
+            descriptionHtml
             productType
             tags
             priceRange {
@@ -108,6 +118,7 @@ export const ALL_PRODUCTS_QUERY = `
           title
           handle
           description
+          descriptionHtml
           productType
           tags
           priceRange {
@@ -143,6 +154,69 @@ export const ALL_PRODUCTS_QUERY = `
               }
             }
           }
+        }
+      }
+    }
+  }
+`;
+
+export const PRODUCTS_BY_TYPE_QUERY = `
+  query ProductsByType($first: Int!, $query: String!) {
+    products(first: $first, query: $query) {
+      edges {
+        node {
+          id
+          title
+          handle
+          description
+          descriptionHtml
+          productType
+          tags
+          priceRange {
+            minVariantPrice {
+              amount
+              currencyCode
+            }
+          }
+          images(first: 5) {
+            edges {
+              node {
+                url
+                altText
+                width
+                height
+              }
+            }
+          }
+          variants(first: 5) {
+            edges {
+              node {
+                id
+                title
+                price {
+                  amount
+                  currencyCode
+                }
+                availableForSale
+                selectedOptions {
+                  name
+                  value
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const ALL_PRODUCT_HANDLES_QUERY = `
+  query AllProductHandles($first: Int!) {
+    products(first: $first) {
+      edges {
+        node {
+          handle
         }
       }
     }

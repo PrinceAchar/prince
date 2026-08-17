@@ -94,7 +94,7 @@ export default function FAQPage() {
                     <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                   </svg>
                 </button>
-                <div className={`overflow-hidden transition-all duration-200 ${open === i ? "max-h-[300px]" : "max-h-0"}`}>
+                <div className={`overflow-hidden transition-all duration-200 ${open === i ? "max-h-[600px]" : "max-h-0"}`}>
                   <div className="px-6 pb-5 pl-[76px]">
                     <div className="w-8 h-[1px] bg-red/30 mb-3" />
                     <p className="text-[13px] md:text-[14px] text-gray leading-relaxed">{faq.a}</p>

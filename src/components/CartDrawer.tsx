@@ -42,12 +42,13 @@ export default function CartDrawer() {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
               </svg>
               <p className="text-gray text-[14px]">Your cart is empty</p>
-              <button
+              <a
+                href="/achar"
                 onClick={closeCart}
                 className="mt-4 px-6 py-2 bg-red text-white text-[12px] font-semibold uppercase tracking-wider rounded-full hover:bg-red-dark transition-colors"
               >
-                Continue Shopping
-              </button>
+                Browse Products
+              </a>
             </div>
           ) : (
             <div className="space-y-4">
@@ -75,6 +76,7 @@ export default function CartDrawer() {
                         <button
                           onClick={() => updateQuantity(item.lineId, item.quantity - 1)}
                           disabled={isLoading}
+                          aria-label="Decrease quantity"
                           className="w-6 h-6 rounded-full bg-brand-black/10 text-brand-black text-[14px] flex items-center justify-center hover:bg-brand-black/20 transition-colors disabled:opacity-50"
                         >
                           -
@@ -85,6 +87,7 @@ export default function CartDrawer() {
                         <button
                           onClick={() => updateQuantity(item.lineId, item.quantity + 1)}
                           disabled={isLoading}
+                          aria-label="Increase quantity"
                           className="w-6 h-6 rounded-full bg-brand-black/10 text-brand-black text-[14px] flex items-center justify-center hover:bg-brand-black/20 transition-colors disabled:opacity-50"
                         >
                           +
@@ -125,7 +128,7 @@ export default function CartDrawer() {
               onClick={beginCheckout}
               className={`block w-full py-3 bg-red text-white text-[13px] font-semibold uppercase tracking-wider text-center rounded-full hover:bg-red-dark transition-colors ${!checkoutUrl ? "opacity-50 pointer-events-none" : ""}`}
             >
-              {isLoading ? "Loading..." : "Checkout"}
+              Checkout
             </a>
             <p className="text-[11px] text-gray text-center">
               Shipping & taxes calculated at checkout

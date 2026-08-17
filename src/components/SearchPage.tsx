@@ -42,11 +42,20 @@ export default function SearchPage({ products }: { products: ShopifyProduct[] })
     return products.filter((p) => matches(p, terms));
   }, [products, terms]);
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setQuery(value);
+    const url = new URL(window.location.href);
+    if (value.trim()) {
+      url.searchParams.set("q", value.trim());
+    } else {
+      url.searchParams.delete("q");
+    }
+    router.replace(url.pathname + url.search, { scroll: false });
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const url = new URL(window.location.href);
-    url.searchParams.set("q", query);
-    router.replace(url.pathname + url.search, { scroll: false });
   };
 
   return (
@@ -68,7 +77,7 @@ export default function SearchPage({ products }: { products: ShopifyProduct[] })
               <input
                 type="search"
                 value={query}
-                onChange={(e) => setQuery(e.target.value)}
+                onChange={handleChange}
                 placeholder="Search pickles, murabbas..."
                 autoFocus
                 className="w-full pl-12 pr-4 py-3 bg-yellow/40 border border-brand-black/10 rounded-full text-[14px] text-brand-black placeholder:text-gray/60 focus:outline-none focus:border-red transition-colors"
