@@ -24,7 +24,7 @@ const sections = [
       </svg>
     ),
     title: "Reporting an Issue",
-    text: "If you receive a damaged or incorrect product, please contact us within 48 hours of delivery with your order number and a photo of the issue. Reach us at info@princeachar.com or call +91 98110 56593.",
+    text: "If you receive a damaged or incorrect product, please contact us within 48 hours of delivery with your order number and a photo of the issue. Reach us at pannalaltavinderkumar@gmail.com or call +91 98110 56593.",
   },
   {
     icon: (

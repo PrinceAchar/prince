@@ -52,7 +52,7 @@ const sections = [
       </svg>
     ),
     title: "International Shipping",
-    text: "Currently, we only ship within India. For international inquiries, please contact us directly at info@princeachar.com.",
+    text: "Currently, we only ship within India. For international inquiries, please contact us directly at pannalaltavinderkumar@gmail.com.",
   },
   {
     icon: (

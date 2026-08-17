@@ -13,7 +13,7 @@ export const defaultContent: SiteContent = {
       postalCode: "110006",
       addressCountry: "IN",
       telephone: "+91 98110 56593",
-      email: "info@princeachar.com",
+      email: "pannalaltavinderkumar@gmail.com",
       url: "https://princeachar.com",
       sameAs: ["https://www.instagram.com/princeacharindia/", "https://www.facebook.com/people/Prince-Achar/61553016616914/"],
     },
@@ -134,9 +134,9 @@ export const defaultContent: SiteContent = {
         ctaLink: "tel:+919811056593",
       },
       email: {
-        address: "info@princeachar.com",
+        address: "pannalaltavinderkumar@gmail.com",
         ctaText: "Email Us",
-        ctaLink: "mailto:info@princeachar.com",
+        ctaLink: "mailto:pannalaltavinderkumar@gmail.com",
       },
     },
     images: [
@@ -168,7 +168,7 @@ export const defaultContent: SiteContent = {
       },
       {
         question: "Do you offer bulk or wholesale orders?",
-        answer: "Yes. We work with distributors, retailers, and food businesses across India. Contact us at info@princeachar.com or call +91 98110 56593 for bulk pricing.",
+        answer: "Yes. We work with distributors, retailers, and food businesses across India. Contact us at pannalaltavinderkumar@gmail.com or call +91 98110 56593 for bulk pricing.",
       },
       {
         question: "Where can I buy Prince Achar products?",

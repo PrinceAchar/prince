@@ -60,7 +60,7 @@ const sections = [
       </svg>
     ),
     title: "Your Rights",
-    text: "You have the right to access, correct, or delete your personal information. To exercise these rights, please contact us at info@princeachar.com.",
+    text: "You have the right to access, correct, or delete your personal information. To exercise these rights, please contact us at pannalaltavinderkumar@gmail.com.",
   },
   {
     icon: (
@@ -78,7 +78,7 @@ const sections = [
       </svg>
     ),
     title: "Contact Us",
-    text: "If you have questions about this Privacy Policy, please reach out to us at info@princeachar.com or +91 98110 56593.",
+    text: "If you have questions about this Privacy Policy, please reach out to us at pannalaltavinderkumar@gmail.com or +91 98110 56593.",
   },
 ];
 

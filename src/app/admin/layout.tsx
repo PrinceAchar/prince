@@ -7,8 +7,8 @@ import { onAuthStateChanged, type User } from "firebase/auth";
 import Link from "next/link";
 
 const ADMIN_EMAILS = [
-  "info@princeachar.com",
-  "acaditya10@gmail.com",
+  "pannalaltavinderkumar@gmail.com",
+  "hi@acaditya10.tech",
 ];
 
 const NAV_ITEMS = [

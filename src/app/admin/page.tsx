@@ -15,8 +15,8 @@ import { getClientAuth } from "@/lib/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 
 const ADMIN_EMAILS = [
-  "info@princeachar.com",
-  "acaditya10@gmail.com",
+  "pannalaltavinderkumar@gmail.com",
+  "hi@acaditya10.tech",
 ];
 
 function genId() {

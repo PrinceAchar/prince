@@ -27,7 +27,7 @@ const organizationJsonLd = {
   contactPoint: {
     "@type": "ContactPoint",
     telephone: "+91 98110 56593",
-    email: "info@princeachar.com",
+    email: "pannalaltavinderkumar@gmail.com",
     contactType: "customer service",
   },
   sameAs: ["https://www.instagram.com/princeacharindia/"],
