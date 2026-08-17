@@ -34,13 +34,10 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
     }
 
     const auth = getClientAuth();
-    const unsub = onAuthStateChanged(auth, async (u) => {
+    const unsub = onAuthStateChanged(auth, (u) => {
       setUser(u);
       setLoading(false);
       if (!u && pathname !== "/admin/login") {
-        router.push("/admin/login");
-      } else if (u && !ADMIN_EMAILS.includes(u.email ?? "")) {
-        await auth.signOut();
         router.push("/admin/login");
       }
     });

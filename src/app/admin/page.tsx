@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import { useContent, saveContent, resetContent } from "@/lib/content";
 import type { SiteContent } from "@/lib/content-types";
 import SectionCard, { FieldGroup, TextInput, Toggle, ListEditor, FaqEditor } from "@/components/admin/SectionCard";
@@ -10,6 +11,13 @@ import FloatingSave from "@/components/admin/FloatingSave";
 import { shopifyFetchClient, type ShopifyProduct } from "@/lib/shopify";
 import { ALL_PRODUCTS_QUERY } from "@/lib/queries";
 import { usePathname } from "next/navigation";
+import { getClientAuth } from "@/lib/firebase";
+import { onAuthStateChanged } from "firebase/auth";
+
+const ADMIN_EMAILS = [
+  "info@princeachar.com",
+  "acaditya10@gmail.com",
+];
 
 function genId() {
   return Math.random().toString(36).slice(2, 9);
@@ -17,9 +25,26 @@ function genId() {
 
 export default function AdminPage() {
   const pathname = usePathname();
+  const router = useRouter();
   const defaultContent = useContent();
   const [content, setContent] = useState<SiteContent>(defaultContent);
   const [products, setProducts] = useState<ShopifyProduct[]>([]);
+  const [authChecked, setAuthChecked] = useState(false);
+
+  useEffect(() => {
+    const auth = getClientAuth();
+    const unsub = onAuthStateChanged(auth, async (u) => {
+      if (!u) {
+        router.replace("/admin/login");
+      } else if (!ADMIN_EMAILS.includes(u.email ?? "")) {
+        await auth.signOut();
+        router.replace("/admin/login");
+      } else {
+        setAuthChecked(true);
+      }
+    });
+    return unsub;
+  }, [router]);
 
   useEffect(() => {
     setContent(defaultContent);
@@ -58,6 +83,14 @@ export default function AdminPage() {
   };
 
   const h = content.homepage;
+
+  if (!authChecked) {
+    return (
+      <div className="max-w-[800px] mx-auto px-4 md:px-6 py-6 flex items-center justify-center min-h-[60vh]">
+        <div className="w-8 h-8 border-2 border-red border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-[800px] mx-auto px-4 md:px-6 py-6 space-y-4">

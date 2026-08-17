@@ -1,14 +1,28 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { getClientAuth } from "@/lib/firebase";
-import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "firebase/auth";
 
 export default function AdminLoginPage() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [checkingAuth, setCheckingAuth] = useState(true);
+
+  useEffect(() => {
+    const auth = getClientAuth();
+    const unsub = onAuthStateChanged(auth, (u) => {
+      setCheckingAuth(false);
+      if (u) {
+        router.replace("/admin");
+      }
+    });
+    return unsub;
+  }, [router]);
 
   const handleEmailLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -17,19 +31,19 @@ export default function AdminLoginPage() {
     try {
       const auth = getClientAuth();
       await signInWithEmailAndPassword(auth, email, password);
-    } catch (err) {
-      if (err instanceof Error) {
-        if (err.message.includes("invalid-credential") || err.message.includes("wrong-password")) {
-          setError("Invalid email or password");
-        } else if (err.message.includes("user-not-found")) {
-          setError("No account found with this email");
-        } else {
-          setError(err.message);
-        }
+      // onAuthStateChanged listener above will redirect
+    } catch (err: unknown) {
+      console.error("Login error:", err);
+      const code = (err as { code?: string }).code;
+      if (code === "auth/invalid-credential" || code === "auth/wrong-password" || code === "auth/user-not-found") {
+        setError("Invalid email or password");
+      } else if (code === "auth/too-many-requests") {
+        setError("Too many attempts. Please try again later.");
+      } else if (code === "auth/user-disabled") {
+        setError("This account has been disabled.");
       } else {
-        setError("Login failed");
+        setError((err as Error).message || "Login failed");
       }
-    } finally {
       setLoading(false);
     }
   };
@@ -42,14 +56,28 @@ export default function AdminLoginPage() {
       const provider = new GoogleAuthProvider();
       provider.setCustomParameters({ prompt: "select_account" });
       await signInWithPopup(auth, provider);
-    } catch (err) {
-      if (err instanceof Error && !err.message.includes("popup-closed")) {
-        setError(err.message || "Google sign-in failed");
+      // onAuthStateChanged listener above will redirect
+    } catch (err: unknown) {
+      console.error("Google login error:", err);
+      const code = (err as { code?: string }).code;
+      if (code === "auth/popup-closed-by-user") {
+        setError("");
+      } else if (code === "auth/unauthorized-domain") {
+        setError("This domain is not authorized for Google sign-in. Add it in Firebase Console → Authentication → Settings → Authorized domains.");
+      } else {
+        setError((err as Error).message || "Google sign-in failed");
       }
-    } finally {
       setLoading(false);
     }
   };
+
+  if (checkingAuth) {
+    return (
+      <div className="min-h-screen bg-[#FAF5E4] flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-red border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#FAF5E4] flex items-center justify-center px-4">
@@ -115,7 +143,9 @@ export default function AdminLoginPage() {
           </div>
 
           {error && (
-            <p className="text-[12px] text-red">{error}</p>
+            <div className="bg-red/5 border border-red/15 rounded-lg px-4 py-3">
+              <p className="text-[12px] text-red">{error}</p>
+            </div>
           )}
 
           <button
