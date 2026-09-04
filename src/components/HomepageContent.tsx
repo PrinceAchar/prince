@@ -112,13 +112,13 @@ export default function HomepageContent({ bestsellers }: { bestsellers: ShopifyP
       {/* OUR STORY */}
       <section id="story" className="bg-white animate-fade-in-up">
         <div className="flex flex-col md:flex-row">
-          <div className="md:hidden px-6 pt-12 pb-2">
+          <div className="md:hidden">
             <Image
               src={h.story.imageUrl || "/about-us.webp"}
               alt="Our Story"
               width={800}
               height={800}
-              className="w-[75%] mx-auto max-w-[300px] aspect-square object-cover rounded-lg animate-fade-in-up"
+              className="w-full object-cover animate-fade-in-up"
             />
           </div>
 
