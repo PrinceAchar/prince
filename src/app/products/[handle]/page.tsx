@@ -4,7 +4,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ProductDetails from "@/components/ProductDetails";
 import ProductGallery from "@/components/ProductGallery";
-import ProductGrid from "@/components/ProductGrid";
+import RelatedProductsRow from "@/components/RelatedProductsRow";
 import { Suspense } from "react";
 import {
   getAllProductHandles,
@@ -34,7 +34,7 @@ export async function generateMetadata({
   }
 
   const title = `${product.title} | ${SITE_NAME}`;
-  const description = product.description.trim();
+  const description = product.seo?.description?.trim() || product.description.trim();
   const image = product.images.edges[0]?.node;
   const url = `${SITE_URL}/products/${product.handle}`;
 
@@ -94,7 +94,9 @@ export default async function ProductPage({
         <section className="bg-white py-10 md:py-16">
           <div className="max-w-[1200px] mx-auto px-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-14">
-              <ProductGallery product={product} />
+              <div className="self-start md:sticky md:top-[90px]">
+                <ProductGallery product={product} />
+              </div>
               <ProductDetails product={product} />
             </div>
           </div>
@@ -102,7 +104,7 @@ export default async function ProductPage({
 
         {/* RELATED PRODUCTS */}
         {related.length > 0 && (
-          <section className="bg-yellow py-12 md:py-20">
+          <section className="bg-white py-12 md:py-20">
             <div className="max-w-[1200px] mx-auto px-6">
               <div className="text-center mb-8 md:mb-12">
                 <span className="inline-block text-[11px] font-semibold uppercase tracking-[3px] text-red mb-3">
@@ -113,7 +115,7 @@ export default async function ProductPage({
                 </h2>
               </div>
               <Suspense>
-                <ProductGrid products={related} />
+                <RelatedProductsRow products={related} />
               </Suspense>
             </div>
           </section>

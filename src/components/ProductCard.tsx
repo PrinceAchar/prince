@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { type ShopifyProduct, formatPrice, getProductSize, isProductSoldOut } from "@/lib/shopify";
 import { useCart } from "./CartProvider";
 
@@ -17,12 +18,12 @@ const tagColors: Record<string, string> = {
 
 interface ProductCardProps {
   product: ShopifyProduct;
-  onImageClick: (product: ShopifyProduct) => void;
   featured?: boolean;
 }
 
-export default function ProductCard({ product, onImageClick, featured = false }: ProductCardProps) {
+export default function ProductCard({ product, featured = false }: ProductCardProps) {
   const { addItem, openCart } = useCart();
+  const router = useRouter();
   const [isHovered, setIsHovered] = useState(false);
   const [mobileImageIndex, setMobileImageIndex] = useState(0);
   const [isAdding, setIsAdding] = useState(false);
@@ -48,7 +49,7 @@ export default function ProductCard({ product, onImageClick, featured = false }:
     e.stopPropagation();
     if (!variant || soldOut || isAdding) return;
     if (hasMultipleVariants) {
-      onImageClick(product);
+      router.push(`/products/${product.handle}`);
       return;
     }
     setIsAdding(true);
@@ -63,14 +64,13 @@ export default function ProductCard({ product, onImageClick, featured = false }:
   const handleMobileImageTap = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (!hasMultipleImages) {
-      onImageClick(product);
+      router.push(`/products/${product.handle}`);
       return;
     }
     setMobileImageIndex((prev) => {
       const next = prev + 1;
       if (next >= images.length) {
-        // Last image tapped — open overlay
-        onImageClick(product);
+        router.push(`/products/${product.handle}`);
         return 0;
       }
       return next;
@@ -82,7 +82,7 @@ export default function ProductCard({ product, onImageClick, featured = false }:
       className={`group rounded-xl overflow-hidden border border-brand-black/5 hover:shadow-lg transition-shadow cursor-pointer ${
         featured ? "bg-white" : "bg-yellow/50"
       }`}
-      onClick={() => onImageClick(product)}
+      onClick={() => router.push(`/products/${product.handle}`)}
     >
       <div
         className="relative aspect-square bg-brand-black/5 flex items-center justify-center overflow-hidden"
@@ -177,11 +177,22 @@ export default function ProductCard({ product, onImageClick, featured = false }:
       </div>
 
       <div className="p-5 md:p-6">
-        <div className="flex items-center gap-2 mb-2">
-          <span className={`text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full ${tagClass}`}>
-            {tag}
-          </span>
-          {size && <span className="text-[11px] text-gray">{size}</span>}
+        <div className="flex items-center justify-between gap-2 mb-2">
+          <div className="flex items-center gap-2">
+            <span className={`text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full ${tagClass}`}>
+              {tag}
+            </span>
+            {size && <span className="text-[11px] text-gray">{size}</span>}
+          </div>
+          <svg
+            className="w-4 h-4 shrink-0 text-red transition-transform duration-300 group-hover:translate-x-0.5"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={2}
+            stroke="currentColor"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12l-7.5 7.5M21 12H3" />
+          </svg>
         </div>
         <h3 className="font-heading text-[17px] md:text-[18px] font-semibold text-brand-black mb-2 leading-snug">
           <Link
@@ -192,16 +203,9 @@ export default function ProductCard({ product, onImageClick, featured = false }:
             {product.title}
           </Link>
         </h3>
-        <div className="rich-text text-[13px] md:text-[14px] text-gray leading-relaxed mb-2 line-clamp-2"
-          dangerouslySetInnerHTML={{ __html: product.descriptionHtml }}
-        />
-        <Link
-          href={`/products/${product.handle}`}
-          onClick={(e) => e.stopPropagation()}
-          className="inline-block text-[11px] font-semibold uppercase tracking-wider text-red hover:opacity-70 transition-opacity mb-4"
-        >
-          View Details →
-        </Link>
+        <p className="text-[13px] md:text-[14px] text-gray leading-relaxed mb-4 line-clamp-3">
+          {product.seo?.description?.trim() || product.description.trim().split("\n")[0]}
+        </p>
         <div className="flex items-center justify-between">
           <span className="text-[18px] font-bold text-red">{price}</span>
           <button

@@ -59,6 +59,10 @@ export interface ShopifyProduct {
   handle: string;
   description: string;
   descriptionHtml: string;
+  seo?: {
+    title: string;
+    description: string;
+  };
   productType: string;
   tags: string[];
   priceRange: {
@@ -102,6 +106,10 @@ export interface ShopifyProduct {
       };
     }[];
   };
+  tagline?: { value: string } | null;
+  tastes?: { value: string } | null;
+  ingredients?: { value: string } | null;
+  storageInstructions?: { value: string } | null;
 }
 
 export interface ShopifyCollection {

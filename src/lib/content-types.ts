@@ -141,6 +141,7 @@ export interface FooterContent {
 
 export interface ProductsContent {
   order: string[];
+  showSocialProof: boolean;
 }
 
 export interface SiteContent {

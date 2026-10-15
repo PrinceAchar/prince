@@ -26,9 +26,15 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const isDev = process.env.NODE_ENV === "development";
 
   useEffect(() => {
     if (pathname === "/admin/login") {
+      setLoading(false);
+      return;
+    }
+
+    if (isDev) {
       setLoading(false);
       return;
     }
@@ -56,7 +62,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
     );
   }
 
-  if (!user) return null;
+  if (!user && !isDev) return null;
 
   return (
     <div className="min-h-screen bg-[#FAF5E4]">

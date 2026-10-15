@@ -204,5 +204,6 @@ export const defaultContent: SiteContent = {
 
   products: {
     order: [],
+    showSocialProof: true,
   },
 };

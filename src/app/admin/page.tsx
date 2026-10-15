@@ -32,6 +32,11 @@ export default function AdminPage() {
   const [authChecked, setAuthChecked] = useState(false);
 
   useEffect(() => {
+    if (process.env.NODE_ENV === "development") {
+      setAuthChecked(true);
+      return;
+    }
+
     const auth = getClientAuth();
     const unsub = onAuthStateChanged(auth, async (u) => {
       if (!u) {
@@ -472,7 +477,15 @@ export default function AdminPage() {
         <ProductReorder
           products={products}
           order={content.products.order}
-          onChange={(v) => update("products", { order: v })}
+          onChange={(v) => update("products", { ...content.products, order: v })}
+        />
+      </SectionCard>
+
+      <SectionCard id="product-social-proof" title="Product Page Social Proof" defaultOpen>
+        <Toggle
+          checked={content.products.showSocialProof !== false}
+          onChange={(v) => update("products", { ...content.products, showSocialProof: v })}
+          label='Show random reviews & "1K+ bought in last month" on product pages'
         />
       </SectionCard>
 

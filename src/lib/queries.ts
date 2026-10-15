@@ -6,6 +6,10 @@ export const PRODUCT_BY_HANDLE_QUERY = `
       handle
       description
       descriptionHtml
+      seo {
+        title
+        description
+      }
       productType
       tags
       priceRange {
@@ -53,6 +57,76 @@ export const PRODUCT_BY_HANDLE_QUERY = `
   }
 `;
 
+// Use this query once metafield definitions are created in Shopify admin:
+// Settings > Custom data > Products > Add: tagline, tastes, ingredients, storage_instructions
+// Then swap PRODUCT_BY_HANDLE_QUERY with this query.
+export const PRODUCT_BY_HANDLE_WITH_METAFIELDS_QUERY = `
+  query ProductByHandle($handle: String!) {
+    productByHandle(handle: $handle) {
+      id
+      title
+      handle
+      description
+      descriptionHtml
+      productType
+      tags
+      priceRange {
+        minVariantPrice {
+          amount
+          currencyCode
+        }
+      }
+      images(first: 5) {
+        edges {
+          node {
+            url
+            altText
+            width
+            height
+          }
+        }
+      }
+      variants(first: 5) {
+        edges {
+          node {
+            id
+            title
+            price {
+              amount
+              currencyCode
+            }
+            availableForSale
+            selectedOptions {
+              name
+              value
+            }
+          }
+        }
+      }
+      collections(first: 1) {
+        edges {
+          node {
+            handle
+            title
+          }
+        }
+      }
+      tagline: metafield(namespace: "field", key: "tagline") {
+        value
+      }
+      tastes: metafield(namespace: "field", key: "tastes") {
+        value
+      }
+      ingredients: metafield(namespace: "field", key: "ingredients") {
+        value
+      }
+      storageInstructions: metafield(namespace: "field", key: "storage_instructions") {
+        value
+      }
+    }
+  }
+`;
+
 export const PRODUCTS_BY_COLLECTION_QUERY = `
   query ProductsByCollection($handle: String!, $first: Int!) {
     collectionByHandle(handle: $handle) {
@@ -67,6 +141,10 @@ export const PRODUCTS_BY_COLLECTION_QUERY = `
             handle
             description
             descriptionHtml
+            seo {
+              title
+              description
+            }
             productType
             tags
             priceRange {
@@ -119,6 +197,10 @@ export const ALL_PRODUCTS_QUERY = `
           handle
           description
           descriptionHtml
+          seo {
+            title
+            description
+          }
           productType
           tags
           priceRange {
@@ -170,6 +252,10 @@ export const PRODUCTS_BY_TYPE_QUERY = `
           handle
           description
           descriptionHtml
+          seo {
+            title
+            description
+          }
           productType
           tags
           priceRange {
