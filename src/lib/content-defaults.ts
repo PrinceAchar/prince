@@ -205,5 +205,14 @@ export const defaultContent: SiteContent = {
   products: {
     order: [],
     showSocialProof: true,
+    pincode: {
+      enabled: true,
+      title: "Check delivery time",
+      metroDays: 2,
+      standardDays: 4,
+      codAvailable: true,
+      codMessage: "Cash on Delivery available",
+      note: "Free shipping on all orders across India.",
+    },
   },
 };

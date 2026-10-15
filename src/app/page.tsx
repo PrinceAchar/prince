@@ -6,7 +6,7 @@ import { getFeaturedProducts } from "@/lib/featured";
 export const revalidate = 3600;
 
 export default async function Home() {
-  const bestsellers = await getFeaturedProducts(4);
+  const bestsellers = await getFeaturedProducts(3);
 
   return (
     <>

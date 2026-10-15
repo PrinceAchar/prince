@@ -142,6 +142,15 @@ export interface FooterContent {
 export interface ProductsContent {
   order: string[];
   showSocialProof: boolean;
+  pincode: {
+    enabled: boolean;
+    title: string;
+    metroDays: number;
+    standardDays: number;
+    codAvailable: boolean;
+    codMessage: string;
+    note: string;
+  };
 }
 
 export interface SiteContent {

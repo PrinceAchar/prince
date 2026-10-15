@@ -6,6 +6,7 @@ import { type ShopifyProduct, formatPrice, isProductSoldOut } from "@/lib/shopif
 import { useCart } from "./CartProvider";
 import VariantSelector from "./VariantSelector";
 import { useContent } from "@/lib/content";
+import PincodeChecker from "./PincodeChecker";
 
 const trustBadges = [
   {
@@ -173,11 +174,6 @@ export default function ProductDetails({
       {/* Title */}
       <h2 className={titleClassName}>{product.title}</h2>
 
-      {/* Short excerpt (SEO meta description) */}
-      <p className="text-[14px] text-gray leading-relaxed mb-4">
-        {product.seo?.description?.trim() || product.description.trim().split("\n")[0]}
-      </p>
-
       {/* Reviews & social proof (toggleable in admin) */}
       {showSocialProof && (
         <div className="flex items-center gap-2 mb-5">
@@ -259,11 +255,14 @@ export default function ProductDetails({
       <div className="flex items-center justify-between py-4 border-t border-b border-brand-black/10 mb-6">
         {trustBadges.map((badge) => (
           <div key={badge.label} className="flex flex-col items-center gap-1.5 text-center">
-            <span className="text-brand-black">{badge.icon}</span>
+            <span className="text-green">{badge.icon}</span>
             <span className="text-[10px] text-gray leading-tight">{badge.label}</span>
           </div>
         ))}
       </div>
+
+      {/* Pincode delivery checker */}
+      <PincodeChecker />
 
       {/* Product Details description */}
       <div className="mb-6">
@@ -287,7 +286,7 @@ export default function ProductDetails({
       <div className="grid grid-cols-4 gap-3 mb-6">
         {featureIcons.map((feat) => (
           <div key={feat.label} className="flex flex-col items-center gap-2 text-center">
-            <div className="w-10 h-10 rounded-full bg-brand-black/5 flex items-center justify-center text-brand-black">
+            <div className="w-10 h-10 rounded-full bg-green/10 flex items-center justify-center text-green">
               {feat.icon}
             </div>
             <span className="text-[10px] text-gray leading-tight">{feat.label}</span>

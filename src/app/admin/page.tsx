@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useContent, saveContent, resetContent } from "@/lib/content";
+import { defaultContent as contentDefaults } from "@/lib/content-defaults";
 import type { SiteContent } from "@/lib/content-types";
 import SectionCard, { FieldGroup, TextInput, Toggle, ListEditor, FaqEditor } from "@/components/admin/SectionCard";
 import ImageUpload from "@/components/admin/ImageUpload";
@@ -28,6 +29,7 @@ export default function AdminPage() {
   const router = useRouter();
   const defaultContent = useContent();
   const [content, setContent] = useState<SiteContent>(defaultContent);
+  const pcfg = content.products.pincode ?? contentDefaults.products.pincode;
   const [products, setProducts] = useState<ShopifyProduct[]>([]);
   const [authChecked, setAuthChecked] = useState(false);
 
@@ -487,6 +489,34 @@ export default function AdminPage() {
           onChange={(v) => update("products", { ...content.products, showSocialProof: v })}
           label='Show random reviews & "1K+ bought in last month" on product pages'
         />
+      </SectionCard>
+
+      <SectionCard id="pincode-checker" title="Pincode Delivery Checker" defaultOpen>
+        <Toggle
+          checked={pcfg.enabled !== false}
+          onChange={(v) => update("products", { ...content.products, pincode: { ...pcfg, enabled: v } })}
+          label="Show pincode delivery checker on product pages"
+        />
+        <FieldGroup label="Title">
+          <TextInput value={pcfg.title} onChange={(v) => update("products", { ...content.products, pincode: { ...pcfg, title: v } })} />
+        </FieldGroup>
+        <FieldGroup label="Metro delivery days (pincodes starting 1, 4, 5, 6, 70, 71)">
+          <TextInput value={String(pcfg.metroDays)} onChange={(v) => update("products", { ...content.products, pincode: { ...pcfg, metroDays: Math.max(1, Number(v) || 1) } })} />
+        </FieldGroup>
+        <FieldGroup label="Standard delivery days (all other pincodes)">
+          <TextInput value={String(pcfg.standardDays)} onChange={(v) => update("products", { ...content.products, pincode: { ...pcfg, standardDays: Math.max(1, Number(v) || 1) } })} />
+        </FieldGroup>
+        <Toggle
+          checked={pcfg.codAvailable !== false}
+          onChange={(v) => update("products", { ...content.products, pincode: { ...pcfg, codAvailable: v } })}
+          label="Show Cash on Delivery note"
+        />
+        <FieldGroup label="Cash on Delivery note">
+          <TextInput value={pcfg.codMessage} onChange={(v) => update("products", { ...content.products, pincode: { ...pcfg, codMessage: v } })} />
+        </FieldGroup>
+        <FieldGroup label="Extra note (shown with results)">
+          <TextInput value={pcfg.note} onChange={(v) => update("products", { ...content.products, pincode: { ...pcfg, note: v } })} multiline />
+        </FieldGroup>
       </SectionCard>
 
       <div className="h-24" />

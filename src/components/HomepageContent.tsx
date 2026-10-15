@@ -139,12 +139,12 @@ export default function HomepageContent({ bestsellers }: { bestsellers: ShopifyP
             </p>
           </div>
 
-          <div className="hidden md:block relative w-[35%] animate-fade-in-up">
+          <div className="hidden md:block relative w-1/2 animate-fade-in-up">
             <Image
               src={h.story.imageUrl || "/about-us.webp"}
               alt="Our Story"
               fill
-              sizes="35vw"
+              sizes="50vw"
               className="object-cover"
             />
           </div>
