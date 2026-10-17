@@ -80,7 +80,7 @@ export const defaultContent: SiteContent = {
       label: "Our Collection",
       title: "Authentic Pickles",
       description: "Handcrafted in small batches using traditional Delhi recipes passed down since 1980. Every jar is a promise of purity, flavor, and heritage.",
-      bannerUrl: "/achar-banner.webp",
+      bannerUrl: "/achar-banner.png",
     },
   },
 
@@ -89,13 +89,13 @@ export const defaultContent: SiteContent = {
       label: "Slow-Cooked Fruit Preserves",
       title: "Murabba",
       description: "Slow-cooked fruit preserves made with time-honored recipes \u2014 simmered to perfection and sealed with tradition.",
-      bannerUrl: "/murabba-banner.webp",
+      bannerUrl: "/murabba-banner.png",
     },
     chutney: {
       label: "Sweet & Savory Companions",
       title: "Chutneys",
       description: "Bold, tangy condiments crafted to pair with everything from parathas to platters.",
-      bannerUrl: "/chutney-banner.webp",
+      bannerUrl: "/chutney-banner.png",
     },
   },
 
