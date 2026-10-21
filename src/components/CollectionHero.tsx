@@ -18,12 +18,15 @@ export default function CollectionHero({ section }: { section: Section }) {
   return (
     <>
       <Heading className="sr-only">{data.title}</Heading>
-      <div
-        role="img"
-        aria-label={data.title}
-        className="w-full bg-yellow bg-cover bg-center aspect-[6/1] min-h-[200px] md:min-h-[280px]"
-        style={{ backgroundImage: `url("${data.bannerUrl}")` }}
-      />
+      <div className="w-full bg-yellow">
+        <img
+          src={data.bannerUrl}
+          alt={data.title}
+          className="block w-full h-auto"
+          loading="eager"
+          fetchPriority="high"
+        />
+      </div>
     </>
   );
 }
