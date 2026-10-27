@@ -38,7 +38,7 @@ export default function AccountMenu() {
   if (isLoggedIn === null) {
     return (
       <span className="w-5 h-5 flex items-center justify-center">
-        <svg className="animate-spin h-4 w-4 text-[#C21A33]" viewBox="0 0 24 24" fill="none">
+        <svg className="animate-spin h-4 w-4 text-red" viewBox="0 0 24 24" fill="none">
           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
         </svg>
@@ -48,7 +48,7 @@ export default function AccountMenu() {
 
   if (!isLoggedIn) {
     return (
-      <a href="/account/login" className="text-[#C21A33] hover:opacity-70 transition-opacity">
+      <a href="/account/login" className="text-red hover:opacity-70 transition-opacity">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -71,7 +71,7 @@ export default function AccountMenu() {
     <div ref={menuRef} className="relative">
       <button
         onClick={() => setOpen(!open)}
-        className="text-[#C21A33] hover:opacity-70 transition-opacity"
+        className="text-red hover:opacity-70 transition-opacity"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -89,14 +89,14 @@ export default function AccountMenu() {
       </button>
 
       {open && (
-        <div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-[0_4px_30px_rgba(0,0,0,0.12)] py-2 z-[1001]">
+        <div className="absolute right-0 top-full mt-2 w-48 bg-surface rounded-xl shadow-[0_4px_30px_rgba(0,0,0,0.12)] py-2 z-[1001]">
           <button
             onClick={(e) => {
               e.preventDefault();
               setOpen(false);
               router.push("/account");
             }}
-            className="block w-full text-left px-4 py-2.5 text-[13px] text-[#1A1A1A] hover:bg-[#FAF5E4] transition-colors"
+            className="block w-full text-left px-4 py-2.5 text-[13px] text-brand-black hover:bg-yellow transition-colors"
           >
             My Account
           </button>
@@ -106,7 +106,7 @@ export default function AccountMenu() {
               setOpen(false);
               router.push("/account/orders");
             }}
-            className="block w-full text-left px-4 py-2.5 text-[13px] text-[#1A1A1A] hover:bg-[#FAF5E4] transition-colors"
+            className="block w-full text-left px-4 py-2.5 text-[13px] text-brand-black hover:bg-yellow transition-colors"
           >
             My Orders
           </button>
@@ -116,15 +116,15 @@ export default function AccountMenu() {
               setOpen(false);
               router.push("/account/addresses");
             }}
-            className="block w-full text-left px-4 py-2.5 text-[13px] text-[#1A1A1A] hover:bg-[#FAF5E4] transition-colors"
+            className="block w-full text-left px-4 py-2.5 text-[13px] text-brand-black hover:bg-yellow transition-colors"
           >
             Addresses
           </button>
-          <hr className="my-1 border-[#1A1A1A]/5" />
+          <hr className="my-1 border-brand-black/5" />
           <button
             onClick={handleLogout}
             disabled={loading}
-            className="w-full text-left px-4 py-2.5 text-[13px] text-[#C21A33] hover:bg-red-50 transition-colors disabled:opacity-50"
+            className="w-full text-left px-4 py-2.5 text-[13px] text-red hover:bg-red/10 transition-colors disabled:opacity-50"
           >
             {loading ? "Signing out..." : "Sign out"}
           </button>

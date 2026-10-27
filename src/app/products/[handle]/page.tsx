@@ -91,7 +91,7 @@ export default async function ProductPage({
 
       <main className="pt-[60px] md:pt-[70px]">
         {/* PRODUCT DETAILS */}
-        <section className="bg-white py-10 md:py-16">
+        <section className="bg-surface py-10 md:py-16">
           <div className="max-w-[1200px] mx-auto px-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-14">
               <div className="self-start md:sticky md:top-[90px]">
@@ -104,7 +104,7 @@ export default async function ProductPage({
 
         {/* RELATED PRODUCTS */}
         {related.length > 0 && (
-          <section className="bg-white py-12 md:py-20">
+          <section className="bg-surface py-12 md:py-20">
             <div className="max-w-[1200px] mx-auto px-6">
               <div className="text-center mb-8 md:mb-12">
                 <span className="inline-block text-[11px] font-semibold uppercase tracking-[3px] text-red mb-3">

@@ -110,7 +110,7 @@ export default function HomepageContent({ bestsellers }: { bestsellers: ShopifyP
       <BestsellersSection products={bestsellers} />
 
       {/* OUR STORY */}
-      <section id="story" className="bg-white animate-fade-in-up">
+      <section id="story" className="bg-surface animate-fade-in-up">
         <div className="flex flex-col md:flex-row">
           <div className="md:hidden">
             <Image
@@ -155,7 +155,7 @@ export default function HomepageContent({ bestsellers }: { bestsellers: ShopifyP
       <AwardsCarousel />
 
       {/* VIDEO */}
-      <section id="video" className="py-12 md:py-[100px] px-6 md:px-16 lg:px-[60px] bg-white animate-fade-in-up">
+      <section id="video" className="py-12 md:py-[100px] px-6 md:px-16 lg:px-[60px] bg-surface animate-fade-in-up">
         <div className="flex flex-col md:flex-row gap-8 md:gap-[60px] max-w-[1200px] mx-auto items-center">
           <div className="w-full max-w-[300px] md:max-w-none md:w-[320px] rounded-lg overflow-hidden animate-fade-in-up">
             <VideoPlayer />

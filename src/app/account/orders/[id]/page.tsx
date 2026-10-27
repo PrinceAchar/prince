@@ -55,9 +55,9 @@ function getStatusColor(status: string): string {
     case "REFUNDED":
     case "PARTIALLY_REFUNDED":
     case "CANCELLED":
-      return "text-red-700 bg-red-50";
+      return "text-red bg-red/10";
     default:
-      return "text-[#1A1A1A]/60 bg-[#1A1A1A]/5";
+      return "text-brand-black/60 bg-brand-black/5";
   }
 }
 
@@ -95,8 +95,8 @@ export default function OrderDetailPage() {
     return (
       <>
         <Navbar />
-        <main className="min-h-screen bg-[#FAF5E4] pt-[70px] md:pt-[80px] flex items-center justify-center">
-          <p className="text-[14px] text-[#1A1A1A]/50">Loading...</p>
+        <main className="min-h-screen bg-yellow pt-[70px] md:pt-[80px] flex items-center justify-center">
+          <p className="text-[14px] text-brand-black/50">Loading...</p>
         </main>
         <Footer />
       </>
@@ -107,10 +107,10 @@ export default function OrderDetailPage() {
     return (
       <>
         <Navbar />
-        <main className="min-h-screen bg-[#FAF5E4] pt-[70px] md:pt-[80px] flex items-center justify-center">
+        <main className="min-h-screen bg-yellow pt-[70px] md:pt-[80px] flex items-center justify-center">
           <div className="text-center">
-            <p className="text-[14px] text-red-600 mb-4">{error || "Order not found"}</p>
-            <Link href="/account/orders" className="text-[13px] text-[#C21A33] underline underline-offset-4">
+            <p className="text-[14px] text-red mb-4">{error || "Order not found"}</p>
+            <Link href="/account/orders" className="text-[13px] text-red underline underline-offset-4">
               Back to orders
             </Link>
           </div>
@@ -126,15 +126,15 @@ export default function OrderDetailPage() {
     <>
       <Navbar />
 
-      <main className="min-h-screen bg-[#FAF5E4] pt-[70px] md:pt-[80px]">
+      <main className="min-h-screen bg-yellow pt-[70px] md:pt-[80px]">
         <div className="max-w-[800px] mx-auto px-4 py-12 md:py-16">
           {/* Header */}
           <div className="flex flex-wrap items-center justify-between gap-3 mb-8">
             <div>
-              <h1 className="font-heading text-[28px] md:text-[32px] font-bold text-[#1A1A1A]">
+              <h1 className="font-heading text-[28px] md:text-[32px] font-bold text-brand-black">
                 Order #{order.number}
               </h1>
-              <p className="text-[14px] text-[#1A1A1A]/60 mt-1">
+              <p className="text-[14px] text-brand-black/60 mt-1">
                 Placed on{" "}
                 {new Date(order.processedAt).toLocaleDateString("en-IN", {
                   day: "numeric",
@@ -164,15 +164,15 @@ export default function OrderDetailPage() {
           <AccountNav />
 
           {/* Items */}
-          <div className="bg-white rounded-2xl shadow-[0_2px_20px_rgba(0,0,0,0.06)] p-6 md:p-8 mb-6">
-            <h2 className="font-heading text-[18px] font-bold text-[#1A1A1A] mb-4">
+          <div className="bg-surface rounded-2xl shadow-[0_2px_20px_rgba(0,0,0,0.06)] p-6 md:p-8 mb-6">
+            <h2 className="font-heading text-[18px] font-bold text-brand-black mb-4">
               Items
             </h2>
             <div className="space-y-3">
               {order.lineItems.edges.map((item, i) => (
                 <div key={i} className="flex items-center gap-3">
                   {item.node.image && (
-                    <div className="w-14 h-14 rounded-lg overflow-hidden bg-[#FAF5E4] flex-shrink-0">
+                    <div className="w-14 h-14 rounded-lg overflow-hidden bg-yellow flex-shrink-0">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={item.node.image.url}
@@ -182,20 +182,20 @@ export default function OrderDetailPage() {
                     </div>
                   )}
                   <div className="flex-1 min-w-0">
-                    <p className="text-[14px] text-[#1A1A1A]">{item.node.title}</p>
-                    <p className="text-[12px] text-[#1A1A1A]/50">
+                    <p className="text-[14px] text-brand-black">{item.node.title}</p>
+                    <p className="text-[12px] text-brand-black/50">
                       Qty: {item.node.quantity}
                     </p>
                   </div>
-                  <p className="text-[14px] text-[#1A1A1A] font-medium">
+                  <p className="text-[14px] text-brand-black font-medium">
                     {formatPrice(item.node.price.amount, item.node.price.currencyCode)}
                   </p>
                 </div>
               ))}
             </div>
 
-            <div className="border-t border-[#1A1A1A]/5 mt-5 pt-5 space-y-2 text-[14px]">
-              <div className="flex justify-between text-[#1A1A1A]/60">
+            <div className="border-t border-brand-black/5 mt-5 pt-5 space-y-2 text-[14px]">
+              <div className="flex justify-between text-brand-black/60">
                 <span>Subtotal</span>
                 <span>
                   {order.subtotal
@@ -203,21 +203,21 @@ export default function OrderDetailPage() {
                     : "--"}
                 </span>
               </div>
-              <div className="flex justify-between text-[#1A1A1A]/60">
+              <div className="flex justify-between text-brand-black/60">
                 <span>Shipping</span>
                 <span>
                   {formatPrice(order.totalShipping.amount, order.totalShipping.currencyCode)}
                 </span>
               </div>
               {order.totalTax && (
-                <div className="flex justify-between text-[#1A1A1A]/60">
+                <div className="flex justify-between text-brand-black/60">
                   <span>Tax</span>
                   <span>
                     {formatPrice(order.totalTax.amount, order.totalTax.currencyCode)}
                   </span>
                 </div>
               )}
-              <div className="flex justify-between font-semibold text-[#1A1A1A] pt-2">
+              <div className="flex justify-between font-semibold text-brand-black pt-2">
                 <span>Total</span>
                 <span>{formatPrice(order.totalPrice.amount, currencyCode)}</span>
               </div>
@@ -226,11 +226,11 @@ export default function OrderDetailPage() {
 
           {/* Shipping Address */}
           {order.shippingAddress && (
-            <div className="bg-white rounded-2xl shadow-[0_2px_20px_rgba(0,0,0,0.06)] p-6 md:p-8 mb-6">
-              <h2 className="font-heading text-[18px] font-bold text-[#1A1A1A] mb-3">
+            <div className="bg-surface rounded-2xl shadow-[0_2px_20px_rgba(0,0,0,0.06)] p-6 md:p-8 mb-6">
+              <h2 className="font-heading text-[18px] font-bold text-brand-black mb-3">
                 Shipping Address
               </h2>
-              <p className="text-[14px] text-[#1A1A1A] leading-relaxed">
+              <p className="text-[14px] text-brand-black leading-relaxed">
                 {order.shippingAddress.firstName} {order.shippingAddress.lastName}
                 <br />
                 {order.shippingAddress.address1}
@@ -254,13 +254,13 @@ export default function OrderDetailPage() {
           <div className="flex flex-wrap gap-3">
             <Link
               href={order.statusPageUrl}
-              className="px-6 py-2.5 bg-[#C21A33] text-white text-[13px] font-semibold uppercase tracking-[1px] rounded-lg hover:bg-[#C21A33]/90 transition-colors"
+              className="px-6 py-2.5 bg-red text-white text-[13px] font-semibold uppercase tracking-[1px] rounded-lg hover:bg-red/90 transition-colors"
             >
               Track Order
             </Link>
             <Link
               href="/account/orders"
-              className="px-6 py-2.5 border border-[#1A1A1A]/15 text-[#1A1A1A] text-[13px] font-semibold uppercase tracking-[1px] rounded-lg hover:bg-[#1A1A1A]/5 transition-colors"
+              className="px-6 py-2.5 border border-brand-black/15 text-brand-black text-[13px] font-semibold uppercase tracking-[1px] rounded-lg hover:bg-brand-black/5 transition-colors"
             >
               All Orders
             </Link>

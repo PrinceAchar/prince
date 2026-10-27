@@ -54,7 +54,7 @@ function HeritageDivider() {
 }
 
 const fieldClass =
-  "w-full px-4 py-3 bg-white border border-brand-black/12 rounded-xl text-[14px] text-brand-black placeholder:text-gray/70 outline-none focus:border-red/50 focus:ring-2 focus:ring-red/15 transition-colors";
+  "w-full px-4 py-3 bg-surface border border-brand-black/12 rounded-xl text-[14px] text-brand-black placeholder:text-gray/70 outline-none focus:border-red/50 focus:ring-2 focus:ring-red/15 transition-colors";
 
 function Slideshow({ images }: { images: string[] }) {
   const [idx, setIdx] = useState(0);
@@ -75,7 +75,7 @@ function Slideshow({ images }: { images: string[] }) {
 
   return (
     <div
-      className="relative h-full min-h-[380px] lg:min-h-0 rounded-[16px] overflow-hidden bg-[#F3E9D6]"
+      className="relative h-full min-h-[380px] lg:min-h-0 rounded-[16px] overflow-hidden bg-yellow"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
@@ -108,7 +108,7 @@ function Slideshow({ images }: { images: string[] }) {
               type="button"
               onClick={() => go(-1)}
               aria-label="Previous photo"
-              className="w-7 h-7 rounded-full border border-white/60 text-white flex items-center justify-center transition-colors hover:bg-white/15"
+              className="w-7 h-7 rounded-full border border-white/60 text-white flex items-center justify-center transition-colors hover:bg-surface/15"
             >
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="m15 18-6-6 6-6" />
@@ -118,7 +118,7 @@ function Slideshow({ images }: { images: string[] }) {
               type="button"
               onClick={() => go(1)}
               aria-label="Next photo"
-              className="w-7 h-7 rounded-full border border-white/60 text-white flex items-center justify-center transition-colors hover:bg-white/15"
+              className="w-7 h-7 rounded-full border border-white/60 text-white flex items-center justify-center transition-colors hover:bg-surface/15"
             >
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="m9 18 6-6-6-6" />
@@ -190,7 +190,7 @@ export default function ContactPage() {
     <>
       <Navbar />
 
-      <section className="pt-[60px] md:pt-[70px] bg-white">
+      <section className="pt-[60px] md:pt-[70px] bg-surface">
         <div className="max-w-[1150px] mx-auto px-6 pt-10 md:pt-12 pb-2 text-center">
           <span className="inline-block text-[11px] font-semibold uppercase tracking-[3px] text-red mb-3">
             {c.hero.label}
@@ -205,7 +205,7 @@ export default function ContactPage() {
         </div>
       </section>
 
-      <section className="bg-white pb-8">
+      <section className="bg-surface pb-8">
         <div className="max-w-[1200px] mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-6 md:gap-7 lg:items-stretch">
             <Slideshow images={c.images} />
@@ -281,7 +281,7 @@ export default function ContactPage() {
         </div>
       </section>
 
-      <section className="bg-white pb-10 md:pb-14">
+      <section className="bg-surface pb-10 md:pb-14">
         <div className="max-w-[1200px] mx-auto px-6">
           <div className="bg-yellow rounded-[14px] border border-brand-black/8 px-5 md:px-7 py-6 md:py-7">
             <div className="grid grid-cols-1 md:grid-cols-[auto_auto_auto_auto] divide-y divide-brand-black/10 md:divide-y-0 md:divide-x">

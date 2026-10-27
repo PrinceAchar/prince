@@ -61,7 +61,7 @@ export default function SearchPage({ products }: { products: ShopifyProduct[] })
   return (
     <>
       {/* Search bar */}
-      <section className="bg-white py-8 md:py-12">
+      <section className="bg-surface py-8 md:py-12">
         <div className="max-w-[1200px] mx-auto px-6">
           <form onSubmit={handleSubmit} className="flex items-center gap-3 max-w-[560px] mx-auto">
             <div className="relative flex-1">
@@ -94,7 +94,7 @@ export default function SearchPage({ products }: { products: ShopifyProduct[] })
       </section>
 
       {/* Results */}
-      <section className="bg-white pb-12 md:pb-20">
+      <section className="bg-surface pb-12 md:pb-20">
         <div className="max-w-[1200px] mx-auto px-6">
           {terms.length === 0 ? (
             <p className="text-center text-gray text-[14px]">

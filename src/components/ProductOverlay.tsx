@@ -166,7 +166,7 @@ export default function ProductOverlay({ product, onClose }: ProductOverlayProps
         </div>
 
         {/* Mobile description */}
-        <div className="bg-[#FAF5E4] -mt-2 relative z-10 p-6">
+        <div className="bg-yellow -mt-2 relative z-10 p-6">
           <ProductDetails
             product={product}
             titleClassName="font-heading text-[22px] font-bold text-brand-black mb-3 leading-tight"
@@ -246,7 +246,7 @@ export default function ProductOverlay({ product, onClose }: ProductOverlayProps
               {selectedIndex > 0 && (
                 <button
                   onClick={() => setSelectedIndex(selectedIndex - 1)}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 shadow-lg flex items-center justify-center hover:bg-white transition-colors"
+                  className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 shadow-lg flex items-center justify-center hover:bg-surface transition-colors"
                 >
                   <svg className="w-5 h-5 text-brand-black" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
@@ -256,7 +256,7 @@ export default function ProductOverlay({ product, onClose }: ProductOverlayProps
               {selectedIndex < images.length - 1 && (
                 <button
                   onClick={() => setSelectedIndex(selectedIndex + 1)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 shadow-lg flex items-center justify-center hover:bg-white transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 shadow-lg flex items-center justify-center hover:bg-surface transition-colors"
                 >
                   <svg className="w-5 h-5 text-brand-black" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
@@ -268,7 +268,7 @@ export default function ProductOverlay({ product, onClose }: ProductOverlayProps
         </div>
 
         {/* Column 3: Product info */}
-        <div className="relative w-[420px] flex-shrink-0 p-8 bg-[#FAF5E4] rounded-2xl flex flex-col">
+        <div className="relative w-[420px] flex-shrink-0 p-8 bg-yellow rounded-2xl flex flex-col">
           <div className="absolute top-4 right-4 flex items-center gap-2">
             <button
               onClick={handleShare}

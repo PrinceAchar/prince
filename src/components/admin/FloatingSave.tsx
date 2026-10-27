@@ -28,7 +28,7 @@ export default function FloatingSave({ onSave, onReset }: FloatingSaveProps) {
         {onReset && (
           <button
             onClick={onReset}
-            className="px-4 py-3 bg-white border border-brand-black/15 text-brand-black text-[12px] font-medium rounded-xl hover:bg-brand-black/5 transition-colors shadow-lg"
+            className="px-4 py-3 bg-surface border border-brand-black/15 text-brand-black text-[12px] font-medium rounded-xl hover:bg-brand-black/5 transition-colors shadow-lg"
           >
             Reset to Defaults
           </button>
@@ -42,7 +42,7 @@ export default function FloatingSave({ onSave, onReset }: FloatingSaveProps) {
               : state === "error"
               ? "bg-red text-white"
               : state === "saving"
-              ? "bg-brand-black/70 text-white"
+              ? "bg-black/70 text-white"
               : "bg-red hover:bg-red-dark text-white"
           }`}
         >

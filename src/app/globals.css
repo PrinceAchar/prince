@@ -1,15 +1,55 @@
 @import "tailwindcss";
 
-@theme inline {
+/*
+ * Design tokens.
+ *
+ * Dark mode is driven EXCLUSIVELY by the OS/browser "prefers-color-scheme"
+ * setting — there is no toggle and no JS. Utilities reference these CSS
+ * variables (note: plain `@theme`, not `inline`), so overriding the values
+ * under the dark media query restyles the entire site consistently.
+ *
+ * Token semantics (keep them unambiguous):
+ *   yellow      → page background (cream / warm near-black)
+ *   surface     → card & panel background (white / warm dark)
+ *   brand-black → PRIMARY TEXT color (near-black / warm cream)
+ *   gray        → muted text
+ *   light-gray  → borders
+ *   red, green  → accents (slightly brightened in dark for contrast)
+ *
+ * `white` is deliberately NOT redefined: `text-white` must always mean
+ * "white text on a colored background" in both modes.
+ */
+@theme {
   --color-red: #C21A33;
   --color-red-dark: #9c1529;
   --color-green: #2E7D32;
   --color-green-dark: #1F5E23;
   --color-yellow: #FAF5E4;
   --color-off-white: #FAFAFA;
+  --color-surface: #FFFFFF;
   --color-brand-black: #1A1A1A;
   --color-gray: #6B6B6B;
   --color-light-gray: #E5E5E5;
+}
+
+:root {
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --color-red: #E2455B;
+    --color-red-dark: #C21A33;
+    --color-green: #5BA85F;
+    --color-green-dark: #3E8A42;
+    --color-yellow: #16120E;
+    --color-off-white: #1C1713;
+    --color-surface: #211B16;
+    --color-brand-black: #F2EDE4;
+    --color-gray: #A39B8E;
+    --color-light-gray: #3A332B;
+  }
 }
 
 html {
@@ -19,8 +59,8 @@ html {
 
 body {
   font-family: var(--font-body), -apple-system, sans-serif;
-  background: #FAF5E4;
-  color: #1A1A1A;
+  background: var(--color-yellow);
+  color: var(--color-brand-black);
   overflow-x: clip;
 }
 
@@ -56,7 +96,7 @@ body {
 .rich-text h4 {
   font-family: var(--font-heading), "Times New Roman", serif;
   font-weight: 700;
-  color: #1A1A1A;
+  color: var(--color-brand-black);
   margin-bottom: 0.4rem;
   line-height: 1.3;
 }
@@ -82,7 +122,7 @@ body {
 }
 
 .rich-text a {
-  color: #C21A33;
+  color: var(--color-red);
   text-decoration: underline;
 }
 

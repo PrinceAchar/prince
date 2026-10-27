@@ -22,8 +22,8 @@ export default function AccountNav() {
             href={link.href}
             className={`px-4 py-2 text-[13px] font-semibold uppercase tracking-[1px] rounded-lg transition-colors whitespace-nowrap ${
               active
-                ? "bg-[#C21A33] text-white"
-                : "bg-white text-[#1A1A1A] hover:bg-[#1A1A1A]/5"
+                ? "bg-red text-white"
+                : "bg-surface text-brand-black hover:bg-brand-black/5"
             }`}
           >
             {link.label}

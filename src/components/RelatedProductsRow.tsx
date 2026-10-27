@@ -69,7 +69,7 @@ function RelatedCard({ product }: { product: ShopifyProduct }) {
           />
         )}
         {soldOut && (
-          <div className="absolute top-3 left-3 z-20 bg-brand-black/80 text-white text-[10px] font-semibold uppercase tracking-wider px-3 py-1.5 rounded-full">
+          <div className="absolute top-3 left-3 z-20 bg-black/80 text-white text-[10px] font-semibold uppercase tracking-wider px-3 py-1.5 rounded-full">
             Sold Out
           </div>
         )}

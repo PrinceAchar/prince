@@ -10,8 +10,25 @@ export default function FAQPage() {
   const c = content.faq;
   const [open, setOpen] = useState<number | null>(null);
 
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: c.items.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: faq.answer,
+      },
+    })),
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
       <Navbar />
 
       {/* HERO */}
@@ -33,14 +50,14 @@ export default function FAQPage() {
       </section>
 
       {/* FAQ ACCORDION */}
-      <section className="bg-gradient-to-b from-white to-yellow/30 py-12 md:py-16">
+      <section className="bg-gradient-to-b from-surface to-yellow/30 py-12 md:py-16">
         <div className="max-w-[750px] mx-auto px-6">
           <div className="space-y-3">
             {c.items.map((faq, i) => (
               <div
                 key={i}
                 className={`border rounded-xl overflow-hidden transition-all duration-200 ${
-                  open === i ? "border-red/20 shadow-md bg-white" : "border-brand-black/10 bg-white"
+                  open === i ? "border-red/20 shadow-md bg-surface" : "border-brand-black/10 bg-surface"
                 }`}
               >
                 <button

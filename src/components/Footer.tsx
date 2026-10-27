@@ -24,7 +24,7 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="bg-[#FAF5E4] text-brand-black relative overflow-hidden pt-6 md:pt-10">
+    <footer className="bg-yellow text-brand-black relative overflow-hidden pt-6 md:pt-10">
       <div className="max-w-[1150px] mx-auto px-6 pb-6 md:pb-10 relative">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 md:gap-6 md:divide-x md:divide-brand-black/10 text-center md:text-left">
           <div className="col-span-1 sm:col-span-2 md:col-span-1 md:px-6 flex flex-col items-center md:items-start">

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Outfit } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "@/components/CartProvider";
@@ -12,25 +12,67 @@ const SITE_DESCRIPTION =
 
 const organizationJsonLd = {
   "@context": "https://schema.org",
-  "@type": "Organization",
-  name: SITE_NAME,
-  url: SITE_URL,
-  logo: `${SITE_URL}/logo.jpeg`,
-  description: SITE_DESCRIPTION,
-  address: {
-    "@type": "PostalAddress",
-    streetAddress: "Shop No. 6673, Khari Baoli Road, Fatehpuri, Chandni Chowk",
-    addressLocality: "New Delhi",
-    postalCode: "110006",
-    addressCountry: "IN",
-  },
-  contactPoint: {
-    "@type": "ContactPoint",
-    telephone: "+91 98110 56593",
-    email: "pannalaltavinderkumar@gmail.com",
-    contactType: "customer service",
-  },
-  sameAs: ["https://www.instagram.com/princeacharindia/"],
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": `${SITE_URL}/#organization`,
+      name: SITE_NAME,
+      url: SITE_URL,
+      logo: `${SITE_URL}/logo.jpeg`,
+      description: SITE_DESCRIPTION,
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: "Shop No. 6673, Khari Baoli Road, Fatehpuri, Chandni Chowk",
+        addressLocality: "New Delhi",
+        postalCode: "110006",
+        addressCountry: "IN",
+      },
+      contactPoint: {
+        "@type": "ContactPoint",
+        telephone: "+91 98110 56593",
+        email: "pannalaltavinderkumar@gmail.com",
+        contactType: "customer service",
+      },
+      sameAs: ["https://www.instagram.com/princeacharindia/"],
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${SITE_URL}/#website`,
+      url: SITE_URL,
+      name: SITE_NAME,
+      publisher: { "@id": `${SITE_URL}/#organization` },
+      potentialAction: {
+        "@type": "SearchAction",
+        target: {
+          "@type": "EntryPoint",
+          urlTemplate: `${SITE_URL}/search?q={search_term_string}`,
+        },
+        "query-input": "required name=search_term_string",
+      },
+    },
+    {
+      "@type": "GroceryStore",
+      "@id": `${SITE_URL}/#store`,
+      name: SITE_NAME,
+      url: SITE_URL,
+      image: `${SITE_URL}/logo.jpeg`,
+      telephone: "+91 98110 56593",
+      priceRange: "₹₹",
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: "Shop No. 6673, Khari Baoli Road, Fatehpuri, Chandni Chowk",
+        addressLocality: "New Delhi",
+        postalCode: "110006",
+        addressCountry: "IN",
+      },
+      geo: {
+        "@type": "GeoCoordinates",
+        latitude: 28.6570235,
+        longitude: 77.2212014,
+      },
+      sameAs: ["https://www.instagram.com/princeacharindia/"],
+    },
+  ],
 };
 
 const cormorant = Cormorant_Garamond({
@@ -64,6 +106,13 @@ export const metadata: Metadata = {
     images: ["/logo.jpeg"],
   },
   robots: { index: true, follow: true },
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#FAF5E4" },
+    { media: "(prefers-color-scheme: dark)", color: "#16120E" },
+  ],
 };
 
 export default function RootLayout({

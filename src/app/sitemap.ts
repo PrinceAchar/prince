@@ -11,7 +11,6 @@ const paths = [
   "/privacy",
   "/returns",
   "/shipping",
-  "/store-locator",
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -21,10 +20,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...paths.map((path) => ({
       url: `${SITE_URL}${path}`,
       lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: path === "" ? 1 : 0.8,
     })),
     ...handles.map((handle) => ({
       url: `${SITE_URL}/products/${handle}`,
       lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 0.6,
     })),
   ];
 }

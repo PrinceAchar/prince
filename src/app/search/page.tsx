@@ -5,6 +5,7 @@ import SearchPage from "@/components/SearchPage";
 import { shopifyFetch, type ProductData, type ShopifyProduct } from "@/lib/shopify";
 import { ALL_PRODUCTS_QUERY } from "@/lib/queries";
 import { productPageMetadata } from "@/lib/metadata";
+import { SITE_URL } from "@/lib/site";
 import type { Metadata } from "next";
 
 const PAGE_TITLE = "Search | Prince Achar";
@@ -17,7 +18,12 @@ export async function generateMetadata({
   searchParams: Promise<{ product?: string }>;
 }): Promise<Metadata> {
   const { product } = await searchParams;
-  return productPageMetadata(product, PAGE_TITLE, PAGE_DESCRIPTION);
+  const base = await productPageMetadata(product, PAGE_TITLE, PAGE_DESCRIPTION);
+  return {
+    ...base,
+    robots: { index: false, follow: true },
+    alternates: base.alternates ?? { canonical: `${SITE_URL}/search` },
+  };
 }
 
 async function getAllProducts(): Promise<ShopifyProduct[]> {

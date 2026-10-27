@@ -80,7 +80,7 @@ export default function ProductCard({ product, featured = false }: ProductCardPr
   return (
     <div
       className={`group rounded-xl overflow-hidden border border-brand-black/5 hover:shadow-lg transition-shadow cursor-pointer ${
-        featured ? "bg-white" : "bg-yellow/50"
+        featured ? "bg-surface" : "bg-yellow/50"
       }`}
       onClick={() => router.push(`/products/${product.handle}`)}
     >
@@ -170,7 +170,7 @@ export default function ProductCard({ product, featured = false }: ProductCardPr
 
         {/* Sold out badge */}
         {soldOut && (
-          <div className="absolute top-3 left-3 z-20 bg-brand-black/80 text-white text-[10px] font-semibold uppercase tracking-wider px-3 py-1.5 rounded-full">
+          <div className="absolute top-3 left-3 z-20 bg-black/80 text-white text-[10px] font-semibold uppercase tracking-wider px-3 py-1.5 rounded-full">
             Sold Out
           </div>
         )}

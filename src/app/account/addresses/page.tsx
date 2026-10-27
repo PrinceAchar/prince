@@ -178,17 +178,17 @@ export default function AddressesPage() {
   };
 
   const inputClass =
-    "w-full px-3 py-2.5 bg-[#FAF5E4] border border-[#1A1A1A]/10 rounded-lg text-[14px] text-[#1A1A1A] placeholder:text-[#1A1A1A]/30 focus:outline-none focus:border-[#C21A33] transition-colors";
+    "w-full px-3 py-2.5 bg-yellow border border-brand-black/10 rounded-lg text-[14px] text-brand-black placeholder:text-brand-black/30 focus:outline-none focus:border-red transition-colors";
 
   return (
     <>
       <Navbar />
 
-      <main className="min-h-screen bg-[#FAF5E4] pt-[70px] md:pt-[80px]">
+      <main className="min-h-screen bg-yellow pt-[70px] md:pt-[80px]">
         <div className="max-w-[800px] mx-auto px-4 py-12 md:py-16">
           {/* Header */}
           <div className="flex items-center justify-between mb-8">
-            <h1 className="font-heading text-[28px] md:text-[32px] font-bold text-[#1A1A1A]">
+            <h1 className="font-heading text-[28px] md:text-[32px] font-bold text-brand-black">
               Addresses
             </h1>
             {!showForm && (
@@ -198,7 +198,7 @@ export default function AddressesPage() {
                   setEditingId(null);
                   setShowForm(true);
                 }}
-                className="px-4 py-2 bg-[#C21A33] text-white text-[13px] font-semibold uppercase tracking-[1px] rounded-lg hover:bg-[#C21A33]/90 transition-colors"
+                className="px-4 py-2 bg-red text-white text-[13px] font-semibold uppercase tracking-[1px] rounded-lg hover:bg-red/90 transition-colors"
               >
                 Add New
               </button>
@@ -208,15 +208,15 @@ export default function AddressesPage() {
           <AccountNav />
 
           {error && (
-            <div className="mb-6 p-3 bg-red-50 border border-red-200 rounded-lg text-[13px] text-red-700">
+            <div className="mb-6 p-3 bg-red/10 border border-red/20 rounded-lg text-[13px] text-red">
               {error}
             </div>
           )}
 
           {/* Address Form */}
           {showForm && (
-            <div className="bg-white rounded-2xl shadow-[0_2px_20px_rgba(0,0,0,0.06)] p-6 md:p-8 mb-6">
-              <h2 className="font-heading text-[18px] font-bold text-[#1A1A1A] mb-4">
+            <div className="bg-surface rounded-2xl shadow-[0_2px_20px_rgba(0,0,0,0.06)] p-6 md:p-8 mb-6">
+              <h2 className="font-heading text-[18px] font-bold text-brand-black mb-4">
                 {editingId ? "Edit Address" : "New Address"}
               </h2>
               <form onSubmit={handleSubmit} className="space-y-4">
@@ -290,7 +290,7 @@ export default function AddressesPage() {
                   <button
                     type="submit"
                     disabled={saving}
-                    className="px-6 py-2.5 bg-[#C21A33] text-white text-[13px] font-semibold uppercase tracking-[1px] rounded-lg hover:bg-[#C21A33]/90 transition-colors disabled:opacity-50"
+                    className="px-6 py-2.5 bg-red text-white text-[13px] font-semibold uppercase tracking-[1px] rounded-lg hover:bg-red/90 transition-colors disabled:opacity-50"
                   >
                     {saving ? "Saving..." : editingId ? "Update" : "Save"}
                   </button>
@@ -301,7 +301,7 @@ export default function AddressesPage() {
                       setEditingId(null);
                       setForm(emptyForm);
                     }}
-                    className="px-6 py-2.5 border border-[#1A1A1A]/15 text-[#1A1A1A] text-[13px] font-semibold uppercase tracking-[1px] rounded-lg hover:bg-[#1A1A1A]/5 transition-colors"
+                    className="px-6 py-2.5 border border-brand-black/15 text-brand-black text-[13px] font-semibold uppercase tracking-[1px] rounded-lg hover:bg-brand-black/5 transition-colors"
                   >
                     Cancel
                   </button>
@@ -312,12 +312,12 @@ export default function AddressesPage() {
 
           {/* Address List */}
           {loading ? (
-            <div className="text-center py-8 text-[14px] text-[#1A1A1A]/50">
+            <div className="text-center py-8 text-[14px] text-brand-black/50">
               Loading...
             </div>
           ) : addresses.length === 0 && !showForm ? (
-            <div className="bg-white rounded-2xl shadow-[0_2px_20px_rgba(0,0,0,0.06)] p-8 text-center">
-              <p className="text-[14px] text-[#1A1A1A]/50">
+            <div className="bg-surface rounded-2xl shadow-[0_2px_20px_rgba(0,0,0,0.06)] p-8 text-center">
+              <p className="text-[14px] text-brand-black/50">
                 No saved addresses yet.
               </p>
             </div>
@@ -326,14 +326,14 @@ export default function AddressesPage() {
               {addresses.map((addr) => (
                 <div
                   key={addr.id}
-                  className="bg-white rounded-2xl shadow-[0_2px_20px_rgba(0,0,0,0.06)] p-6"
+                  className="bg-surface rounded-2xl shadow-[0_2px_20px_rgba(0,0,0,0.06)] p-6"
                 >
                   <div className="flex items-start justify-between">
-                    <div className="text-[14px] text-[#1A1A1A] leading-relaxed">
+                    <div className="text-[14px] text-brand-black leading-relaxed">
                       <p className="font-medium flex items-center gap-2">
                         {addr.firstName} {addr.lastName}
                         {defaultAddressId === addr.id && (
-                          <span className="text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 bg-[#C21A33]/10 text-[#C21A33] rounded-full">
+                          <span className="text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 bg-red/10 text-red rounded-full">
                             Default
                           </span>
                         )}
@@ -350,7 +350,7 @@ export default function AddressesPage() {
                       {defaultAddressId !== addr.id && (
                         <button
                           onClick={() => handleSetDefault(addr.id)}
-                          className="mt-3 text-[12px] text-[#1A1A1A]/50 underline underline-offset-2 hover:text-[#C21A33] transition-colors"
+                          className="mt-3 text-[12px] text-brand-black/50 underline underline-offset-2 hover:text-red transition-colors"
                         >
                           Set as default
                         </button>
@@ -359,13 +359,13 @@ export default function AddressesPage() {
                     <div className="flex gap-2">
                       <button
                         onClick={() => handleEdit(addr)}
-                        className="text-[12px] text-[#C21A33] underline underline-offset-2 hover:opacity-70 transition-opacity"
+                        className="text-[12px] text-red underline underline-offset-2 hover:opacity-70 transition-opacity"
                       >
                         Edit
                       </button>
                       <button
                         onClick={() => handleDelete(addr.id)}
-                        className="text-[12px] text-[#1A1A1A]/40 underline underline-offset-2 hover:text-red-600 transition-colors"
+                        className="text-[12px] text-brand-black/40 underline underline-offset-2 hover:text-red transition-colors"
                       >
                         Delete
                       </button>

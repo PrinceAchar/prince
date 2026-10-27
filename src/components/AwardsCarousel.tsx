@@ -38,7 +38,7 @@ export default function AwardsCarousel() {
               <button
                 key={i}
                 onClick={() => setSelected(award)}
-                className="flex-none w-[220px] md:w-[260px] lg:w-[280px] bg-white rounded-lg overflow-hidden shadow-sm group text-left cursor-pointer"
+                className="flex-none w-[220px] md:w-[260px] lg:w-[280px] bg-surface rounded-lg overflow-hidden shadow-sm group text-left cursor-pointer"
               >
                 <div className="relative w-full aspect-square overflow-hidden">
                   <Image
@@ -73,7 +73,7 @@ export default function AwardsCarousel() {
           onClick={() => setSelected(null)}
         >
           <div
-            className="relative w-full max-w-[400px] bg-white rounded-2xl overflow-hidden shadow-2xl"
+            className="relative w-full max-w-[400px] bg-surface rounded-2xl overflow-hidden shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="relative w-full aspect-square overflow-hidden">

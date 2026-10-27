@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
 import { getClientDb } from "./firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { defaultContent } from "./content-defaults";
@@ -15,22 +15,23 @@ export function useContent(): SiteContent {
 export function ContentProvider({ children }: { children: ReactNode }) {
   const [content, setContent] = useState<SiteContent>(defaultContent);
 
-  const fetchContent = useCallback(async () => {
-    try {
-      const db = getClientDb();
-      const snap = await getDoc(doc(db, "siteContent", "main"));
-      if (snap.exists()) {
-        const data = snap.data() as Partial<SiteContent>;
-        setContent(mergeContent(defaultContent, data));
-      }
-    } catch {
-      // Firebase not configured or offline — use defaults
-    }
-  }, []);
-
   useEffect(() => {
-    fetchContent();
-  }, [fetchContent]);
+    let cancelled = false;
+    const db = getClientDb();
+    getDoc(doc(db, "siteContent", "main"))
+      .then((snap) => {
+        if (!cancelled && snap.exists()) {
+          const data = snap.data() as Partial<SiteContent>;
+          setContent(mergeContent(defaultContent, data));
+        }
+      })
+      .catch(() => {
+        // Firebase not configured or offline — use defaults
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   return (
     <ContentContext.Provider value={content}>

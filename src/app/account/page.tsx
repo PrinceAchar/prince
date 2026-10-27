@@ -81,8 +81,8 @@ export default function AccountPage() {
     return (
       <>
         <Navbar />
-        <main className="min-h-screen bg-[#FAF5E4] pt-[70px] md:pt-[80px] flex items-center justify-center">
-          <p className="text-[14px] text-[#1A1A1A]/50">Loading...</p>
+        <main className="min-h-screen bg-yellow pt-[70px] md:pt-[80px] flex items-center justify-center">
+          <p className="text-[14px] text-brand-black/50">Loading...</p>
         </main>
         <Footer />
       </>
@@ -93,12 +93,12 @@ export default function AccountPage() {
     return (
       <>
         <Navbar />
-        <main className="min-h-screen bg-[#FAF5E4] pt-[70px] md:pt-[80px] flex items-center justify-center">
+        <main className="min-h-screen bg-yellow pt-[70px] md:pt-[80px] flex items-center justify-center">
           <div className="text-center">
-            <p className="text-[14px] text-red-600 mb-4">{error || "Failed to load account"}</p>
+            <p className="text-[14px] text-red mb-4">{error || "Failed to load account"}</p>
             <a
               href="/account/login"
-              className="text-[13px] text-[#C21A33] underline underline-offset-4"
+              className="text-[13px] text-red underline underline-offset-4"
             >
               Try logging in again
             </a>
@@ -116,14 +116,14 @@ export default function AccountPage() {
     <>
       <Navbar />
 
-      <main className="min-h-screen bg-[#FAF5E4] pt-[70px] md:pt-[80px]">
+      <main className="min-h-screen bg-yellow pt-[70px] md:pt-[80px]">
         <div className="max-w-[800px] mx-auto px-4 py-12 md:py-16">
           {/* Header */}
           <div className="mb-10">
-            <h1 className="font-heading text-[28px] md:text-[36px] font-bold text-[#1A1A1A]">
+            <h1 className="font-heading text-[28px] md:text-[36px] font-bold text-brand-black">
               My Account
             </h1>
-            <p className="text-[14px] text-[#1A1A1A]/60 mt-2">
+            <p className="text-[14px] text-brand-black/60 mt-2">
               Welcome back, {customer.firstName || "there"}
             </p>
           </div>
@@ -131,9 +131,9 @@ export default function AccountPage() {
           <AccountNav />
 
           {/* Profile Card */}
-          <div className="bg-white rounded-2xl shadow-[0_2px_20px_rgba(0,0,0,0.06)] p-6 md:p-8 mb-6">
+          <div className="bg-surface rounded-2xl shadow-[0_2px_20px_rgba(0,0,0,0.06)] p-6 md:p-8 mb-6">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="font-heading text-[20px] font-bold text-[#1A1A1A]">
+              <h2 className="font-heading text-[20px] font-bold text-brand-black">
                 Profile
               </h2>
               {!editingName && (
@@ -146,7 +146,7 @@ export default function AccountPage() {
                     setNameError("");
                     setEditingName(true);
                   }}
-                  className="text-[12px] text-[#C21A33] underline underline-offset-2 hover:opacity-70 transition-opacity"
+                  className="text-[12px] text-red underline underline-offset-2 hover:opacity-70 transition-opacity"
                 >
                   Edit
                 </button>
@@ -155,7 +155,7 @@ export default function AccountPage() {
             {editingName ? (
               <form onSubmit={handleNameSave} className="space-y-3">
                 {nameError && (
-                  <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-[13px] text-red-700">
+                  <div className="p-3 bg-red/10 border border-red/20 rounded-lg text-[13px] text-red">
                     {nameError}
                   </div>
                 )}
@@ -167,7 +167,7 @@ export default function AccountPage() {
                       setNameForm({ ...nameForm, firstName: e.target.value })
                     }
                     placeholder="First name"
-                    className="w-full px-3 py-2.5 bg-[#FAF5E4] border border-[#1A1A1A]/10 rounded-lg text-[14px] text-[#1A1A1A] placeholder:text-[#1A1A1A]/30 focus:outline-none focus:border-[#C21A33] transition-colors"
+                    className="w-full px-3 py-2.5 bg-yellow border border-brand-black/10 rounded-lg text-[14px] text-brand-black placeholder:text-brand-black/30 focus:outline-none focus:border-red transition-colors"
                     required
                   />
                   <input
@@ -177,7 +177,7 @@ export default function AccountPage() {
                       setNameForm({ ...nameForm, lastName: e.target.value })
                     }
                     placeholder="Last name"
-                    className="w-full px-3 py-2.5 bg-[#FAF5E4] border border-[#1A1A1A]/10 rounded-lg text-[14px] text-[#1A1A1A] placeholder:text-[#1A1A1A]/30 focus:outline-none focus:border-[#C21A33] transition-colors"
+                    className="w-full px-3 py-2.5 bg-yellow border border-brand-black/10 rounded-lg text-[14px] text-brand-black placeholder:text-brand-black/30 focus:outline-none focus:border-red transition-colors"
                     required
                   />
                 </div>
@@ -185,14 +185,14 @@ export default function AccountPage() {
                   <button
                     type="submit"
                     disabled={savingName}
-                    className="px-6 py-2 bg-[#C21A33] text-white text-[12px] font-semibold uppercase tracking-[1px] rounded-lg hover:bg-[#C21A33]/90 transition-colors disabled:opacity-50"
+                    className="px-6 py-2 bg-red text-white text-[12px] font-semibold uppercase tracking-[1px] rounded-lg hover:bg-red/90 transition-colors disabled:opacity-50"
                   >
                     {savingName ? "Saving..." : "Save"}
                   </button>
                   <button
                     type="button"
                     onClick={() => setEditingName(false)}
-                    className="px-6 py-2 border border-[#1A1A1A]/15 text-[#1A1A1A] text-[12px] font-semibold uppercase tracking-[1px] rounded-lg hover:bg-[#1A1A1A]/5 transition-colors"
+                    className="px-6 py-2 border border-brand-black/15 text-brand-black text-[12px] font-semibold uppercase tracking-[1px] rounded-lg hover:bg-brand-black/5 transition-colors"
                   >
                     Cancel
                   </button>
@@ -201,21 +201,21 @@ export default function AccountPage() {
             ) : (
               <div className="space-y-3 text-[14px]">
                 <div className="flex justify-between">
-                  <span className="text-[#1A1A1A]/50">Name</span>
-                  <span className="text-[#1A1A1A]">
+                  <span className="text-brand-black/50">Name</span>
+                  <span className="text-brand-black">
                     {customer.firstName} {customer.lastName}
                   </span>
                 </div>
               <div className="flex justify-between">
-                <span className="text-[#1A1A1A]/50">Email</span>
-                <span className="text-[#1A1A1A]">
+                <span className="text-brand-black/50">Email</span>
+                <span className="text-brand-black">
                   {customer.emailAddress.emailAddress}
                 </span>
               </div>
               {customer.phoneNumber?.phoneNumber && (
                 <div className="flex justify-between">
-                  <span className="text-[#1A1A1A]/50">Phone</span>
-                  <span className="text-[#1A1A1A]">{customer.phoneNumber.phoneNumber}</span>
+                  <span className="text-brand-black/50">Phone</span>
+                  <span className="text-brand-black">{customer.phoneNumber.phoneNumber}</span>
                 </div>
               )}
               </div>
@@ -226,19 +226,19 @@ export default function AccountPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Link
               href="/account/orders"
-              className="bg-white rounded-2xl shadow-[0_2px_20px_rgba(0,0,0,0.06)] p-6 hover:shadow-[0_4px_30px_rgba(0,0,0,0.1)] transition-shadow"
+              className="bg-surface rounded-2xl shadow-[0_2px_20px_rgba(0,0,0,0.06)] p-6 hover:shadow-[0_4px_30px_rgba(0,0,0,0.1)] transition-shadow"
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="font-heading text-[18px] font-bold text-[#1A1A1A]">
+                  <h3 className="font-heading text-[18px] font-bold text-brand-black">
                     Orders
                   </h3>
-                  <p className="text-[13px] text-[#1A1A1A]/50 mt-1">
+                  <p className="text-[13px] text-brand-black/50 mt-1">
                     {ordersCount} {ordersCount === 1 ? "order" : "orders"}
                   </p>
                 </div>
                 <svg
-                  className="w-5 h-5 text-[#C21A33]"
+                  className="w-5 h-5 text-red"
                   fill="none"
                   viewBox="0 0 24 24"
                   strokeWidth={2}
@@ -255,20 +255,20 @@ export default function AccountPage() {
 
             <Link
               href="/account/addresses"
-              className="bg-white rounded-2xl shadow-[0_2px_20px_rgba(0,0,0,0.06)] p-6 hover:shadow-[0_4px_30px_rgba(0,0,0,0.1)] transition-shadow"
+              className="bg-surface rounded-2xl shadow-[0_2px_20px_rgba(0,0,0,0.06)] p-6 hover:shadow-[0_4px_30px_rgba(0,0,0,0.1)] transition-shadow"
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="font-heading text-[18px] font-bold text-[#1A1A1A]">
+                  <h3 className="font-heading text-[18px] font-bold text-brand-black">
                     Addresses
                   </h3>
-                  <p className="text-[13px] text-[#1A1A1A]/50 mt-1">
+                  <p className="text-[13px] text-brand-black/50 mt-1">
                     {addressesCount}{" "}
                     {addressesCount === 1 ? "address" : "addresses"}
                   </p>
                 </div>
                 <svg
-                  className="w-5 h-5 text-[#C21A33]"
+                  className="w-5 h-5 text-red"
                   fill="none"
                   viewBox="0 0 24 24"
                   strokeWidth={2}
@@ -288,7 +288,7 @@ export default function AccountPage() {
           <div className="mt-8 text-center">
             <a
               href="/api/auth/logout"
-              className="text-[13px] text-[#C21A33] underline underline-offset-4 hover:opacity-70 transition-opacity"
+              className="text-[13px] text-red underline underline-offset-4 hover:opacity-70 transition-opacity"
             >
               Sign out
             </a>

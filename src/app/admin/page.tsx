@@ -31,13 +31,12 @@ export default function AdminPage() {
   const [content, setContent] = useState<SiteContent>(defaultContent);
   const pcfg = content.products.pincode ?? contentDefaults.products.pincode;
   const [products, setProducts] = useState<ShopifyProduct[]>([]);
-  const [authChecked, setAuthChecked] = useState(false);
+  const [authChecked, setAuthChecked] = useState(
+    () => process.env.NODE_ENV === "development"
+  );
 
   useEffect(() => {
-    if (process.env.NODE_ENV === "development") {
-      setAuthChecked(true);
-      return;
-    }
+    if (process.env.NODE_ENV === "development") return;
 
     const auth = getClientAuth();
     const unsub = onAuthStateChanged(auth, async (u) => {
@@ -53,9 +52,13 @@ export default function AdminPage() {
     return unsub;
   }, [router]);
 
-  useEffect(() => {
+  // Sync edits with content that arrives after mount (adjust-during-render
+  // pattern instead of an effect, per React docs on deriving state from props).
+  const [prevDefaultContent, setPrevDefaultContent] = useState(defaultContent);
+  if (prevDefaultContent !== defaultContent) {
+    setPrevDefaultContent(defaultContent);
     setContent(defaultContent);
-  }, [defaultContent]);
+  }
 
   useEffect(() => {
     shopifyFetchClient<{ products: { edges: { node: ShopifyProduct }[] } }>(ALL_PRODUCTS_QUERY, { first: 50 })
@@ -128,7 +131,7 @@ export default function AdminPage() {
         <FieldGroup label="Slides">
           <div className="space-y-3">
             {h.hero.slides.map((slide, i) => (
-              <div key={slide.id} className="p-3 bg-[#FAF5E4]/50 border border-brand-black/10 rounded-xl space-y-2">
+              <div key={slide.id} className="p-3 bg-yellow/50 border border-brand-black/10 rounded-xl space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="text-[11px] font-medium text-gray">Slide {i + 1}</span>
                   <button
@@ -194,7 +197,7 @@ export default function AdminPage() {
             type="number"
             value={h.hero.autoPlayInterval}
             onChange={(e) => updateHome("hero", { ...h.hero, autoPlayInterval: Number(e.target.value) })}
-            className="w-32 px-3 py-2 bg-[#FAF5E4]/50 border border-brand-black/12 rounded-xl text-[13px] text-brand-black outline-none focus:border-red/50 transition-colors"
+            className="w-32 px-3 py-2 bg-yellow/50 border border-brand-black/12 rounded-xl text-[13px] text-brand-black outline-none focus:border-red/50 transition-colors"
           />
         </FieldGroup>
         <div className="border-t border-brand-black/5 pt-4 mt-2">

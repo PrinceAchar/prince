@@ -16,7 +16,7 @@ export default function Navbar() {
   const [searchQuery, setSearchQuery] = useState("");
   const searchInputRef = useRef<HTMLInputElement>(null);
   const searchContainerRef = useRef<HTMLDivElement>(null);
-  const productsCacheRef = useRef<ShopifyProduct[] | null>(null);
+  const [productsCache, setProductsCache] = useState<ShopifyProduct[] | null>(null);
   const lastScroll = useRef(0);
   const router = useRouter();
   const { totalItems, openCart } = useCart();
@@ -38,16 +38,16 @@ export default function Navbar() {
 
   // Fetch products once when search opens for live preview
   useEffect(() => {
-    if (!searchOpen || productsCacheRef.current) return;
+    if (!searchOpen || productsCache) return;
     shopifyFetchClient<{ products: { edges: { node: ShopifyProduct }[] } }>(ALL_PRODUCTS_QUERY, { first: 50 })
       .then((data) => {
-        productsCacheRef.current = data.products.edges.map((e) => e.node);
+        setProductsCache(data.products.edges.map((e) => e.node));
       })
       .catch(() => {});
-  }, [searchOpen]);
+  }, [searchOpen, productsCache]);
 
   const searchResults = useMemo(() => {
-    const products = productsCacheRef.current;
+    const products = productsCache;
     if (!products || !searchQuery.trim()) return [];
     const terms = searchQuery.toLowerCase().trim().split(/\s+/).filter(Boolean);
     return products
@@ -56,7 +56,7 @@ export default function Navbar() {
         return terms.every((t) => haystack.includes(t));
       })
       .slice(0, 6);
-  }, [searchQuery]);
+  }, [searchQuery, productsCache]);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -148,7 +148,7 @@ export default function Navbar() {
               </svg>
             </button>
             {searchOpen && (
-              <div className="absolute right-0 top-[calc(100%+10px)] w-[280px] md:w-[360px] bg-white border border-brand-black/10 rounded-xl shadow-lg z-[1001] overflow-hidden">
+              <div className="absolute right-0 top-[calc(100%+10px)] w-[280px] md:w-[360px] bg-surface border border-brand-black/10 rounded-xl shadow-lg z-[1001] overflow-hidden">
                 <form onSubmit={handleSearchSubmit} className="flex items-center gap-2 p-2">
                   <input
                     ref={searchInputRef}
@@ -224,7 +224,7 @@ export default function Navbar() {
                   </div>
                 )}
 
-                {searchQuery.trim() && searchResults.length === 0 && productsCacheRef.current && (
+                {searchQuery.trim() && searchResults.length === 0 && productsCache && (
                   <div className="border-t border-brand-black/5 px-4 py-4 text-center">
                     <p className="text-[12px] text-gray">No products found</p>
                     <Link

@@ -1,7 +1,9 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { SITE_URL } from "@/lib/site";
 
 export const metadata = {
+  alternates: { canonical: `${SITE_URL}/returns` },
   title: "Returns & Refunds | Prince Achar",
   description:
     "Our policy for damaged, defective, or incorrect items — how to report an issue and receive a replacement or refund from Prince Achar.",
@@ -76,11 +78,11 @@ export default function ReturnsPage() {
       </section>
 
       {/* CONTENT CARDS */}
-      <section className="bg-gradient-to-b from-white to-yellow/30 py-12 md:py-16">
+      <section className="bg-gradient-to-b from-surface to-yellow/30 py-12 md:py-16">
         <div className="max-w-[750px] mx-auto px-6">
           <div className="grid gap-4">
             {sections.map((s, i) => (
-              <div key={i} className="flex gap-5 bg-white rounded-xl border border-brand-black/5 p-6 shadow-sm">
+              <div key={i} className="flex gap-5 bg-surface rounded-xl border border-brand-black/5 p-6 shadow-sm">
                 <div className="flex-shrink-0 w-11 h-11 bg-red/10 text-red rounded-lg flex items-center justify-center">
                   {s.icon}
                 </div>

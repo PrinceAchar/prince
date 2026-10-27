@@ -53,7 +53,7 @@ export default function ProductReorder({ products, order, onChange }: ProductReo
             onDragEnd={() => setDragIdx(null)}
             onDragOver={(e) => e.preventDefault()}
             onDrop={() => { if (dragIdx !== null) move(dragIdx, i); }}
-            className={`flex items-center gap-3 p-2 bg-white border border-brand-black/10 rounded-lg cursor-grab active:cursor-grabbing transition-colors ${dragIdx === i ? "opacity-50" : ""}`}
+            className={`flex items-center gap-3 p-2 bg-surface border border-brand-black/10 rounded-lg cursor-grab active:cursor-grabbing transition-colors ${dragIdx === i ? "opacity-50" : ""}`}
           >
             <span className="text-gray/40 text-[14px] cursor-grab">☰</span>
             <div className="relative w-10 h-10 rounded-lg overflow-hidden bg-brand-black/5 flex-shrink-0">
@@ -85,7 +85,7 @@ export default function ProductReorder({ products, order, onChange }: ProductReo
           {remaining.map((product) => {
             const img = product.images.edges[0]?.node;
             return (
-              <div key={product.handle} className="flex items-center gap-3 p-2 bg-white/50 border border-brand-black/5 rounded-lg mb-1.5">
+              <div key={product.handle} className="flex items-center gap-3 p-2 bg-surface/50 border border-brand-black/5 rounded-lg mb-1.5">
                 <div className="relative w-8 h-8 rounded-lg overflow-hidden bg-brand-black/5 flex-shrink-0">
                   {img ? (
                     <Image src={img.url} alt={product.title} fill className="object-cover" sizes="32px" />

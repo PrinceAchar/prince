@@ -7,9 +7,10 @@ import { PRODUCTS_BY_COLLECTION_QUERY } from "@/lib/queries";
 import { Suspense } from "react";
 import { productsJsonLd } from "@/lib/jsonld";
 import { productPageMetadata } from "@/lib/metadata";
+import { SITE_URL } from "@/lib/site";
 import type { Metadata } from "next";
 
-async function getAcharProducts(): Promise<ShopifyProduct[]> {
+async function getAcharProducts(): Promise<ShopifyProduct[] | null> {
   try {
     const data = await shopifyFetch<CollectionByHandleData>(PRODUCTS_BY_COLLECTION_QUERY, {
       handle: "pickles",
@@ -18,7 +19,9 @@ async function getAcharProducts(): Promise<ShopifyProduct[]> {
     const products = data.collectionByHandle?.products.edges.map((e) => e.node) || [];
     return products.sort((a, b) => a.title.localeCompare(b.title));
   } catch {
-    return [];
+    // Distinguish fetch failure from an empty collection so we don't
+    // present an outage as "Products coming soon".
+    return null;
   }
 }
 
@@ -32,7 +35,11 @@ export async function generateMetadata({
   searchParams: Promise<{ product?: string }>;
 }): Promise<Metadata> {
   const { product } = await searchParams;
-  return productPageMetadata(product, PAGE_TITLE, PAGE_DESCRIPTION);
+  const base = await productPageMetadata(product, PAGE_TITLE, PAGE_DESCRIPTION);
+  return {
+    ...base,
+    alternates: base.alternates ?? { canonical: `${SITE_URL}/achar` },
+  };
 }
 
 export default async function AcharPage() {
@@ -40,7 +47,7 @@ export default async function AcharPage() {
 
   return (
     <>
-      {products.length > 0 && (
+      {products !== null && products.length > 0 && (
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(productsJsonLd(products)) }}
@@ -52,9 +59,13 @@ export default async function AcharPage() {
         <CollectionHero section="achar" />
       </section>
 
-      <section className="bg-white py-12 md:py-20">
+      <section className="bg-surface py-12 md:py-20">
         <div className="max-w-[1200px] mx-auto px-6">
-          {products.length > 0 ? (
+          {products === null ? (
+            <p className="text-center text-gray text-[14px]">
+              Unable to load products right now. Please refresh the page.
+            </p>
+          ) : products.length > 0 ? (
             <Suspense>
               <ProductGrid products={products} />
             </Suspense>

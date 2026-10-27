@@ -22,7 +22,7 @@ export default function VideoPlayer() {
       {/* 1:1 Thumbnail */}
       <button
         onClick={handleOpen}
-        className="relative w-full aspect-square bg-brand-black rounded-lg overflow-hidden group cursor-pointer"
+        className="relative w-full aspect-square bg-black rounded-lg overflow-hidden group cursor-pointer"
         aria-label="Play video"
       >
         <video

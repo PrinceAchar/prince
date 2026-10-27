@@ -49,7 +49,7 @@ function GridSkeleton() {
       {Array.from({ length: 3 }).map((_, i) => (
         <div
           key={i}
-          className="rounded-xl overflow-hidden border border-brand-black/5 bg-white"
+          className="rounded-xl overflow-hidden border border-brand-black/5 bg-surface"
         >
           <div className="aspect-square bg-brand-black/5" />
           <div className="p-5 space-y-2">

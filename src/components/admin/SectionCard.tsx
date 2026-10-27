@@ -14,7 +14,7 @@ export default function SectionCard({ id, title, defaultOpen = false, preview, c
   const [open, setOpen] = useState(defaultOpen);
 
   return (
-    <div id={id} className="bg-white border border-brand-black/10 rounded-2xl overflow-hidden scroll-mt-20">
+    <div id={id} className="bg-surface border border-brand-black/10 rounded-2xl overflow-hidden scroll-mt-20">
       <button
         onClick={() => setOpen(!open)}
         className="w-full flex items-center justify-between px-5 py-4 text-left hover:bg-yellow/30 transition-colors"
@@ -33,7 +33,7 @@ export default function SectionCard({ id, title, defaultOpen = false, preview, c
           {preview && (
             <div className="mt-4 mb-4">
               <p className="text-[11px] font-medium text-gray uppercase tracking-wider mb-2">Preview</p>
-              <div className="border border-brand-black/10 rounded-xl overflow-hidden bg-[#FAF5E4]">
+              <div className="border border-brand-black/10 rounded-xl overflow-hidden bg-yellow">
                 {preview}
               </div>
             </div>
@@ -62,7 +62,7 @@ export function TextInput({ value, onChange, placeholder, multiline }: {
   placeholder?: string;
   multiline?: boolean;
 }) {
-  const cls = "w-full px-3 py-2.5 bg-[#FAF5E4]/50 border border-brand-black/12 rounded-xl text-[13px] text-brand-black placeholder:text-gray/60 outline-none focus:border-red/50 focus:ring-2 focus:ring-red/15 transition-colors";
+  const cls = "w-full px-3 py-2.5 bg-yellow/50 border border-brand-black/12 rounded-xl text-[13px] text-brand-black placeholder:text-gray/60 outline-none focus:border-red/50 focus:ring-2 focus:ring-red/15 transition-colors";
   if (multiline) {
     return <textarea value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} className={`${cls} min-h-[80px] resize-y`} />;
   }
@@ -97,7 +97,7 @@ export function ListEditor({ items, onChange, placeholder }: { items: string[]; 
               onChange(next);
             }}
             placeholder={placeholder}
-            className="flex-1 px-3 py-2 bg-[#FAF5E4]/50 border border-brand-black/12 rounded-xl text-[13px] text-brand-black placeholder:text-gray/60 outline-none focus:border-red/50 transition-colors"
+            className="flex-1 px-3 py-2 bg-yellow/50 border border-brand-black/12 rounded-xl text-[13px] text-brand-black placeholder:text-gray/60 outline-none focus:border-red/50 transition-colors"
           />
           <button
             type="button"
@@ -126,7 +126,7 @@ export function FaqEditor({ items, onChange }: { items: { question: string; answ
   return (
     <div className="space-y-3">
       {items.map((item, i) => (
-        <div key={i} className="p-3 bg-[#FAF5E4]/50 border border-brand-black/10 rounded-xl space-y-2">
+        <div key={i} className="p-3 bg-yellow/50 border border-brand-black/10 rounded-xl space-y-2">
           <div className="flex items-start gap-2">
             <input
               type="text"
@@ -137,7 +137,7 @@ export function FaqEditor({ items, onChange }: { items: { question: string; answ
                 onChange(next);
               }}
               placeholder="Question"
-              className="flex-1 px-3 py-2 bg-white border border-brand-black/12 rounded-lg text-[13px] text-brand-black placeholder:text-gray/60 outline-none focus:border-red/50 transition-colors"
+              className="flex-1 px-3 py-2 bg-surface border border-brand-black/12 rounded-lg text-[13px] text-brand-black placeholder:text-gray/60 outline-none focus:border-red/50 transition-colors"
             />
             <button
               type="button"
@@ -158,7 +158,7 @@ export function FaqEditor({ items, onChange }: { items: { question: string; answ
               onChange(next);
             }}
             placeholder="Answer"
-            className="w-full px-3 py-2 bg-white border border-brand-black/12 rounded-lg text-[13px] text-brand-black placeholder:text-gray/60 outline-none focus:border-red/50 transition-colors min-h-[60px] resize-y"
+            className="w-full px-3 py-2 bg-surface border border-brand-black/12 rounded-lg text-[13px] text-brand-black placeholder:text-gray/60 outline-none focus:border-red/50 transition-colors min-h-[60px] resize-y"
           />
         </div>
       ))}

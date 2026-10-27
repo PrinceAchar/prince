@@ -41,9 +41,9 @@ function getStatusColor(status: string): string {
       return "text-amber-700 bg-amber-50";
     case "REFUNDED":
     case "PARTIALLY_REFUNDED":
-      return "text-red-700 bg-red-50";
+      return "text-red bg-red/10";
     default:
-      return "text-[#1A1A1A]/60 bg-[#1A1A1A]/5";
+      return "text-brand-black/60 bg-brand-black/5";
   }
 }
 
@@ -95,8 +95,8 @@ export default function OrdersPage() {
     return (
       <>
         <Navbar />
-        <main className="min-h-screen bg-[#FAF5E4] pt-[70px] md:pt-[80px] flex items-center justify-center">
-          <p className="text-[14px] text-[#1A1A1A]/50">Loading...</p>
+        <main className="min-h-screen bg-yellow pt-[70px] md:pt-[80px] flex items-center justify-center">
+          <p className="text-[14px] text-brand-black/50">Loading...</p>
         </main>
         <Footer />
       </>
@@ -107,10 +107,10 @@ export default function OrdersPage() {
     return (
       <>
         <Navbar />
-        <main className="min-h-screen bg-[#FAF5E4] pt-[70px] md:pt-[80px] flex items-center justify-center">
+        <main className="min-h-screen bg-yellow pt-[70px] md:pt-[80px] flex items-center justify-center">
           <div className="text-center">
-            <p className="text-[14px] text-red-600 mb-4">{error}</p>
-            <a href="/account/login" className="text-[13px] text-[#C21A33] underline underline-offset-4">
+            <p className="text-[14px] text-red mb-4">{error}</p>
+            <a href="/account/login" className="text-[13px] text-red underline underline-offset-4">
               Try logging in again
             </a>
           </div>
@@ -124,11 +124,11 @@ export default function OrdersPage() {
     <>
       <Navbar />
 
-      <main className="min-h-screen bg-[#FAF5E4] pt-[70px] md:pt-[80px]">
+      <main className="min-h-screen bg-yellow pt-[70px] md:pt-[80px]">
         <div className="max-w-[800px] mx-auto px-4 py-12 md:py-16">
           {/* Header */}
           <div className="mb-8">
-            <h1 className="font-heading text-[28px] md:text-[32px] font-bold text-[#1A1A1A]">
+            <h1 className="font-heading text-[28px] md:text-[32px] font-bold text-brand-black">
               My Orders
             </h1>
           </div>
@@ -136,13 +136,13 @@ export default function OrdersPage() {
           <AccountNav />
 
           {orders.length === 0 ? (
-            <div className="bg-white rounded-2xl shadow-[0_2px_20px_rgba(0,0,0,0.06)] p-8 text-center">
-              <p className="text-[14px] text-[#1A1A1A]/50 mb-4">
+            <div className="bg-surface rounded-2xl shadow-[0_2px_20px_rgba(0,0,0,0.06)] p-8 text-center">
+              <p className="text-[14px] text-brand-black/50 mb-4">
                 You haven&apos;t placed any orders yet.
               </p>
               <Link
                 href="/achar"
-                className="inline-block px-6 py-2.5 bg-[#C21A33] text-white text-[13px] font-semibold uppercase tracking-[1px] rounded-lg hover:bg-[#C21A33]/90 transition-colors"
+                className="inline-block px-6 py-2.5 bg-red text-white text-[13px] font-semibold uppercase tracking-[1px] rounded-lg hover:bg-red/90 transition-colors"
               >
                 Browse Products
               </Link>
@@ -152,18 +152,18 @@ export default function OrdersPage() {
               {orders.map((order) => (
                 <div
                   key={order.id}
-                  className="bg-white rounded-2xl shadow-[0_2px_20px_rgba(0,0,0,0.06)] p-6"
+                  className="bg-surface rounded-2xl shadow-[0_2px_20px_rgba(0,0,0,0.06)] p-6"
                 >
                   {/* Order Header */}
                   <div className="flex flex-wrap items-start justify-between gap-3 mb-4">
                     <div>
                       <Link
                         href={`/account/orders/${encodeURIComponent(order.id)}`}
-                        className="text-[13px] text-[#C21A33] font-medium hover:opacity-70 transition-opacity"
+                        className="text-[13px] text-red font-medium hover:opacity-70 transition-opacity"
                       >
                         Order #{order.number}
                       </Link>
-                      <p className="text-[13px] text-[#1A1A1A]/50">
+                      <p className="text-[13px] text-brand-black/50">
                         {new Date(order.processedAt).toLocaleDateString("en-IN", {
                           day: "numeric",
                           month: "long",
@@ -192,11 +192,11 @@ export default function OrdersPage() {
                   </div>
 
                   {/* Order Items */}
-                  <div className="border-t border-[#1A1A1A]/5 pt-4 space-y-3">
+                  <div className="border-t border-brand-black/5 pt-4 space-y-3">
                     {order.lineItems.edges.map((item, i) => (
                       <div key={i} className="flex items-center gap-3">
                         {item.node.image && (
-                          <div className="w-12 h-12 rounded-lg overflow-hidden bg-[#FAF5E4] flex-shrink-0">
+                          <div className="w-12 h-12 rounded-lg overflow-hidden bg-yellow flex-shrink-0">
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img
                               src={item.node.image.url}
@@ -206,14 +206,14 @@ export default function OrdersPage() {
                           </div>
                         )}
                         <div className="flex-1 min-w-0">
-                          <p className="text-[13px] text-[#1A1A1A] truncate">
+                          <p className="text-[13px] text-brand-black truncate">
                             {item.node.title}
                           </p>
-                          <p className="text-[12px] text-[#1A1A1A]/50">
+                          <p className="text-[12px] text-brand-black/50">
                             Qty: {item.node.quantity}
                           </p>
                         </div>
-                        <p className="text-[13px] text-[#1A1A1A] font-medium">
+                        <p className="text-[13px] text-brand-black font-medium">
                           {formatPrice(
                             item.node.price.amount,
                             item.node.price.currencyCode
@@ -224,14 +224,14 @@ export default function OrdersPage() {
                   </div>
 
                   {/* Order Total */}
-                  <div className="border-t border-[#1A1A1A]/5 pt-4 mt-4 flex justify-between items-center">
+                  <div className="border-t border-brand-black/5 pt-4 mt-4 flex justify-between items-center">
                     <Link
                       href={`/account/orders/${encodeURIComponent(order.id)}`}
-                      className="text-[12px] text-[#C21A33] underline underline-offset-2 hover:opacity-70 transition-opacity"
+                      className="text-[12px] text-red underline underline-offset-2 hover:opacity-70 transition-opacity"
                     >
                       View details
                     </Link>
-                    <p className="text-[14px] font-semibold text-[#1A1A1A]">
+                    <p className="text-[14px] font-semibold text-brand-black">
                       Total:{" "}
                       {formatPrice(
                         order.totalPrice.amount,
@@ -250,7 +250,7 @@ export default function OrdersPage() {
             <button
               onClick={handleLoadMore}
               disabled={loadingMore}
-              className="px-6 py-2.5 border border-[#C21A33] text-[#C21A33] text-[12px] font-semibold uppercase tracking-[1px] rounded-lg hover:bg-[#C21A33] hover:text-white transition-colors disabled:opacity-50"
+              className="px-6 py-2.5 border border-red text-red text-[12px] font-semibold uppercase tracking-[1px] rounded-lg hover:bg-red hover:text-white transition-colors disabled:opacity-50"
             >
               {loadingMore ? "Loading..." : "Load More Orders"}
             </button>
