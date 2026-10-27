@@ -23,8 +23,8 @@ export default function ImageUpload({ value, onChange, folder = "princeachar/adm
       const url = await uploadToCloudinary(file, folder);
       setPreview(url);
       onChange(url);
-    } catch {
-      alert("Upload failed. Please try again.");
+    } catch (err) {
+      alert(err instanceof Error && err.message ? err.message : "Upload failed. Please try again.");
     } finally {
       setUploading(false);
     }

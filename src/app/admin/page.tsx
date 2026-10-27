@@ -9,16 +9,16 @@ import SectionCard, { FieldGroup, TextInput, Toggle, ListEditor, FaqEditor } fro
 import ImageUpload from "@/components/admin/ImageUpload";
 import ProductReorder from "@/components/admin/ProductReorder";
 import FloatingSave from "@/components/admin/FloatingSave";
+import { ResetConfirmDialog, HistoryDialog } from "@/components/admin/AdminModals";
+import { pushHistorySnapshot, listHistorySnapshots, type HistorySnapshot } from "@/lib/content-history";
+import { ADMIN_EMAILS } from "@/lib/admin-emails";
 import { shopifyFetchClient, type ShopifyProduct } from "@/lib/shopify";
 import { ALL_PRODUCTS_QUERY } from "@/lib/queries";
 import { usePathname } from "next/navigation";
 import { getClientAuth } from "@/lib/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 
-const ADMIN_EMAILS = [
-  "pannalaltavinderkumar@gmail.com",
-  "hi@acaditya10.tech",
-];
+const DRAFT_KEY = "pa-admin-draft";
 
 function genId() {
   return Math.random().toString(36).slice(2, 9);
@@ -34,6 +34,69 @@ export default function AdminPage() {
   const [authChecked, setAuthChecked] = useState(
     () => process.env.NODE_ENV === "development"
   );
+
+  // ── Editing safety: dirty flag, last-published snapshot, draft restore ──
+  const [dirty, setDirty] = useState(false);
+  const [savedJson, setSavedJson] = useState(() => JSON.stringify(defaultContent));
+  const [draftInfo, setDraftInfo] = useState<{ savedAt: number; content: SiteContent } | null>(null);
+  const [showReset, setShowReset] = useState(false);
+  const [resetBusy, setResetBusy] = useState(false);
+  const [showHistory, setShowHistory] = useState(false);
+  const [historySnapshots, setHistorySnapshots] = useState<HistorySnapshot[]>([]);
+  const [historyLoading, setHistoryLoading] = useState(false);
+  const [historyError, setHistoryError] = useState<string | null>(null);
+
+  const currentEmail = () => getClientAuth().currentUser?.email ?? "unknown";
+
+  // Block closing/refreshing the tab while there are unpublished edits.
+  useEffect(() => {
+    if (!dirty) return;
+    const warn = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = "";
+    };
+    window.addEventListener("beforeunload", warn);
+    return () => window.removeEventListener("beforeunload", warn);
+  }, [dirty]);
+
+  // Pick up an unsaved draft left behind by an accidental refresh/close.
+  // Read asynchronously so state isn't set synchronously within the effect.
+  useEffect(() => {
+    let cancelled = false;
+    Promise.resolve()
+      .then(() => {
+        try {
+          const raw = localStorage.getItem(DRAFT_KEY);
+          if (raw) {
+            const parsed = JSON.parse(raw) as { savedAt?: number; content?: SiteContent };
+            if (parsed?.content && typeof parsed.savedAt === "number") {
+              if (!cancelled) setDraftInfo({ savedAt: parsed.savedAt, content: parsed.content });
+            } else {
+              localStorage.removeItem(DRAFT_KEY);
+            }
+          }
+        } catch {
+          localStorage.removeItem(DRAFT_KEY);
+        }
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  // Persist a draft while editing (debounced); cleared on save/discard.
+  useEffect(() => {
+    if (!dirty) return;
+    const t = setTimeout(() => {
+      try {
+        localStorage.setItem(DRAFT_KEY, JSON.stringify({ savedAt: Date.now(), content }));
+      } catch {
+        // storage unavailable — draft protection simply won't apply
+      }
+    }, 400);
+    return () => clearTimeout(t);
+  }, [content, dirty]);
 
   useEffect(() => {
     if (process.env.NODE_ENV === "development") return;
@@ -54,10 +117,13 @@ export default function AdminPage() {
 
   // Sync edits with content that arrives after mount (adjust-during-render
   // pattern instead of an effect, per React docs on deriving state from props).
+  // Skipped while there are local edits so a late-arriving fetch never wipes
+  // the operator's unsaved work; the live snapshot still tracks the server.
   const [prevDefaultContent, setPrevDefaultContent] = useState(defaultContent);
   if (prevDefaultContent !== defaultContent) {
     setPrevDefaultContent(defaultContent);
-    setContent(defaultContent);
+    setSavedJson(JSON.stringify(defaultContent));
+    if (!dirty) setContent(defaultContent);
   }
 
   useEffect(() => {
@@ -75,33 +141,112 @@ export default function AdminPage() {
   }, [pathname]);
 
   const update = useCallback(<K extends keyof SiteContent>(key: K, value: SiteContent[K]) => {
+    setDirty(true);
     setContent((c) => ({ ...c, [key]: value }));
   }, []);
 
   const updateHome = useCallback(<K extends keyof SiteContent["homepage"]>(key: K, value: SiteContent["homepage"][K]) => {
+    setDirty(true);
     setContent((c) => ({ ...c, homepage: { ...c.homepage, [key]: value } }));
   }, []);
 
   const updateSettings = useCallback(<K extends keyof SiteContent["settings"]>(key: K, value: SiteContent["settings"][K]) => {
+    setDirty(true);
     setContent((c) => ({ ...c, settings: { ...c.settings, [key]: value } }));
   }, []);
 
+  // Push a rollback point (the content about to be replaced) into History.
+  const backupToHistory = async () => {
+    const previous = JSON.parse(savedJson) as SiteContent;
+    await pushHistorySnapshot(previous, currentEmail());
+  };
+
   const handleSave = async () => {
+    const nextJson = JSON.stringify(content);
+    if (nextJson !== savedJson) {
+      try {
+        await backupToHistory();
+        setHistoryError(null);
+      } catch {
+        setHistoryError(
+          "Automatic backups aren't being saved — the Firestore rules must allow admin read/write on the `siteContentHistory` collection. (This save itself still published.)"
+        );
+      }
+    }
     await saveContent(content);
+    setSavedJson(nextJson);
+    setDirty(false);
+    setDraftInfo(null);
     // Keep the pre-paint theme cache in sync with what was just published.
     try {
       localStorage.setItem("pa-theme", content.settings.theme ?? "light");
+      localStorage.removeItem(DRAFT_KEY);
     } catch {
       // storage unavailable — harmless, next load re-syncs from content
     }
   };
+
   const handleReset = async () => {
-    await resetContent();
-    setContent(defaultContent);
+    setResetBusy(true);
     try {
-      const resetTheme = defaultContent.settings.theme ?? "light";
-      localStorage.setItem("pa-theme", resetTheme);
-      document.documentElement.dataset.theme = resetTheme;
+      try {
+        await backupToHistory();
+        setHistoryError(null);
+      } catch {
+        setHistoryError(
+          "Automatic backups aren't being saved — the Firestore rules must allow admin read/write on the `siteContentHistory` collection."
+        );
+      }
+      await resetContent();
+      setContent(defaultContent);
+      setSavedJson(JSON.stringify(defaultContent));
+      setDirty(false);
+      setDraftInfo(null);
+      try {
+        const resetTheme = defaultContent.settings.theme ?? "light";
+        localStorage.setItem("pa-theme", resetTheme);
+        localStorage.removeItem(DRAFT_KEY);
+        document.documentElement.dataset.theme = resetTheme;
+      } catch {
+        // ignore
+      }
+      setShowReset(false);
+    } finally {
+      setResetBusy(false);
+    }
+  };
+
+  const openHistory = async () => {
+    setShowHistory(true);
+    setHistoryLoading(true);
+    try {
+      setHistorySnapshots(await listHistorySnapshots());
+    } catch {
+      setHistoryError(
+        "History could not be loaded — the Firestore rules must allow admin read/write on the `siteContentHistory` collection."
+      );
+    } finally {
+      setHistoryLoading(false);
+    }
+  };
+
+  const restoreSnapshot = (snap: HistorySnapshot) => {
+    setContent(snap.content);
+    setDirty(true);
+    setShowHistory(false);
+  };
+
+  const applyDraft = () => {
+    if (!draftInfo) return;
+    setContent(draftInfo.content);
+    setDirty(true);
+    setDraftInfo(null);
+  };
+
+  const discardDraft = () => {
+    setDraftInfo(null);
+    try {
+      localStorage.removeItem(DRAFT_KEY);
     } catch {
       // ignore
     }
@@ -117,10 +262,43 @@ export default function AdminPage() {
     );
   }
 
+  const draftMismatch =
+    draftInfo !== null && JSON.stringify(draftInfo.content) !== JSON.stringify(content);
+
   return (
     <div className="max-w-[800px] mx-auto px-4 md:px-6 py-6 space-y-4">
       <h1 className="font-heading text-[24px] font-bold text-brand-black mb-2">Site Content</h1>
       <p className="text-[13px] text-gray mb-6">Edit any section below. Changes are live after saving.</p>
+
+      {draftInfo && draftMismatch && (
+        <div className="p-3.5 bg-surface border border-brand-black/10 rounded-xl flex flex-wrap items-center justify-between gap-3">
+          <p className="text-[12px] text-brand-black">
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#F5A623] mr-1.5 align-middle" />
+            Unsaved draft from{" "}
+            {new Date(draftInfo.savedAt).toLocaleString(undefined, {
+              dateStyle: "medium",
+              timeStyle: "short",
+            })}{" "}
+            was found (e.g. after a refresh).
+          </p>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={applyDraft}
+              className="px-3 py-1.5 bg-red hover:bg-red-dark text-white text-[11px] font-semibold rounded-lg transition-colors"
+            >
+              Restore draft
+            </button>
+            <button
+              type="button"
+              onClick={discardDraft}
+              className="px-3 py-1.5 border border-brand-black/15 text-gray hover:text-brand-black text-[11px] font-medium rounded-lg transition-colors"
+            >
+              Discard
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* ─── Site Settings ─── */}
       <SectionCard id="settings" title="Site Settings">
@@ -575,7 +753,27 @@ export default function AdminPage() {
 
       <div className="h-24" />
 
-      <FloatingSave onSave={handleSave} onReset={handleReset} />
+      <FloatingSave
+        onSave={handleSave}
+        onReset={() => setShowReset(true)}
+        onHistory={openHistory}
+        dirty={dirty}
+      />
+
+      <ResetConfirmDialog
+        open={showReset}
+        busy={resetBusy}
+        onCancel={() => setShowReset(false)}
+        onConfirm={handleReset}
+      />
+      <HistoryDialog
+        open={showHistory}
+        snapshots={historySnapshots}
+        loading={historyLoading}
+        error={historyError}
+        onClose={() => setShowHistory(false)}
+        onRestore={restoreSnapshot}
+      />
     </div>
   );
 }
