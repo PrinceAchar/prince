@@ -6,6 +6,7 @@ export const defaultContent: SiteContent = {
     siteDescription: "Handcrafted pickles and preserves from the heart of Old Delhi. Authentic flavors passed down through generations since 1980.",
     logoUrl: "/logo.jpeg",
     ogImageUrl: "/logo.jpeg",
+    theme: "light",
     organization: {
       name: "Prince Achar",
       streetAddress: "Shop No. 6673, Khari Baoli Road, Fatehpuri, Chandni Chowk",

@@ -3,10 +3,15 @@
 /*
  * Design tokens.
  *
- * Dark mode is driven EXCLUSIVELY by the OS/browser "prefers-color-scheme"
- * setting — there is no toggle and no JS. Utilities reference these CSS
- * variables (note: plain `@theme`, not `inline`), so overriding the values
- * under the dark media query restyles the entire site consistently.
+ * The colour theme is controlled from the admin panel (Site Settings → Theme)
+ * via `data-theme` on <html>, with the visitor's OS preference ("system") as
+ * one of the options. There is no toggle UI and no theme JS beyond applying
+ * the admin's choice (utilities reference these CSS variables — plain `@theme`,
+ * not `inline` — so overriding values restyles the whole site consistently):
+ *
+ *   data-theme="light"  → always light (currently selected)
+ *   data-theme="dark"   → always dark
+ *   data-theme="system" / absent → follows prefers-color-scheme
  *
  * Token semantics (keep them unambiguous):
  *   yellow      → page background (cream / warm near-black)
@@ -36,8 +41,9 @@
   color-scheme: light;
 }
 
+/* Dark palette from the device — skipped when the admin panel pinned light. */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     color-scheme: dark;
     --color-red: #E2455B;
     --color-red-dark: #C21A33;
@@ -50,6 +56,21 @@
     --color-gray: #A39B8E;
     --color-light-gray: #3A332B;
   }
+}
+
+/* Dark palette forced by the admin panel, regardless of device. */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --color-red: #E2455B;
+  --color-red-dark: #C21A33;
+  --color-green: #5BA85F;
+  --color-green-dark: #3E8A42;
+  --color-yellow: #16120E;
+  --color-off-white: #1C1713;
+  --color-surface: #211B16;
+  --color-brand-black: #F2EDE4;
+  --color-gray: #A39B8E;
+  --color-light-gray: #3A332B;
 }
 
 html {

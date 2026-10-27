@@ -123,6 +123,14 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${cormorant.variable} ${outfit.variable}`}>
       <body>
+        {/* Apply the stored colour theme before first paint to avoid a flash:
+            defaults to "light" (the admin panel's current selection). */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              'try{var t=localStorage.getItem("pa-theme");document.documentElement.dataset.theme=t||"light"}catch(e){document.documentElement.dataset.theme="light"}',
+          }}
+        />
         <Providers>
           <script
             type="application/ld+json"

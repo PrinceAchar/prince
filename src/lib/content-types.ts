@@ -6,11 +6,17 @@ export interface HeroSlide {
   id: string;
 }
 
+export type ThemeMode = "light" | "dark" | "system";
+
 export interface SiteSettings {
   siteName: string;
   siteDescription: string;
   logoUrl: string;
   ogImageUrl: string;
+  /** Site colour theme as chosen in the admin panel.
+   *  "light" = always light, "dark" = always dark,
+   *  "system" = follow the visitor's device preference. */
+  theme?: ThemeMode;
   organization: {
     name: string;
     streetAddress: string;

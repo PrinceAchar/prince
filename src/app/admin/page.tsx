@@ -86,10 +86,25 @@ export default function AdminPage() {
     setContent((c) => ({ ...c, settings: { ...c.settings, [key]: value } }));
   }, []);
 
-  const handleSave = async () => await saveContent(content);
+  const handleSave = async () => {
+    await saveContent(content);
+    // Keep the pre-paint theme cache in sync with what was just published.
+    try {
+      localStorage.setItem("pa-theme", content.settings.theme ?? "light");
+    } catch {
+      // storage unavailable — harmless, next load re-syncs from content
+    }
+  };
   const handleReset = async () => {
     await resetContent();
     setContent(defaultContent);
+    try {
+      const resetTheme = defaultContent.settings.theme ?? "light";
+      localStorage.setItem("pa-theme", resetTheme);
+      document.documentElement.dataset.theme = resetTheme;
+    } catch {
+      // ignore
+    }
   };
 
   const h = content.homepage;
@@ -120,6 +135,42 @@ export default function AdminPage() {
         </FieldGroup>
         <FieldGroup label="OG Image (social sharing)">
           <ImageUpload value={content.settings.ogImageUrl} onChange={(v) => updateSettings("ogImageUrl", v)} folder="princeachar/og" />
+        </FieldGroup>
+        <FieldGroup label="Website Theme">
+          <div className="inline-flex rounded-xl border border-brand-black/12 bg-yellow/50 p-1 gap-1">
+            {([
+              { value: "light", label: "☀ Light" },
+              { value: "dark", label: "☾ Dark" },
+              { value: "system", label: "◐ Device" },
+            ] as const).map((opt) => {
+              const active = (content.settings.theme ?? "light") === opt.value;
+              return (
+                <button
+                  key={opt.value}
+                  type="button"
+                  onClick={() => {
+                    updateSettings("theme", opt.value);
+                    // Preview immediately; persisted on Save.
+                    try {
+                      document.documentElement.dataset.theme = opt.value;
+                    } catch {
+                      // ignore
+                    }
+                  }}
+                  className={`px-4 py-2 rounded-lg text-[12px] font-medium transition-colors ${
+                    active ? "bg-red text-white" : "text-gray hover:text-brand-black"
+                  }`}
+                >
+                  {opt.label}
+                </button>
+              );
+            })}
+          </div>
+          <p className="text-[11px] text-gray mt-1.5">
+            Colour theme for the whole site. <strong>Light</strong> shows everyone the cream theme;
+            <strong> Dark</strong> shows everyone the dark theme; <strong>Device</strong> follows each
+            visitor&apos;s system setting. Press &ldquo;Save All Changes&rdquo; to publish.
+          </p>
         </FieldGroup>
       </SectionCard>
 

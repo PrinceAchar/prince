@@ -33,6 +33,19 @@ export function ContentProvider({ children }: { children: ReactNode }) {
     };
   }, []);
 
+  // Apply the admin panel's colour-theme choice (Site Settings → Theme).
+  // data-theme drives the CSS token overrides in globals.css; the value is
+  // cached so the inline pre-paint script can restore it on the next visit.
+  const theme = content.settings?.theme ?? "light";
+  useEffect(() => {
+    try {
+      document.documentElement.dataset.theme = theme;
+      localStorage.setItem("pa-theme", theme);
+    } catch {
+      // storage unavailable — theme still applies for this page view
+    }
+  }, [theme]);
+
   return (
     <ContentContext.Provider value={content}>
       {children}
