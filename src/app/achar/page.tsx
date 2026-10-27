@@ -15,7 +15,8 @@ async function getAcharProducts(): Promise<ShopifyProduct[]> {
       handle: "pickles",
       first: 20,
     });
-    return data.collectionByHandle?.products.edges.map((e) => e.node) || [];
+    const products = data.collectionByHandle?.products.edges.map((e) => e.node) || [];
+    return products.sort((a, b) => a.title.localeCompare(b.title));
   } catch {
     return [];
   }

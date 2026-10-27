@@ -20,7 +20,8 @@ async function getMurabbaProducts(): Promise<ShopifyProduct[]> {
       handle: "murabba",
       first: 20,
     });
-    return data.collectionByHandle?.products.edges.map((e) => e.node) || [];
+    const products = data.collectionByHandle?.products.edges.map((e) => e.node) || [];
+    return products.sort((a, b) => a.title.localeCompare(b.title));
   } catch {
     return [];
   }
@@ -44,6 +45,7 @@ export default async function MurabbaPage() {
     getMurabbaProducts(),
     getProductsByType("Chutney"),
   ]);
+  chutneys.sort((a, b) => a.title.localeCompare(b.title));
   const allProducts = [...murabbas, ...chutneys];
 
   return (
