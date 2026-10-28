@@ -2,8 +2,8 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ProductGrid from "@/components/ProductGrid";
 import CollectionHero from "@/components/CollectionHero";
-import { shopifyFetch, type CollectionByHandleData, type ShopifyProduct } from "@/lib/shopify";
-import { PRODUCTS_BY_COLLECTION_QUERY } from "@/lib/queries";
+import { shopifyFetch, type ProductData, type ShopifyProduct } from "@/lib/shopify";
+import { PRODUCTS_BY_TYPE_QUERY } from "@/lib/queries";
 import { Suspense } from "react";
 import { productsJsonLd } from "@/lib/jsonld";
 import { productPageMetadata } from "@/lib/metadata";
@@ -12,11 +12,14 @@ import type { Metadata } from "next";
 
 async function getAcharProducts(): Promise<ShopifyProduct[] | null> {
   try {
-    const data = await shopifyFetch<CollectionByHandleData>(PRODUCTS_BY_COLLECTION_QUERY, {
-      handle: "pickles",
-      first: 20,
+    // Products are grouped by Shopify "Product type", not collection
+    // membership, so the list can't silently drop items a new product
+    // isn't manually added to a collection for.
+    const data = await shopifyFetch<ProductData>(PRODUCTS_BY_TYPE_QUERY, {
+      first: 250,
+      query: "product_type:Pickle",
     });
-    const products = data.collectionByHandle?.products.edges.map((e) => e.node) || [];
+    const products = data.products.edges.map((e) => e.node) || [];
     return products.sort((a, b) => a.title.localeCompare(b.title));
   } catch {
     // Distinguish fetch failure from an empty collection so we don't

@@ -185,10 +185,10 @@ export async function getProductByHandle(handle: string): Promise<ShopifyProduct
   }
 }
 
-export async function getProductsByType(productType: string): Promise<ShopifyProduct[]> {
+export async function getProductsByType(productType: string, first = 250): Promise<ShopifyProduct[]> {
   try {
     const data = await shopifyFetch<ProductData>(PRODUCTS_BY_TYPE_QUERY, {
-      first: 20,
+      first,
       query: `product_type:${productType}`,
     });
     return data.products.edges.map((e) => e.node);

@@ -5,10 +5,10 @@ import CollectionHero from "@/components/CollectionHero";
 import {
   shopifyFetch,
   getProductsByType,
-  type CollectionByHandleData,
+  type ProductData,
   type ShopifyProduct,
 } from "@/lib/shopify";
-import { PRODUCTS_BY_COLLECTION_QUERY } from "@/lib/queries";
+import { PRODUCTS_BY_TYPE_QUERY } from "@/lib/queries";
 import { Suspense } from "react";
 import { productsJsonLd } from "@/lib/jsonld";
 import { productPageMetadata } from "@/lib/metadata";
@@ -17,11 +17,13 @@ import type { Metadata } from "next";
 
 async function getMurabbaProducts(): Promise<ShopifyProduct[] | null> {
   try {
-    const data = await shopifyFetch<CollectionByHandleData>(PRODUCTS_BY_COLLECTION_QUERY, {
-      handle: "murabba",
-      first: 20,
+    // Grouped by Shopify "Product type" (same mechanism as the chutney
+    // section below) rather than collection handle.
+    const data = await shopifyFetch<ProductData>(PRODUCTS_BY_TYPE_QUERY, {
+      first: 250,
+      query: "product_type:Murabba",
     });
-    const products = data.collectionByHandle?.products.edges.map((e) => e.node) || [];
+    const products = data.products.edges.map((e) => e.node) || [];
     return products.sort((a, b) => a.title.localeCompare(b.title));
   } catch {
     // Distinguish fetch failure from an empty collection so we don't
