@@ -101,10 +101,17 @@ export default function ProductDetails({
   const showSocialProof = content.products.showSocialProof !== false;
   const review = useMemo(() => generateRandomReview(), []);
 
+  const ingredients =
+    product.ingredients?.value ||
+    content.products.ingredients.byType[
+      (product.productType ?? "").toLowerCase() as keyof typeof content.products.ingredients.byType
+    ] ||
+    content.products.ingredients.default;
+
   const collapsibleSections = [
     {
       title: "Ingredients",
-      content: product.ingredients?.value || "Made with premium quality ingredients, traditional spices, and pure mustard oil. Carefully sun-matured to develop rich aroma and deep flavour.",
+      content: ingredients,
     },
     {
       title: "Storage Instructions",

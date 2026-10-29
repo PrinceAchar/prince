@@ -141,7 +141,7 @@ export const defaultContent: SiteContent = {
       },
     },
     images: [
-      "/store/contact-jars.png",
+      "/contact-jars.png",
     ],
   },
 
@@ -203,6 +203,18 @@ export const defaultContent: SiteContent = {
   products: {
     order: [],
     showSocialProof: true,
+    ingredients: {
+      byType: {
+        pickle:
+          "Made with hand-picked seasonal produce, cold-pressed mustard oil, and our traditional blend of red chilli, turmeric, fenugreek and other aromatic spices. Salt-cured and slowly sun-matured in small batches for a bold, tangy bite.",
+        murabba:
+          "Made with whole fruit simmered slowly in a light sugar syrup with a hint of rock salt and warm spices. Sun-matured to a soft, glossy texture with a sweet, mellow finish.",
+        chutney:
+          "Made with ripe fruit, sugar and a gentle balance of spices and acidity. Slow-cooked to a thick, spoonable consistency with a bright, sweet-and-tangy flavour.",
+      },
+      default:
+        "Made with carefully selected ingredients, traditional spices, and pure mustard oil. Prepared in small batches for authentic homemade flavour.",
+    },
     pincode: {
       enabled: true,
       title: "Check delivery time",

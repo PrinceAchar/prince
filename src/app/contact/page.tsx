@@ -126,49 +126,20 @@ export default function ContactPage() {
     <>
       <Navbar />
 
-      {/* Full-bleed red banner styled to match the collection banners
-          (bg #CC0000, gold #FFEB99, filigree corners reused from
-          achar-banner.png). Sits under the fixed navbar. */}
-      <div className="pt-[60px] md:pt-[70px]">
-        <div className="relative w-full overflow-hidden bg-[#CC0000]">
-          <Image
-            src="/banner-corner.png"
-            alt=""
-            aria-hidden="true"
-            width={341}
-            height={345}
-            className="absolute top-0 left-0 w-[76px] md:w-[150px] h-auto pointer-events-none"
-          />
-          <Image
-            src="/banner-corner.png"
-            alt=""
-            aria-hidden="true"
-            width={341}
-            height={345}
-            className="absolute top-0 right-0 w-[76px] md:w-[150px] h-auto -scale-x-100 pointer-events-none"
-          />
-          <Image
-            src="/banner-corner.png"
-            alt=""
-            aria-hidden="true"
-            width={341}
-            height={345}
-            className="absolute bottom-0 left-0 w-[76px] md:w-[150px] h-auto -scale-y-100 pointer-events-none"
-          />
-          <Image
-            src="/banner-corner.png"
-            alt=""
-            aria-hidden="true"
-            width={341}
-            height={345}
-            className="absolute bottom-0 right-0 w-[76px] md:w-[150px] h-auto -scale-x-100 -scale-y-100 pointer-events-none"
-          />
-          <div className="relative flex items-center justify-center px-24 md:px-40 py-9 md:py-14">
-            <h1 className="font-heading text-[34px] md:text-[58px] leading-none text-[#FFEB99]">
-              Contact Us
-            </h1>
-          </div>
-        </div>
+      {/* Full-bleed contact banner image (red bg, gold "Contact Us" and
+          filigree corners are baked in), rendered like the collection
+          banners. Sits under the fixed navbar. */}
+      <div className="pt-[60px] md:pt-[70px] bg-yellow">
+        <h1 className="sr-only">Contact Us</h1>
+        <Image
+          src="/contact-banner.png"
+          alt="Contact Us"
+          width={2172}
+          height={281}
+          priority
+          fetchPriority="high"
+          className="block w-full h-auto"
+        />
       </div>
 
       <section className="bg-surface pt-8 md:pt-10 pb-8">

@@ -148,6 +148,17 @@ export interface FooterContent {
 export interface ProductsContent {
   order: string[];
   showSocialProof: boolean;
+  /** Fallback ingredient copy for the product page "Ingredients" section,
+   * keyed by Shopify product type. A product's own `field.ingredients`
+   * metafield (set in Shopify admin) always takes precedence over these. */
+  ingredients: {
+    byType: {
+      pickle: string;
+      murabba: string;
+      chutney: string;
+    };
+    default: string;
+  };
   pincode: {
     enabled: boolean;
     title: string;
