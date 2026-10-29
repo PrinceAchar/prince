@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { type ShopifyProduct, formatPrice, getProductSize, isProductSoldOut } from "@/lib/shopify";
 import { useCart } from "./CartProvider";
+import ProductTitle from "./ProductTitle";
 
 const tagColors: Record<string, string> = {
   Pickle: "bg-red/10 text-red",
@@ -200,7 +201,7 @@ export default function ProductCard({ product, featured = false }: ProductCardPr
             onClick={(e) => e.stopPropagation()}
             className="hover:text-red transition-colors"
           >
-            {product.title}
+            <ProductTitle title={product.title} />
           </Link>
         </h3>
         <p className="text-[13px] md:text-[14px] text-gray leading-relaxed mb-4 line-clamp-3">

@@ -35,7 +35,7 @@ export const defaultContent: SiteContent = {
       items: [
         "FREE DELIVERY ON ORDERS ABOVE \u20B9500",
         "HANDMADE IN DELHI SINCE 1980",
-        "100% NATURAL INGREDIENTS",
+        "A LEGACY OF TASTE",
       ],
     },
     story: {

@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { type ShopifyProduct, formatPrice, isProductSoldOut } from "@/lib/shopify";
 import { useCart } from "./CartProvider";
+import ProductTitle from "./ProductTitle";
 
 export default function RelatedProductsRow({ products }: { products: ShopifyProduct[] }) {
   if (products.length === 0) return null;
@@ -76,13 +77,13 @@ function RelatedCard({ product }: { product: ShopifyProduct }) {
       </div>
 
       <div className="p-4">
-        <h3 className="font-heading text-[15px] font-semibold text-brand-black mb-1 leading-snug line-clamp-1">
+        <h3 className="font-heading text-[15px] font-semibold text-brand-black mb-1 leading-snug line-clamp-2">
           <Link
             href={`/products/${product.handle}`}
             onClick={(e) => e.stopPropagation()}
             className="hover:text-red transition-colors"
           >
-            {product.title}
+            <ProductTitle title={product.title} />
           </Link>
         </h3>
         <div className="flex items-center justify-between mt-3">
