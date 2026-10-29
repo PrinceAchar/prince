@@ -31,7 +31,7 @@ export default function HomepageContent({ bestsellers }: { bestsellers: ShopifyP
     <>
       {/* HERO */}
       <section id="home" className="pt-[60px] md:pt-[70px] bg-yellow">
-        <div className="relative w-full aspect-[16/9] overflow-hidden animate-fade-in-up">
+        <div className="relative w-full aspect-[2/1] overflow-hidden animate-fade-in-up">
           {h.hero.slides.map((s, i) => (
             <div key={s.id} className={`absolute inset-0 transition-opacity duration-700 ${i === currentSlide ? "opacity-100" : "opacity-0"}`}>
               {s.link ? (
@@ -57,8 +57,6 @@ export default function HomepageContent({ bestsellers }: { bestsellers: ShopifyP
               )}
             </div>
           ))}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-transparent" />
-
           {/* Slide title/subtitle overlay */}
           {(slide?.title || slide?.subtitle) && (
             <div className="absolute inset-0 flex items-center justify-center text-center px-6">

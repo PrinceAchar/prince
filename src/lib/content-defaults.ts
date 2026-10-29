@@ -13,7 +13,7 @@ export const defaultContent: SiteContent = {
       addressLocality: "New Delhi",
       postalCode: "110006",
       addressCountry: "IN",
-      telephone: "+91 98110 56593",
+      telephone: "+91 98118 78767",
       email: "pannalaltavinderkumar@gmail.com",
       url: "https://princeachar.com",
       sameAs: ["https://www.instagram.com/princeacharindia/", "https://www.facebook.com/people/Prince-Achar/61553016616914/"],
@@ -126,13 +126,13 @@ export const defaultContent: SiteContent = {
         ctaLink: "https://www.google.com/maps/search/?api=1&query=Prince+Achar+Khari+Baoli+Delhi",
       },
       hours: {
-        weekday: "Mon\u2013Sat: 9:00 AM \u2013 6:00 PM",
+        weekday: "Mon\u2013Sat: 10:30 AM \u2013 7:30 PM",
         sunday: "Sunday: Closed",
       },
       phone: {
-        number: "+91 98110 56593",
+        number: "+91 98118 78767",
         ctaText: "Call Now",
-        ctaLink: "tel:+919811056593",
+        ctaLink: "tel:+919811878767",
       },
       email: {
         address: "pannalaltavinderkumar@gmail.com",
@@ -141,10 +141,7 @@ export const defaultContent: SiteContent = {
       },
     },
     images: [
-      "/store/store-front.webp",
-      "/store/store-2.png",
-      "/store/store-3.png",
-      "/store/store-4.png",
+      "/store/contact-jars.png",
     ],
   },
 
@@ -169,7 +166,7 @@ export const defaultContent: SiteContent = {
       },
       {
         question: "Do you offer bulk or wholesale orders?",
-        answer: "Yes. We work with distributors, retailers, and food businesses across India. Contact us at pannalaltavinderkumar@gmail.com or call +91 98110 56593 for bulk pricing.",
+        answer: "Yes. We work with distributors, retailers, and food businesses across India. Contact us at pannalaltavinderkumar@gmail.com or call +91 98118 78767 for bulk pricing.",
       },
       {
         question: "Where can I buy Prince Achar products?",
@@ -198,7 +195,7 @@ export const defaultContent: SiteContent = {
       facebook: "https://www.facebook.com/people/Prince-Achar/61553016616914/",
     },
     hours: {
-      weekday: "Mon\u2013Sat: 9:00 AM \u2013 6:00 PM",
+      weekday: "Mon\u2013Sat: 10:30 AM \u2013 7:30 PM",
       sunday: "Sunday: Closed",
     },
   },

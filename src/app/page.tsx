@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
-  const bestsellers = await getFeaturedProducts(3);
+  const bestsellers = await getFeaturedProducts();
 
   return (
     <>

@@ -80,7 +80,7 @@ const sections = [
       </svg>
     ),
     title: "Contact Us",
-    text: "If you have questions about this Privacy Policy, please reach out to us at pannalaltavinderkumar@gmail.com or +91 98110 56593.",
+    text: "If you have questions about this Privacy Policy, please reach out to us at pannalaltavinderkumar@gmail.com or +91 98118 78767.",
   },
 ];
 

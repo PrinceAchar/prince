@@ -7,10 +7,9 @@ import { getProductByHandle, type ShopifyProduct } from "./shopify";
 // handles below are the curated default, shown in this exact order.
 
 export const FEATURED_PRODUCT_HANDLES = [
-  "mango-pickle",
-  "mix-pickle",
+  "mango-pickle-with-seed",
   "lemon-pickle",
-  "amla-murabba",
+  "red-chilli-stuffed-pickle",
 ];
 
 export async function getFeaturedProducts(

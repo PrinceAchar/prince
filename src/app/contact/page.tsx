@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -41,92 +41,28 @@ function ClockIcon() {
   );
 }
 
-function HeritageDivider() {
-  return (
-    <div className="flex items-center justify-center gap-3 my-5">
-      <span className="h-px w-20 md:w-24 bg-brand-black/15" />
-      <svg className="w-2.5 h-2.5 text-red" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-        <path d="M12 2l2.2 7.8L22 12l-7.8 2.2L12 22l-2.2-7.8L2 12l7.8-2.2z" />
-      </svg>
-      <span className="h-px w-20 md:w-24 bg-brand-black/15" />
-    </div>
-  );
-}
-
 const fieldClass =
   "w-full px-4 py-3 bg-surface border border-brand-black/12 rounded-xl text-[14px] text-brand-black placeholder:text-gray/70 outline-none focus:border-red/50 focus:ring-2 focus:ring-red/15 transition-colors";
 
-function Slideshow({ images }: { images: string[] }) {
-  const [idx, setIdx] = useState(0);
-  const [paused, setPaused] = useState(false);
-  const go = (dir: number) =>
-    setIdx((i) => (i + dir + images.length) % images.length);
-
-  useEffect(() => {
-    if (paused || images.length <= 1) return;
-    const t = setInterval(
-      () => setIdx((i) => (i + 1) % images.length),
-      5000
-    );
-    return () => clearInterval(t);
-  }, [paused, images.length]);
-
-  if (images.length === 0) return null;
+function ContactImage({ src }: { src?: string }) {
+  if (!src) return null;
 
   return (
-    <div
-      className="relative h-full min-h-[380px] lg:min-h-0 rounded-[16px] overflow-hidden bg-yellow"
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
-    >
-      {images.map((src, i) => (
-        <Image
-          key={src}
-          src={src}
-          alt="Prince Achar store in Khari Baoli, Delhi"
-          fill
-          sizes="(max-width: 1024px) 100vw, 58vw"
-          className={`object-cover transition-opacity duration-700 ${
-            i === idx ? "opacity-100" : "opacity-0"
-          }`}
-        />
-      ))}
+    <div className="relative w-full aspect-square lg:aspect-auto lg:h-full min-h-[380px] rounded-[16px] overflow-hidden bg-yellow">
+      <Image
+        src={src}
+        alt="Prince Achar store in Khari Baoli, Delhi"
+        fill
+        sizes="(max-width: 1024px) 100vw, 58vw"
+        priority
+        className="object-cover"
+      />
       <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-black/5 to-transparent" />
       <div className="absolute bottom-4 left-4">
         <span className="text-white text-[11px] font-semibold uppercase tracking-[2px] drop-shadow-sm">
           Khari Baoli, Delhi
         </span>
       </div>
-      {images.length > 1 && (
-        <div className="absolute bottom-4 right-4 flex items-center gap-3">
-          <span className="text-white text-[12px] tracking-[0.2em] tabular-nums drop-shadow-sm">
-            {String(idx + 1).padStart(2, "0")} /{" "}
-            {String(images.length).padStart(2, "0")}
-          </span>
-          <div className="flex gap-1.5">
-            <button
-              type="button"
-              onClick={() => go(-1)}
-              aria-label="Previous photo"
-              className="w-7 h-7 rounded-full border border-white/60 text-white flex items-center justify-center transition-colors hover:bg-surface/15"
-            >
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="m15 18-6-6 6-6" />
-              </svg>
-            </button>
-            <button
-              type="button"
-              onClick={() => go(1)}
-              aria-label="Next photo"
-              className="w-7 h-7 rounded-full border border-white/60 text-white flex items-center justify-center transition-colors hover:bg-surface/15"
-            >
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="m9 18 6-6-6-6" />
-              </svg>
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
@@ -190,25 +126,55 @@ export default function ContactPage() {
     <>
       <Navbar />
 
-      <section className="pt-[60px] md:pt-[70px] bg-surface">
-        <div className="max-w-[1150px] mx-auto px-6 pt-10 md:pt-12 pb-2 text-center">
-          <span className="inline-block text-[11px] font-semibold uppercase tracking-[3px] text-red mb-3">
-            {c.hero.label}
-          </span>
-          <h1 className="font-heading text-[36px] md:text-[42px] font-bold text-brand-black leading-tight">
-            {c.hero.title}
-          </h1>
-          <p className="text-[13px] md:text-[15px] text-gray max-w-[460px] mx-auto leading-relaxed mt-3">
-            {c.hero.description}
-          </p>
-          <HeritageDivider />
+      {/* Full-bleed red banner styled to match the collection banners
+          (bg #CC0000, gold #FFEB99, filigree corners reused from
+          achar-banner.png). Sits under the fixed navbar. */}
+      <div className="pt-[60px] md:pt-[70px]">
+        <div className="relative w-full overflow-hidden bg-[#CC0000]">
+          <Image
+            src="/banner-corner.png"
+            alt=""
+            aria-hidden="true"
+            width={341}
+            height={345}
+            className="absolute top-0 left-0 w-[76px] md:w-[150px] h-auto pointer-events-none"
+          />
+          <Image
+            src="/banner-corner.png"
+            alt=""
+            aria-hidden="true"
+            width={341}
+            height={345}
+            className="absolute top-0 right-0 w-[76px] md:w-[150px] h-auto -scale-x-100 pointer-events-none"
+          />
+          <Image
+            src="/banner-corner.png"
+            alt=""
+            aria-hidden="true"
+            width={341}
+            height={345}
+            className="absolute bottom-0 left-0 w-[76px] md:w-[150px] h-auto -scale-y-100 pointer-events-none"
+          />
+          <Image
+            src="/banner-corner.png"
+            alt=""
+            aria-hidden="true"
+            width={341}
+            height={345}
+            className="absolute bottom-0 right-0 w-[76px] md:w-[150px] h-auto -scale-x-100 -scale-y-100 pointer-events-none"
+          />
+          <div className="relative flex items-center justify-center px-24 md:px-40 py-9 md:py-14">
+            <h1 className="font-heading text-[34px] md:text-[58px] leading-none text-[#FFEB99]">
+              Contact Us
+            </h1>
+          </div>
         </div>
-      </section>
+      </div>
 
-      <section className="bg-surface pb-8">
+      <section className="bg-surface pt-8 md:pt-10 pb-8">
         <div className="max-w-[1200px] mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-6 md:gap-7 lg:items-stretch">
-            <Slideshow images={c.images} />
+            <ContactImage src={c.images[0]} />
 
             <div className="bg-yellow rounded-[22px] border border-brand-black/10 shadow-[0_2px_18px_rgba(0,0,0,0.04)] p-6 md:p-8">
               {submitted ? (

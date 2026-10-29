@@ -29,7 +29,7 @@ const organizationJsonLd = {
       },
       contactPoint: {
         "@type": "ContactPoint",
-        telephone: "+91 98110 56593",
+        telephone: "+91 98118 78767",
         email: "pannalaltavinderkumar@gmail.com",
         contactType: "customer service",
       },
@@ -56,7 +56,7 @@ const organizationJsonLd = {
       name: SITE_NAME,
       url: SITE_URL,
       image: `${SITE_URL}/logo.jpeg`,
-      telephone: "+91 98110 56593",
+      telephone: "+91 98118 78767",
       priceRange: "₹₹",
       address: {
         "@type": "PostalAddress",
@@ -121,7 +121,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${cormorant.variable} ${outfit.variable}`}>
+    <html lang="en" className={`${cormorant.variable} ${outfit.variable}`} suppressHydrationWarning>
       <body>
         {/* Apply the stored colour theme before first paint to avoid a flash:
             defaults to "light" (the admin panel's current selection). */}
