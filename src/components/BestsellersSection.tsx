@@ -1,15 +1,36 @@
 "use client";
 
-import { Suspense } from "react";
+import { useEffect, useState } from "react";
 import { type ShopifyProduct } from "@/lib/shopify";
-import ProductGrid from "./ProductGrid";
+import ProductCard from "./ProductCard";
 import { useContent } from "@/lib/content";
 
 export default function BestsellersSection({ products }: { products: ShopifyProduct[] }) {
   const content = useContent();
   const bs = content.homepage.bestsellers;
 
+  // 3 per view on desktop, 2 on mobile.
+  const [perPage, setPerPage] = useState(3);
+  const [page, setPage] = useState(0);
+
+  useEffect(() => {
+    const calc = () => setPerPage(window.innerWidth < 1024 ? 2 : 3);
+    calc();
+    window.addEventListener("resize", calc);
+    return () => window.removeEventListener("resize", calc);
+  }, []);
+
+  const totalPages = Math.ceil(products.length / perPage);
+  // Derive a clamped page during render so a viewport change (which lowers
+  // totalPages) never leaves us pointing past the last page.
+  const currentPage = Math.min(page, Math.max(totalPages - 1, 0));
+
   if (products.length === 0) return null;
+
+  const canPrev = currentPage > 0;
+  const canNext = currentPage < totalPages - 1;
+  const navigate = (dir: number) =>
+    setPage(Math.min(Math.max(currentPage + dir, 0), totalPages - 1));
 
   return (
     <section className="bg-yellow py-12 md:py-20">
@@ -26,9 +47,48 @@ export default function BestsellersSection({ products }: { products: ShopifyProd
           </p>
         </div>
 
-        <Suspense fallback={<GridSkeleton />}>
-          <ProductGrid products={products} featured />
-        </Suspense>
+        <div className="relative">
+          <div className="overflow-hidden">
+            <div
+              className="flex transition-transform duration-500 ease-out"
+              style={{ transform: `translateX(-${currentPage * 100}%)` }}
+            >
+              {products.map((product) => (
+                <div
+                  key={product.id}
+                  className="w-1/2 lg:w-1/3 shrink-0 px-2 md:px-3"
+                >
+                  <ProductCard product={product} featured />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {canPrev && (
+            <button
+              type="button"
+              onClick={() => navigate(-1)}
+              aria-label="Previous bestsellers"
+              className="absolute top-1/2 -translate-y-1/2 left-[-10px] z-20 w-9 h-9 md:w-10 md:h-10 rounded-full bg-surface border border-brand-black/10 shadow-md flex items-center justify-center text-brand-black hover:bg-red hover:text-white hover:border-red transition-colors"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="m15 18-6-6 6-6" />
+              </svg>
+            </button>
+          )}
+          {canNext && (
+            <button
+              type="button"
+              onClick={() => navigate(1)}
+              aria-label="Next bestsellers"
+              className="absolute top-1/2 -translate-y-1/2 right-[-10px] z-20 w-9 h-9 md:w-10 md:h-10 rounded-full bg-surface border border-brand-black/10 shadow-md flex items-center justify-center text-brand-black hover:bg-red hover:text-white hover:border-red transition-colors"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="m9 18 6-6-6-6" />
+              </svg>
+            </button>
+          )}
+        </div>
 
         <div className="text-center mt-8 md:mt-12">
           <a
@@ -40,25 +100,5 @@ export default function BestsellersSection({ products }: { products: ShopifyProd
         </div>
       </div>
     </section>
-  );
-}
-
-function GridSkeleton() {
-  return (
-    <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-      {Array.from({ length: 3 }).map((_, i) => (
-        <div
-          key={i}
-          className="rounded-xl overflow-hidden border border-brand-black/5 bg-surface"
-        >
-          <div className="aspect-square bg-brand-black/5" />
-          <div className="p-5 space-y-2">
-            <div className="h-3 w-16 rounded bg-brand-black/10" />
-            <div className="h-4 w-3/4 rounded bg-brand-black/10" />
-            <div className="h-3 w-full rounded bg-brand-black/5" />
-          </div>
-        </div>
-      ))}
-    </div>
   );
 }
