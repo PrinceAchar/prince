@@ -13,6 +13,7 @@ function LoginForm() {
     invalid_state: "Login session expired. Please try again.",
     token_exchange_failed: "Login failed. Please try again.",
     login_required: "Please log in to continue.",
+    client_id_missing: "Shopify client ID is not configured. Please check your environment variables.",
   };
 
   return (
@@ -41,10 +42,17 @@ function LoginForm() {
           </p>
 
           <a
-            href="/api/auth/login"
-            className="block w-full py-3.5 bg-red text-white text-[14px] font-semibold uppercase tracking-[1px] text-center rounded-lg hover:bg-red/90 transition-colors"
+            href="/api/auth/login/simple"
+            className="block w-full py-3.5 bg-red text-white text-[14px] font-semibold uppercase tracking-[1px] text-center rounded-lg hover:bg-red-90 transition-colors"
           >
             Continue with Email
+          </a>
+          
+          <a
+            href="/api/auth/login/debug"
+            className="block w-full py-3.5 bg-gray text-white text-[14px] font-semibold uppercase tracking-[1px] text-center rounded-lg hover:bg-gray-700 transition-colors mt-2"
+          >
+            Debug Authentication
           </a>
         </div>
 
