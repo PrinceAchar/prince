@@ -9,6 +9,7 @@ import {
   getCart,
   type Cart,
 } from "@/lib/shopify";
+import { useSearchParams } from "next/navigation";
 
 export interface CartItem {
   lineId: string;
