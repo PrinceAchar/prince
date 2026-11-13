@@ -11,8 +11,11 @@ export default function AccountMenu() {
   const router = useRouter();
 
   useEffect(() => {
-    fetch("/api/auth/check", { method: "GET" })
-      .then((res) => setIsLoggedIn(res.ok))
+    fetch("/api/auth/check", { method: "GET", cache: "no-store" })
+      .then(async (res) => {
+        const data = await res.json().catch(() => ({}));
+        setIsLoggedIn(res.ok && !!data?.loggedIn);
+      })
       .catch(() => setIsLoggedIn(false));
   }, []);
 

@@ -29,6 +29,10 @@ export default function HomepageContent({ bestsellers }: { bestsellers: ShopifyP
 
   return (
     <>
+      <h1 className="sr-only">
+        Prince Achar — Authentic Handcrafted Pickles, Murabba and Chutneys from
+        Old Delhi
+      </h1>
       {/* HERO */}
       <section id="home" className="pt-[60px] md:pt-[70px] bg-yellow">
         <div className="relative w-full aspect-[2/1] overflow-hidden animate-fade-in-up">
@@ -62,9 +66,9 @@ export default function HomepageContent({ bestsellers }: { bestsellers: ShopifyP
             <div className="absolute inset-0 flex items-center justify-center text-center px-6">
               <div>
                 {slide?.title && (
-                  <h1 className="font-heading text-[36px] md:text-[56px] lg:text-[64px] font-bold text-white mb-4 drop-shadow-lg">
+                  <div className="font-heading text-[36px] md:text-[56px] lg:text-[64px] font-bold text-white mb-4 drop-shadow-lg">
                     {slide.title}
-                  </h1>
+                  </div>
                 )}
                 {slide?.subtitle && (
                   <p className="text-[14px] md:text-[18px] text-white/90 drop-shadow-md">

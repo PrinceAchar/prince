@@ -180,7 +180,7 @@ export default function ProductDetails({
       </span>
 
       {/* Title */}
-      <h2 className={titleClassName}><ProductTitle title={product.title} /></h2>
+      <h1 className={titleClassName}><ProductTitle title={product.title} /></h1>
 
       {/* Reviews & social proof (toggleable in admin) */}
       {showSocialProof && (

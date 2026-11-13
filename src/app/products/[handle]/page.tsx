@@ -12,7 +12,7 @@ import {
   getProductsByCollectionHandle,
   type ShopifyProduct,
 } from "@/lib/shopify";
-import { productJsonLd } from "@/lib/jsonld";
+import { productJsonLd, breadcrumbJsonLd } from "@/lib/jsonld";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 
 export const revalidate = 3600;
@@ -79,6 +79,16 @@ export default async function ProductPage({
 
   const related = await getRelatedProducts(product);
 
+  const collectionHandle = product.collections?.edges[0]?.node.handle;
+  const collectionTitle = product.collections?.edges[0]?.node.title;
+  const crumbs = [
+    { name: "Home", path: "/" },
+    ...(collectionHandle
+      ? [{ name: collectionTitle || "Shop", path: `/${collectionHandle}` }]
+      : []),
+    { name: product.title, path: `/products/${product.handle}` },
+  ];
+
   return (
     <>
       {product && (
@@ -87,6 +97,10 @@ export default async function ProductPage({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd(product)) }}
         />
       )}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd(crumbs)) }}
+      />
       <Navbar />
 
       <main className="pt-[60px] md:pt-[70px]">

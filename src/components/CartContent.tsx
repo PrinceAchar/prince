@@ -128,11 +128,8 @@ export default function CartContent({ cart }: CartContentProps) {
 
   const handleCheckout = () => {
     beginCheckout();
-    window.location.href = cart.checkoutUrl;
+    window.location.href = displayCart.checkoutUrl;
   };
-
-  const subtotal = parseFloat(cart.cost.subtotalAmount.amount);
-  const total = parseFloat(cart.cost.totalAmount.amount);
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -140,10 +137,10 @@ export default function CartContent({ cart }: CartContentProps) {
       <div className="lg:col-span-2">
         <div className="bg-white rounded-lg border border-brand-black/10 p-6">
           <h2 className="font-heading text-[20px] font-bold text-brand-black mb-6">
-            Items ({cart.totalQuantity})
+            Items ({displayCart.totalQuantity})
           </h2>
           
-          {cart.lines.edges.length === 0 ? (
+          {displayCart.lines.edges.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-gray mb-4">Your cart is empty</p>
               <Link 
@@ -155,7 +152,7 @@ export default function CartContent({ cart }: CartContentProps) {
             </div>
           ) : (
             <div className="space-y-4">
-              {cart.lines.edges.map((edge) => {
+              {displayCart.lines.edges.map((edge) => {
                 const line = edge.node;
                 const image = line.merchandise.product.images.edges[0]?.node;
                 
@@ -262,7 +259,7 @@ export default function CartContent({ cart }: CartContentProps) {
             <div className="flex justify-between text-sm">
               <span className="text-gray">Subtotal</span>
               <span className="font-medium text-brand-black">
-                {formatPrice(cart.cost.subtotalAmount.amount, cart.cost.subtotalAmount.currencyCode)}
+                {formatPrice(displayCart.cost.subtotalAmount.amount, displayCart.cost.subtotalAmount.currencyCode)}
               </span>
             </div>
             
@@ -275,7 +272,7 @@ export default function CartContent({ cart }: CartContentProps) {
               <div className="flex justify-between">
                 <span className="font-medium text-brand-black">Total</span>
                 <span className="font-bold text-lg text-brand-black">
-                  {formatPrice(cart.cost.totalAmount.amount, cart.cost.totalAmount.currencyCode)}
+                  {formatPrice(displayCart.cost.totalAmount.amount, displayCart.cost.totalAmount.currencyCode)}
                 </span>
               </div>
             </div>

@@ -1,23 +1,21 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CartContent from "@/components/CartContent";
 import { getCart } from "@/lib/shopify";
 
-export default function CartPage({
-  params,
-}: {
-  params: Promise<{ cartId: string }>;
-}) {
+export default function CartPage() {
   const router = useRouter();
+  const params = useParams<{ cartId: string }>();
   const [cart, setCart] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const { cartId } = params;
+  const cartId = params?.cartId;
 
   useEffect(() => {
+    if (!cartId) return;
     const loadCart = async () => {
       try {
         const cartData = await getCart(cartId as string);
