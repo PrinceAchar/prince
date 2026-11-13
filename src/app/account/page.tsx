@@ -85,7 +85,8 @@ export default function AccountPage() {
     return (
       <>
         <Navbar />
-        <main className="min-h-screen bg-yellow pt-[70px] md:pt-[80px] flex items-center justify-center">
+        <main id="main-content" className="min-h-screen bg-yellow pt-[70px] md:pt-[80px] flex items-center justify-center">
+          <h1 className="sr-only">My Account</h1>
           <p className="text-[14px] text-brand-black/50">Loading...</p>
         </main>
         <Footer />
@@ -97,8 +98,9 @@ export default function AccountPage() {
     return (
       <>
         <Navbar />
-        <main className="min-h-screen bg-yellow pt-[70px] md:pt-[80px] flex items-center justify-center">
+        <main id="main-content" className="min-h-screen bg-yellow pt-[70px] md:pt-[80px] flex items-center justify-center">
           <div className="text-center">
+            <h1 className="sr-only">My Account</h1>
             <p className="text-[14px] text-red mb-4">{error || "Failed to load account"}</p>
             <a
               href="/account/login"
@@ -120,7 +122,7 @@ export default function AccountPage() {
     <>
       <Navbar />
 
-      <main className="min-h-screen bg-yellow pt-[70px] md:pt-[80px]">
+      <main id="main-content" className="min-h-screen bg-yellow pt-[70px] md:pt-[80px]">
         <div className="max-w-[800px] mx-auto px-4 py-12 md:py-16">
           {/* Header */}
           <div className="mb-10">

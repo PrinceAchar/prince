@@ -88,6 +88,7 @@ export default function PrivacyPage() {
   return (
     <>
       <Navbar />
+      <main id="main-content">
 
       {/* HERO */}
       <section className="pt-[60px] md:pt-[70px] bg-yellow relative overflow-hidden">
@@ -124,6 +125,7 @@ export default function PrivacyPage() {
         </div>
       </section>
 
+      </main>
       <Footer />
     </>
   );

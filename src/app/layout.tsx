@@ -1,11 +1,19 @@
 import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Outfit } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 import { CartProvider } from "@/components/CartProvider";
 import CartDrawer from "@/components/CartDrawer";
 import ScrollToTop from "@/components/ScrollToTop";
 import Providers from "./providers";
 import { SITE_URL, SITE_NAME } from "@/lib/site";
+import { getSiteContent } from "@/lib/content-server";
+
+// Storefront copy is edited in /admin and stored in Firestore. Revalidating
+// every minute means those edits reach crawlers and cold visitors without a
+// redeploy, while still serving static HTML from the CDN in between.
+export const revalidate = 60;
 
 const SITE_DESCRIPTION =
   "Handcrafted pickles and preserves from the heart of Old Delhi. Authentic flavors passed down through generations since 1980.";
@@ -101,13 +109,11 @@ export const metadata: Metadata = {
     siteName: SITE_NAME,
     title: "Prince Achar | Authentic Delhi Flavors",
     description: SITE_DESCRIPTION,
-    images: [{ url: "/logo.jpeg", width: 1014, height: 507, alt: SITE_NAME }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Prince Achar | Authentic Delhi Flavors",
     description: SITE_DESCRIPTION,
-    images: ["/logo.jpeg"],
   },
   robots: { index: true, follow: true },
 };
@@ -119,14 +125,22 @@ export const viewport: Viewport = {
   ],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const initialContent = await getSiteContent();
+
   return (
     <html lang="en" className={`${cormorant.variable} ${outfit.variable}`} suppressHydrationWarning>
       <body>
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:rounded-lg focus:bg-red focus:px-5 focus:py-3 focus:text-[13px] focus:font-semibold focus:uppercase focus:tracking-[1px] focus:text-white"
+        >
+          Skip to content
+        </a>
         {/* Apply the stored colour theme before first paint to avoid a flash:
             defaults to "light" (the admin panel's current selection). */}
         <script
@@ -135,7 +149,7 @@ export default function RootLayout({
               'try{var t=localStorage.getItem("pa-theme");document.documentElement.dataset.theme=t||"light"}catch(e){document.documentElement.dataset.theme="light"}',
           }}
         />
-        <Providers>
+        <Providers initialContent={initialContent}>
           <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
@@ -146,6 +160,8 @@ export default function RootLayout({
             <ScrollToTop />
           </CartProvider>
         </Providers>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

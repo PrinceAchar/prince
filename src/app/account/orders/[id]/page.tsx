@@ -113,7 +113,7 @@ export default function OrderDetailPage() {
     return (
       <>
         <Navbar />
-        <main className="min-h-screen bg-yellow pt-[70px] md:pt-[80px] flex items-center justify-center">
+        <main id="main-content" className="min-h-screen bg-yellow pt-[70px] md:pt-[80px] flex items-center justify-center">
           <p className="text-[14px] text-brand-black/50">Loading order...</p>
         </main>
         <Footer />
@@ -125,7 +125,7 @@ export default function OrderDetailPage() {
     return (
       <>
         <Navbar />
-        <main className="min-h-screen bg-yellow pt-[70px] md:pt-[80px] flex items-center justify-center">
+        <main id="main-content" className="min-h-screen bg-yellow pt-[70px] md:pt-[80px] flex items-center justify-center">
           <div className="text-center">
             <p className="text-[14px] text-red mb-4">{error || "Order not found"}</p>
             <Link
@@ -145,7 +145,7 @@ export default function OrderDetailPage() {
     <>
       <Navbar />
 
-      <main className="min-h-screen bg-yellow pt-[70px] md:pt-[80px]">
+      <main id="main-content" className="min-h-screen bg-yellow pt-[70px] md:pt-[80px]">
         <div className="max-w-[1200px] mx-auto px-4 py-12 md:py-16">
           {/* Header */}
           <div className="mb-8">

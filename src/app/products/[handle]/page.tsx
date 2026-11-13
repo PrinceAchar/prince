@@ -103,7 +103,7 @@ export default async function ProductPage({
       />
       <Navbar />
 
-      <main className="pt-[60px] md:pt-[70px]">
+      <main id="main-content" className="pt-[60px] md:pt-[70px]">
         {/* PRODUCT DETAILS */}
         <section className="bg-surface py-10 md:py-16">
           <div className="max-w-[1200px] mx-auto px-6">

@@ -39,16 +39,20 @@ export default function AdminShell({ children }: { children: ReactNode }) {
   }, [needsAuth, router]);
 
   if (pathname === "/admin/login") {
-    return <>{children}</>;
+    return <main id="main-content">{children}</main>;
   }
 
   const loading = needsAuth && !authResolved;
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-yellow flex items-center justify-center">
+      <main
+        id="main-content"
+        className="min-h-screen bg-yellow flex items-center justify-center"
+      >
+        <h1 className="sr-only">Prince Achar Admin</h1>
         <div className="w-8 h-8 border-2 border-red border-t-transparent rounded-full animate-spin" />
-      </div>
+      </main>
     );
   }
 
@@ -123,7 +127,7 @@ export default function AdminShell({ children }: { children: ReactNode }) {
       )}
 
       {/* Main content */}
-      <main className="pt-14 pb-20 md:pb-8">
+      <main id="main-content" className="pt-14 pb-20 md:pb-8">
         {children}
       </main>
     </div>

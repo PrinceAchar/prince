@@ -30,6 +30,7 @@ export default function FAQPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
       <Navbar />
+      <main id="main-content">
 
       {/* HERO */}
       <section className="pt-[60px] md:pt-[70px] bg-yellow relative overflow-hidden">
@@ -103,6 +104,7 @@ export default function FAQPage() {
         </div>
       </section>
 
+      </main>
       <Footer />
     </>
   );

@@ -17,7 +17,9 @@ export default async function Home() {
   return (
     <>
       <Navbar />
+      <main id="main-content">
       <HomepageContent bestsellers={bestsellers} />
+      </main>
       <Footer />
     </>
   );

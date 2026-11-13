@@ -7,7 +7,7 @@ export default function NotFound() {
     <>
       <Navbar />
 
-      <main className="pt-[60px] md:pt-[70px] bg-yellow">
+      <main id="main-content" className="pt-[60px] md:pt-[70px] bg-yellow">
         <div className="max-w-[600px] mx-auto px-6 py-20 md:py-28 text-center">
           <span className="inline-block text-[11px] font-semibold uppercase tracking-[3px] text-red mb-4">
             Page Not Found

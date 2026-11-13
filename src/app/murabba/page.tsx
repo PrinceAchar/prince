@@ -66,6 +66,7 @@ export default async function MurabbaPage() {
         />
       )}
       <Navbar />
+      <main id="main-content">
 
       <section className="pt-[60px] md:pt-[70px]">
         <CollectionHero section="murabba" />
@@ -103,6 +104,7 @@ export default async function MurabbaPage() {
         </>
       )}
 
+      </main>
       <Footer />
     </>
   );

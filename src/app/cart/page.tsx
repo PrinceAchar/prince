@@ -8,7 +8,7 @@ export default function CartPage() {
     <>
       <Navbar />
       
-      <main className="pt-[60px] md:pt-[70px] min-h-screen bg-surface">
+      <main id="main-content" className="pt-[60px] md:pt-[70px] min-h-screen bg-surface">
         <div className="max-w-[1200px] mx-auto px-6 py-12 md:py-16">
           <div className="mb-8">
             <h1 className="font-heading text-[28px] md:text-[34px] font-bold text-brand-black mb-2">

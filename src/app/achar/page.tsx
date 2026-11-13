@@ -57,6 +57,7 @@ export default async function AcharPage() {
         />
       )}
       <Navbar />
+      <main id="main-content">
 
       <section className="pt-[60px] md:pt-[70px]">
         <CollectionHero section="achar" />
@@ -78,6 +79,7 @@ export default async function AcharPage() {
         </div>
       </section>
 
+      </main>
       <Footer />
     </>
   );

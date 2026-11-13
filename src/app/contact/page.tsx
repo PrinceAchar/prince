@@ -125,6 +125,7 @@ export default function ContactPage() {
   return (
     <>
       <Navbar />
+      <main id="main-content">
 
       {/* Full-bleed contact banner image (red bg, gold "Contact Us" and
           filigree corners are baked in), rendered like the collection
@@ -250,6 +251,7 @@ export default function ContactPage() {
         </div>
       </section>
 
+      </main>
       <Footer />
     </>
   );

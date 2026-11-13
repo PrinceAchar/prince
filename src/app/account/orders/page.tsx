@@ -102,7 +102,8 @@ export default function OrdersPage() {
     return (
       <>
         <Navbar />
-        <main className="min-h-screen bg-yellow pt-[70px] md:pt-[80px] flex items-center justify-center">
+        <main id="main-content" className="min-h-screen bg-yellow pt-[70px] md:pt-[80px] flex items-center justify-center">
+          <h1 className="sr-only">My Orders</h1>
           <p className="text-[14px] text-brand-black/50">Loading orders...</p>
         </main>
         <Footer />
@@ -114,7 +115,7 @@ export default function OrdersPage() {
     <>
       <Navbar />
 
-      <main className="min-h-screen bg-yellow pt-[70px] md:pt-[80px]">
+      <main id="main-content" className="min-h-screen bg-yellow pt-[70px] md:pt-[80px]">
         <div className="max-w-[1200px] mx-auto px-4 py-12 md:py-16">
           {/* Header */}
           <div className="mb-8">

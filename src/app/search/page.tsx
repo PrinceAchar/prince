@@ -41,6 +41,7 @@ export default async function SearchPageRoute() {
   return (
     <>
       <Navbar />
+      <main id="main-content">
 
       {/* HERO */}
       <section className="pt-[60px] md:pt-[70px] bg-yellow">
@@ -61,6 +62,7 @@ export default async function SearchPageRoute() {
         <SearchPage products={products} />
       </Suspense>
 
+      </main>
       <Footer />
     </>
   );

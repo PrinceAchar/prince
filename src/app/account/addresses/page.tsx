@@ -177,7 +177,8 @@ export default function AddressesPage() {
     return (
       <>
         <Navbar />
-        <main className="min-h-screen bg-yellow pt-[70px] md:pt-[80px] flex items-center justify-center">
+        <main id="main-content" className="min-h-screen bg-yellow pt-[70px] md:pt-[80px] flex items-center justify-center">
+          <h1 className="sr-only">My Addresses</h1>
           <p className="text-[14px] text-brand-black/50">Loading addresses...</p>
         </main>
         <Footer />
@@ -189,7 +190,7 @@ export default function AddressesPage() {
     <>
       <Navbar />
 
-      <main className="min-h-screen bg-yellow pt-[70px] md:pt-[80px]">
+      <main id="main-content" className="min-h-screen bg-yellow pt-[70px] md:pt-[80px]">
         <div className="max-w-[1200px] mx-auto px-4 py-12 md:py-16">
           {/* Header */}
           <div className="flex items-center justify-between mb-8">

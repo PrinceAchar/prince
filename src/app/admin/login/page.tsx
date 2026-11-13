@@ -74,6 +74,7 @@ export default function AdminLoginPage() {
   if (checkingAuth) {
     return (
       <div className="min-h-screen bg-yellow flex items-center justify-center">
+        <h1 className="sr-only">Prince Achar Admin</h1>
         <div className="w-8 h-8 border-2 border-red border-t-transparent rounded-full animate-spin" />
       </div>
     );
