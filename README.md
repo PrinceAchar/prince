@@ -184,14 +184,27 @@ container, not from a hard-coded script.
 Inside the GTM container, configure:
 
 1. **GA4 Configuration** tag with measurement ID `G-30ZQMK56KN`, trigger *All
-   Pages*.
-2. A **GA4 Event** tag named `page_view` triggered by the custom event
-   `page_view`, sending `page_path`, `page_location` and `page_title` — this is
-   what records App Router navigations.
+   Pages*. (This is already present in `GTM-NXXBQ7LC` and is sending the first
+   page view.)
+2. **Record client-side navigations** — pick **one** of these, never both, or
+   every App Router navigation is counted twice:
+   - **Option A (simplest):** in the GA4 Configuration tag, open *Advanced
+     Settings → Page changes based on browser history events* and tick it. GTM
+     then sends a page view on every history change.
+   - **Option B:** create a **GA4 Event** tag with event name `page_view`,
+     triggered by the custom event `page_view`, sending `page_path`,
+     `page_location` and `page_title`. This consumes the data layer push the
+     site already makes on each navigation.
 3. **GA4 Event** tags for `view_item`, `add_to_cart`, `remove_from_cart` and
    `begin_checkout`, each with *Send Ecommerce data* enabled and the data layer
    selected as the source.
 4. Publish the container. Until it is published, nothing reaches GA4.
+
+Purchases happen on Shopify's checkout domain, outside this site. To record
+`purchase` and checkout-step events in the same GA4 property, connect GA4 in
+Shopify admin (Google & YouTube channel / Shopify's Google Analytics 4
+integration). That integration only covers checkout, so it does not duplicate
+storefront page views.
 
 The CSP in `next.config.ts` already allows the GTM/GA4 hosts, so no header
 change is needed when adding tags.
@@ -240,9 +253,12 @@ Post-deploy smoke test:
 - [ ] Register the Shopify callback `https://princeachar.com/api/auth/callback`.
 - [ ] Add the production domain in **Vercel → Domains** and point DNS.
 - [ ] Enable **Web Analytics** and **Speed Insights** for the project in Vercel.
-- [ ] In **Google Tag Manager** (`GTM-NXXBQ7LC`): add the GA4 configuration tag
-      for `G-30ZQMK56KN`, the `page_view` event tag, and the ecommerce event
-      tags listed in section 7, then **Publish**. Do not add a second GA4 tag.
+- [ ] In **Google Tag Manager** (`GTM-NXXBQ7LC`): keep the GA4 configuration
+      tag for `G-30ZQMK56KN`, turn on history-change page views (or add the
+      `page_view` event tag — not both), add the ecommerce event tags listed in
+      section 7, then **Publish**.
+- [ ] In **Shopify admin**, connect the same GA4 property so `purchase` events
+      from checkout are recorded.
 - [ ] Verify the domain in **Google Search Console** (DNS or the
       `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` token), then submit
       `https://princeachar.com/sitemap.xml`.
