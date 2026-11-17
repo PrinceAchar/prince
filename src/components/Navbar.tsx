@@ -152,6 +152,9 @@ export default function Navbar() {
                 <form onSubmit={handleSearchSubmit} className="flex items-center gap-2 p-2">
                   <input
                     ref={searchInputRef}
+                    id="site-search"
+                    name="q"
+                    aria-label="Search products"
                     type="search"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}

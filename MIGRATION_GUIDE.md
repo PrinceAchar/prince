@@ -58,6 +58,9 @@ See `.env.example`. The ones that break production if missing:
 - `NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN`, `NEXT_PUBLIC_SHOPIFY_STOREFRONT_TOKEN`
 - `SHOPIFY_CUSTOMER_ACCOUNT_CLIENT_ID`
 - `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` (optional, adds the Search Console meta tag)
+- `NEXT_PUBLIC_GTM_ID` / `NEXT_PUBLIC_GA_MEASUREMENT_ID` (optional; default to
+  `GTM-NXXBQ7LC` / `G-30ZQMK56KN`). GTM is the only analytics loader — GA4 runs
+  as a tag inside the container.
 
 ## Shopify setup for customer login
 

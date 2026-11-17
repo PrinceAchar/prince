@@ -7,6 +7,7 @@ import { CartProvider } from "@/components/CartProvider";
 import CartDrawer from "@/components/CartDrawer";
 import ScrollToTop from "@/components/ScrollToTop";
 import Providers from "./providers";
+import GoogleTagManager from "@/components/GoogleTagManager";
 import { SITE_URL, SITE_NAME } from "@/lib/site";
 import { getSiteContent } from "@/lib/content-server";
 
@@ -86,13 +87,11 @@ const organizationJsonLd = {
 const cormorant = Cormorant_Garamond({
   variable: "--font-heading",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
 });
 
 const outfit = Outfit({
   variable: "--font-body",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
 });
 
 export const metadata: Metadata = {
@@ -135,6 +134,7 @@ export default async function RootLayout({
   return (
     <html lang="en" className={`${cormorant.variable} ${outfit.variable}`} suppressHydrationWarning>
       <body>
+        <GoogleTagManager />
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:rounded-lg focus:bg-red focus:px-5 focus:py-3 focus:text-[13px] focus:font-semibold focus:uppercase focus:tracking-[1px] focus:text-white"

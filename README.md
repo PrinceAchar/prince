@@ -22,7 +22,7 @@ products, carts, checkout and customer accounts, and this app renders them.
 | Storefront copy (hero, banners, FAQ…) | Firestore `siteContent/main`, edited in `/admin` |
 | Staff login | Firebase Auth — `/admin/login` |
 | Image uploads | Signed Cloudinary uploads — `/api/admin/upload` |
-| Analytics | Vercel Analytics + Speed Insights |
+| Analytics | Vercel Analytics + Speed Insights + Google Tag Manager → GA4 |
 | Error boundaries | `src/app/error.tsx`, `src/app/global-error.tsx` |
 
 Two separate identity systems exist on purpose:
@@ -87,6 +87,8 @@ Copy `.env.example` → `.env.local` for local work, and set the same keys in
 | Variable | Purpose |
 | --- | --- |
 | `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` | Adds the Search Console verification meta tag |
+| `NEXT_PUBLIC_GTM_ID` | Google Tag Manager container ID (defaults to `GTM-NXXBQ7LC`) |
+| `NEXT_PUBLIC_GA_MEASUREMENT_ID` | GA4 measurement ID used inside GTM (defaults to `G-30ZQMK56KN`) |
 
 If the Firebase **admin** keys are missing, the storefront still works and falls
 back to the copy baked into `src/lib/content-defaults.ts`. The `/admin` panel
@@ -159,6 +161,41 @@ message; the underlying cause is logged by `/api/auth/login` and
 - `public/llms.txt` — plain-language facts for LLM crawlers
 - Vercel Analytics + Speed Insights are mounted in the root layout
 
+### Google Tag Manager & GA4
+
+The site loads **one** tag manager container (`GTM-NXXBQ7LC`) and nothing else.
+GA4 (`G-30ZQMK56KN`) runs as a tag *inside* that container — never add a second
+GA4 tag or a direct `gtag.js` snippet, or page views will be counted twice.
+
+What the storefront pushes to `window.dataLayer` (`src/lib/analytics.ts`):
+
+| Event | When |
+| --- | --- |
+| `page_view` | Every client-side route change (the container covers the first load) |
+| `view_item` | Product page opened |
+| `add_to_cart` | Item added (and quantity increased) |
+| `remove_from_cart` | Item removed (and quantity decreased) |
+| `begin_checkout` | Checkout clicked; navigation is delayed 250 ms so the tag fires |
+
+`item_id` is the **product handle** (e.g. `amla-pickle`), so the events join in
+GA4 ecommerce reports. GA4 traffic and conversions therefore come from the GTM
+container, not from a hard-coded script.
+
+Inside the GTM container, configure:
+
+1. **GA4 Configuration** tag with measurement ID `G-30ZQMK56KN`, trigger *All
+   Pages*.
+2. A **GA4 Event** tag named `page_view` triggered by the custom event
+   `page_view`, sending `page_path`, `page_location` and `page_title` — this is
+   what records App Router navigations.
+3. **GA4 Event** tags for `view_item`, `add_to_cart`, `remove_from_cart` and
+   `begin_checkout`, each with *Send Ecommerce data* enabled and the data layer
+   selected as the source.
+4. Publish the container. Until it is published, nothing reaches GA4.
+
+The CSP in `next.config.ts` already allows the GTM/GA4 hosts, so no header
+change is needed when adding tags.
+
 Every indexable page has exactly one `<h1>`, a self-referencing absolute
 canonical, Open Graph + Twitter tags, and a `#main-content` skip link target.
 
@@ -172,7 +209,8 @@ Configured in `next.config.ts` for every route: HSTS (2 years, preload),
 
 The CSP allows inline scripts because Next.js inlines the RSC payload; moving to
 nonces would require middleware. All other directives are limited to the
-origins actually used (Shopify, Firebase, Cloudinary, Vercel).
+origins actually used (Shopify, Firebase, Cloudinary, Vercel, Google Tag
+Manager / Google Analytics).
 
 ---
 
@@ -202,6 +240,9 @@ Post-deploy smoke test:
 - [ ] Register the Shopify callback `https://princeachar.com/api/auth/callback`.
 - [ ] Add the production domain in **Vercel → Domains** and point DNS.
 - [ ] Enable **Web Analytics** and **Speed Insights** for the project in Vercel.
+- [ ] In **Google Tag Manager** (`GTM-NXXBQ7LC`): add the GA4 configuration tag
+      for `G-30ZQMK56KN`, the `page_view` event tag, and the ecommerce event
+      tags listed in section 7, then **Publish**. Do not add a second GA4 tag.
 - [ ] Verify the domain in **Google Search Console** (DNS or the
       `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` token), then submit
       `https://princeachar.com/sitemap.xml`.

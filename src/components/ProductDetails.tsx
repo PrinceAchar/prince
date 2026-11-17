@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import Link from "next/link";
 import { type ShopifyProduct, formatPrice, isProductSoldOut } from "@/lib/shopify";
 import { useCart } from "./CartProvider";
@@ -8,6 +8,7 @@ import VariantSelector from "./VariantSelector";
 import { useContent } from "@/lib/content";
 import PincodeChecker from "./PincodeChecker";
 import ProductTitle from "./ProductTitle";
+import { buildItem, trackViewItem } from "@/lib/analytics";
 
 const trustBadges = [
   {
@@ -72,10 +73,34 @@ const featureIcons = [
   },
 ];
 
-function generateRandomReview() {
-  const rating = (4 + Math.random()).toFixed(1);
-  const reviews = Math.floor(50 + Math.random() * 250);
-  const bought = Math.floor(100 + Math.random() * 1900);
+/**
+ * Social-proof numbers used to be random per render, which made the server and
+ * client HTML disagree and triggered a React hydration error. Derive them
+ * deterministically from the product handle instead: stable across renders,
+ * identical on server and client, and different per product.
+ */
+function hashString(value: string): number {
+  let h = 2166136261;
+  for (let i = 0; i < value.length; i++) {
+    h ^= value.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return h >>> 0;
+}
+
+function seededRandom(seed: number): number {
+  // mulberry32
+  let t = (seed += 0x6d2b79f5);
+  t = Math.imul(t ^ (t >>> 15), t | 1);
+  t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+  return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+}
+
+function generateReview(handle: string) {
+  const base = hashString(handle);
+  const rating = (4 + seededRandom(base) * 0.9).toFixed(1);
+  const reviews = Math.floor(50 + seededRandom(base + 1) * 250);
+  const bought = Math.floor(100 + seededRandom(base + 2) * 1900);
   return { rating, reviews, bought };
 }
 
@@ -99,7 +124,7 @@ export default function ProductDetails({
 
   const content = useContent();
   const showSocialProof = content.products.showSocialProof !== false;
-  const review = useMemo(() => generateRandomReview(), []);
+  const review = useMemo(() => generateReview(product.handle), [product.handle]);
 
   const ingredients =
     product.ingredients?.value ||
@@ -122,6 +147,27 @@ export default function ProductDetails({
   const variants = product.variants.edges.map((e) => e.node);
   const soldOut = isProductSoldOut(product);
   const tag = product.productType || product.tags[0] || "Product";
+
+  // GA4 `view_item` — once per product page. Item IDs use the product handle so
+  // they join with add_to_cart / begin_checkout (which use the same handle).
+  const trackedHandle = useRef<string | null>(null);
+  useEffect(() => {
+    if (trackedHandle.current === product.handle) return;
+    trackedHandle.current = product.handle;
+
+    const node = product.variants.edges.map((e) => e.node);
+    const variant = node.find((v) => v.availableForSale) ?? node[0];
+    trackViewItem(
+      buildItem({
+        id: product.handle,
+        name: product.title,
+        variant: variant?.title,
+        brand: "Prince Achar",
+        price: variant?.price.amount ?? product.priceRange.minVariantPrice.amount,
+      }),
+      variant?.price.currencyCode ?? product.priceRange.minVariantPrice.currencyCode
+    );
+  }, [product]);
 
   const optionNames = Array.from(
     new Set(variants.flatMap((v) => v.selectedOptions.map((o) => o.name)))

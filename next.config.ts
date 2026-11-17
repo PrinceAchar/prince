@@ -23,6 +23,15 @@ function contentSecurityPolicy(): string {
       "https://va.vercel-scripts.com",
       "https://*.vercel-insights.com",
       "https://apis.google.com",
+      // Google Tag Manager container + tags it injects (GA4, Ads, pixels).
+      "https://www.googletagmanager.com",
+      "https://*.googletagmanager.com",
+      "https://www.google-analytics.com",
+      "https://*.google-analytics.com",
+      "https://*.analytics.google.com",
+      "https://stats.g.doubleclick.net",
+      "https://www.googleadservices.com",
+      "https://googleads.g.doubleclick.net",
     ]
       .filter(Boolean)
       .join(" "),
@@ -42,8 +51,14 @@ function contentSecurityPolicy(): string {
       "wss://*.firebaseio.com",
       "https://va.vercel-scripts.com",
       "https://vitals.vercel-insights.com",
+      // GA4 collection endpoints (including EU/regional hosts) and GTM.
+      "https://www.googletagmanager.com",
+      "https://www.google-analytics.com",
+      "https://*.google-analytics.com",
+      "https://*.analytics.google.com",
+      "https://stats.g.doubleclick.net",
     ].join(" "),
-    "frame-src 'self' https://*.shopify.com https://*.myshopify.com https://accounts.google.com https://*.firebaseapp.com https://www.youtube.com https://player.vimeo.com",
+    "frame-src 'self' https://*.shopify.com https://*.myshopify.com https://accounts.google.com https://*.firebaseapp.com https://www.youtube.com https://player.vimeo.com https://www.googletagmanager.com",
     "media-src 'self' https: blob:",
     "worker-src 'self' blob:",
     "object-src 'none'",

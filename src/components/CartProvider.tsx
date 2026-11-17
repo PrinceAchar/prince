@@ -9,11 +9,18 @@ import {
   getCart,
   type Cart,
 } from "@/lib/shopify";
-import { useSearchParams } from "next/navigation";
+import {
+  buildItem,
+  trackAddToCart,
+  trackRemoveFromCart,
+  trackBeginCheckout,
+  type Ga4Item,
+} from "@/lib/analytics";
 
 export interface CartItem {
   lineId: string;
   variantId: string;
+  productHandle: string;
   productTitle: string;
   variantTitle: string;
   price: string;
@@ -48,6 +55,7 @@ function mapCartToItems(cart: Cart): CartItem[] {
     return {
       lineId: line.id,
       variantId: variant.id,
+      productHandle: variant.product.handle,
       productTitle: variant.product.title,
       variantTitle: variant.title,
       price: variant.price.amount,
@@ -55,6 +63,17 @@ function mapCartToItems(cart: Cart): CartItem[] {
       image: image?.url || "/logo.jpeg",
       quantity: line.quantity,
     };
+  });
+}
+
+function toGa4Item(item: CartItem, quantity = item.quantity): Ga4Item {
+  return buildItem({
+    id: item.productHandle,
+    name: item.productTitle,
+    variant: item.variantTitle,
+    brand: "Prince Achar",
+    price: item.price,
+    quantity,
   });
 }
 
@@ -132,19 +151,23 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const addItem = useCallback(
     async (variantId: string) => {
       try {
+        let cart: Cart;
         if (!cartId) {
-          const cart = await createCart(variantId, 1);
+          cart = await createCart(variantId, 1);
           await syncCart(cart);
         } else {
           const existing = items.find((i) => i.variantId === variantId);
           if (existing) {
-            const cart = await updateCartItem(cartId, existing.lineId, existing.quantity + 1);
+            cart = await updateCartItem(cartId, existing.lineId, existing.quantity + 1);
             await syncCart(cart);
           } else {
-            const cart = await addToCart(cartId, variantId, 1);
+            cart = await addToCart(cartId, variantId, 1);
             await syncCart(cart);
           }
         }
+
+        const added = mapCartToItems(cart).find((i) => i.variantId === variantId);
+        if (added) trackAddToCart(toGa4Item(added, 1), added.currencyCode);
       } catch (err) {
         console.error("Failed to add to cart:", err);
       }
@@ -155,30 +178,42 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const removeItem = useCallback(
     async (lineId: string) => {
       if (!cartId) return;
+      const removed = items.find((i) => i.lineId === lineId);
       setIsLoading(true);
       try {
         const cart = await removeCartItem(cartId, lineId);
         await syncCart(cart);
+        if (removed) trackRemoveFromCart(toGa4Item(removed), removed.currencyCode);
       } catch (err) {
         console.error("Failed to remove from cart:", err);
       } finally {
         setIsLoading(false);
       }
     },
-    [cartId, syncCart]
+    [cartId, items, syncCart]
   );
 
   const updateQuantity = useCallback(
     async (lineId: string, quantity: number) => {
       if (!cartId) return;
+      const target = items.find((i) => i.lineId === lineId);
       setIsLoading(true);
       try {
         if (quantity <= 0) {
           const cart = await removeCartItem(cartId, lineId);
           await syncCart(cart);
+          if (target) trackRemoveFromCart(toGa4Item(target), target.currencyCode);
         } else {
           const cart = await updateCartItem(cartId, lineId, quantity);
           await syncCart(cart);
+          if (target) {
+            const delta = quantity - target.quantity;
+            if (delta > 0) {
+              trackAddToCart(toGa4Item(target, delta), target.currencyCode);
+            } else if (delta < 0) {
+              trackRemoveFromCart(toGa4Item(target, -delta), target.currencyCode);
+            }
+          }
         }
       } catch (err) {
         console.error("Failed to update cart:", err);
@@ -186,7 +221,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         setIsLoading(false);
       }
     },
-    [cartId, syncCart]
+    [cartId, items, syncCart]
   );
 
   const clearCart = useCallback(() => {
@@ -204,7 +239,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
     if (typeof window !== "undefined") {
       localStorage.setItem(CHECKOUT_INITIATED_KEY, String(Date.now()));
     }
-  }, []);
+    if (items.length > 0) {
+      trackBeginCheckout(
+        items.map((i) => toGa4Item(i)),
+        items[0].currencyCode
+      );
+    }
+  }, [items]);
 
   const openCart = useCallback(() => setIsOpen(true), []);
   const closeCart = useCallback(() => setIsOpen(false), []);

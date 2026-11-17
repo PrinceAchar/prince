@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useCart } from "./CartProvider";
 import { formatPrice } from "@/lib/shopify";
 import Image from "next/image";
+import { navigateAfterTracking } from "@/lib/analytics";
 
 interface CartContentProps {
   cart?: {
@@ -128,7 +129,8 @@ export default function CartContent({ cart }: CartContentProps) {
 
   const handleCheckout = () => {
     beginCheckout();
-    window.location.href = displayCart.checkoutUrl;
+    // Let GTM fire begin_checkout before the full-page hand-off to Shopify.
+    navigateAfterTracking(displayCart.checkoutUrl);
   };
 
   return (

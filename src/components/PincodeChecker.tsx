@@ -49,6 +49,9 @@ export default function PincodeChecker() {
 
       <div className="flex items-center gap-2">
         <input
+          id="pincode"
+          name="pincode"
+          aria-label="Delivery pincode"
           type="text"
           inputMode="numeric"
           maxLength={6}
