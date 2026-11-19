@@ -80,7 +80,7 @@ export default function ProductCard({ product, featured = false }: ProductCardPr
 
   return (
     <div
-      className={`group rounded-xl overflow-hidden border border-brand-black/5 hover:shadow-lg transition-shadow cursor-pointer ${
+      className={`group flex h-full flex-col rounded-xl overflow-hidden border border-brand-black/5 hover:shadow-lg transition-shadow cursor-pointer ${
         featured ? "bg-surface" : "bg-yellow/50"
       }`}
       onClick={() => router.push(`/products/${product.handle}`)}
@@ -177,7 +177,7 @@ export default function ProductCard({ product, featured = false }: ProductCardPr
         )}
       </div>
 
-      <div className="p-5 md:p-6">
+      <div className="flex flex-1 flex-col p-5 md:p-6">
         <div className="flex items-center justify-between gap-2 mb-2">
           <div className="flex items-center gap-2">
             <span className={`text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full ${tagClass}`}>
@@ -195,38 +195,66 @@ export default function ProductCard({ product, featured = false }: ProductCardPr
             <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12l-7.5 7.5M21 12H3" />
           </svg>
         </div>
-        <h3 className="font-heading text-[17px] md:text-[18px] font-semibold text-brand-black mb-2 leading-snug">
+        <h3 className="min-h-[2.75em] font-heading text-[17px] md:text-[18px] font-semibold text-brand-black mb-2 leading-snug">
           <Link
             href={`/products/${product.handle}`}
             onClick={(e) => e.stopPropagation()}
             className="hover:text-red transition-colors"
           >
-            <ProductTitle title={product.title} />
+            <ProductTitle title={product.title} mainOnly={featured} />
           </Link>
         </h3>
-        <p className="text-[13px] md:text-[14px] text-gray leading-relaxed mb-4 line-clamp-3">
+        <p className="min-h-[4.9em] text-[13px] md:text-[14px] text-gray leading-relaxed line-clamp-3">
           {product.seo?.description?.trim() || product.description.trim().split("\n")[0]}
         </p>
-        <div className="flex items-center justify-between">
+        <div className="mt-auto flex items-center justify-between gap-2 pt-4">
           <span className="text-[18px] font-bold text-red">{price}</span>
           <button
+            type="button"
             onClick={handleAddToCart}
             disabled={isAdding || soldOut}
-            className={`px-4 py-2 text-[12px] font-semibold uppercase tracking-wider rounded-full transition-colors z-20 relative ${
+            aria-label={
+              soldOut
+                ? `${product.title} — sold out`
+                : hasMultipleVariants
+                  ? `Choose a size for ${product.title}`
+                  : isAdding
+                    ? `Adding ${product.title} to cart`
+                    : `Add ${product.title} to cart`
+            }
+            className={`flex shrink-0 items-center justify-center gap-2 rounded-full p-2.5 text-[12px] font-semibold uppercase tracking-wider transition-colors z-20 relative md:px-4 md:py-2 ${
               soldOut
                 ? "bg-brand-black/10 text-gray cursor-not-allowed"
                 : "bg-red text-white hover:bg-red-dark disabled:opacity-50"
             }`}
           >
-            {soldOut ? "Sold Out" : hasMultipleVariants ? "Choose Size" : isAdding ? (
+            {soldOut ? (
+              "Sold Out"
+            ) : hasMultipleVariants ? (
+              "Choose Size"
+            ) : isAdding ? (
               <span className="flex items-center gap-2">
-                <svg className="animate-spin h-3.5 w-3.5" viewBox="0 0 24 24" fill="none">
+                <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                 </svg>
-                Adding
+                <span className="hidden md:inline">Adding</span>
               </span>
-            ) : "Add to Cart"}
+            ) : (
+              <>
+                <svg
+                  aria-hidden="true"
+                  className="h-4 w-4 md:hidden"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.75}
+                  stroke="currentColor"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                </svg>
+                <span className="hidden md:inline">Add to Cart</span>
+              </>
+            )}
           </button>
         </div>
       </div>
