@@ -187,7 +187,9 @@ would double-count every navigation.
 
 **Consent.** The GTM loader in the root layout (`src/lib/gtm.ts`) pushes
 Consent Mode v2 defaults of `denied` before gtm.js is requested.
-`CookieConsent.tsx` shows a banner until the visitor chooses, then pushes
+`CookieConsent.tsx` shows a short floating banner for 10 seconds. It is only a
+hint: if the visitor does not click, no choice is stored and consent stays
+`denied` (no analytics hits). Clicking Accept or Reject pushes
 `consent / update` and remembers the choice in `localStorage`. The footer's
 **Cookie settings** link reopens the banner.
 

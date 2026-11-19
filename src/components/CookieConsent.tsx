@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import {
   CONSENT_SETTINGS_EVENT,
@@ -9,8 +9,12 @@ import {
   type ConsentChoice,
 } from "@/lib/consent";
 
+/** The banner is a short-lived hint: ignoring it leaves consent denied. */
+const AUTO_DISMISS_MS = 10_000;
+
 export default function CookieConsent() {
   const [isVisible, setIsVisible] = useState(false);
+  const dismissTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     // Deferred so the client's first render matches the server's (no banner
@@ -23,7 +27,16 @@ export default function CookieConsent() {
     return () => window.removeEventListener(CONSENT_SETTINGS_EVENT, reopen);
   }, []);
 
+  useEffect(() => {
+    if (!isVisible) return;
+    dismissTimer.current = setTimeout(() => setIsVisible(false), AUTO_DISMISS_MS);
+    return () => {
+      if (dismissTimer.current) clearTimeout(dismissTimer.current);
+    };
+  }, [isVisible]);
+
   const decide = (choice: ConsentChoice) => {
+    if (dismissTimer.current) clearTimeout(dismissTimer.current);
     saveConsentChoice(choice);
     setIsVisible(false);
   };
@@ -34,34 +47,29 @@ export default function CookieConsent() {
     <div
       role="region"
       aria-label="Cookie preferences"
-      className="fixed inset-x-0 bottom-0 z-[1200] border-t border-brand-black/10 bg-white px-6 py-4 shadow-[0_-8px_30px_rgba(0,0,0,0.12)]"
+      className="fixed bottom-3 left-1/2 z-[1200] w-[calc(100%-1.5rem)] max-w-[640px] -translate-x-1/2 rounded-xl border border-brand-black/10 bg-white/95 px-4 py-2 text-[11px] leading-tight shadow-[0_6px_24px_rgba(0,0,0,0.12)] backdrop-blur-sm"
     >
-      <div className="mx-auto flex max-w-[1150px] flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        <div className="text-[13px] leading-relaxed text-brand-black">
-          <p className="font-semibold">Your privacy matters.</p>
-          <p className="text-gray">
-            We use optional cookies for analytics and advertising. You can accept
-            them or keep only the essentials. Read our{" "}
-            <Link href="/privacy" className="text-red underline underline-offset-2">
-              Privacy Policy
-            </Link>
-            .
-          </p>
-        </div>
-        <div className="flex shrink-0 gap-3">
+      <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1.5">
+        <p className="text-gray">
+          We use optional cookies for analytics.{" "}
+          <Link href="/privacy" className="underline underline-offset-2 hover:text-brand-black">
+            Privacy
+          </Link>
+        </p>
+        <div className="flex shrink-0 items-center gap-4">
           <button
             type="button"
             onClick={() => decide("denied")}
-            className="flex-1 rounded-full border border-brand-black/20 px-5 py-2.5 text-[12px] font-semibold uppercase tracking-wider text-brand-black transition-colors hover:bg-brand-black/5 md:flex-none"
+            className="uppercase tracking-wide text-brand-black/70 transition-colors hover:text-brand-black"
           >
-            Reject optional
+            Reject
           </button>
           <button
             type="button"
             onClick={() => decide("granted")}
-            className="flex-1 rounded-full bg-red px-5 py-2.5 text-[12px] font-semibold uppercase tracking-wider text-white transition-colors hover:bg-red-dark md:flex-none"
+            className="rounded-full bg-brand-black/5 px-3 py-1 uppercase tracking-wide text-brand-black transition-colors hover:bg-brand-black/10"
           >
-            Accept all
+            Accept
           </button>
         </div>
       </div>
