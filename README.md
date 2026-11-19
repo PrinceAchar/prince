@@ -171,40 +171,49 @@ What the storefront pushes to `window.dataLayer` (`src/lib/analytics.ts`):
 
 | Event | When |
 | --- | --- |
-| `page_view` | Every client-side route change (the container covers the first load) |
 | `view_item` | Product page opened |
 | `add_to_cart` | Item added (and quantity increased) |
 | `remove_from_cart` | Item removed (and quantity decreased) |
 | `begin_checkout` | Checkout clicked; navigation is delayed 250 ms so the tag fires |
 
-`item_id` is the **product handle** (e.g. `amla-pickle`), so the events join in
-GA4 ecommerce reports. GA4 traffic and conversions therefore come from the GTM
-container, not from a hard-coded script.
+`item_id` is the **product handle** (e.g. `amla-pickle`). The `ecommerce`
+object is cleared before every push so one event can't inherit the previous
+event's items.
+
+**Page views come from GTM, not from the app.** The container already has
+*history-change page views* enabled, which covers App Router navigations. The
+site deliberately does **not** push `page_view` — adding a `page_view` event tag
+would double-count every navigation.
+
+**Consent.** The GTM loader in the root layout (`src/lib/gtm.ts`) pushes
+Consent Mode v2 defaults of `denied` before gtm.js is requested.
+`CookieConsent.tsx` shows a banner until the visitor chooses, then pushes
+`consent / update` and remembers the choice in `localStorage`. The footer's
+**Cookie settings** link reopens the banner.
 
 Inside the GTM container, configure:
 
-1. **GA4 Configuration** tag with measurement ID `G-30ZQMK56KN`, trigger *All
-   Pages*. (This is already present in `GTM-NXXBQ7LC` and is sending the first
-   page view.)
-2. **Record client-side navigations** — pick **one** of these, never both, or
-   every App Router navigation is counted twice:
-   - **Option A (simplest):** in the GA4 Configuration tag, open *Advanced
-     Settings → Page changes based on browser history events* and tick it. GTM
-     then sends a page view on every history change.
-   - **Option B:** create a **GA4 Event** tag with event name `page_view`,
-     triggered by the custom event `page_view`, sending `page_path`,
-     `page_location` and `page_title`. This consumes the data layer push the
-     site already makes on each navigation.
-3. **GA4 Event** tags for `view_item`, `add_to_cart`, `remove_from_cart` and
-   `begin_checkout`, each with *Send Ecommerce data* enabled and the data layer
-   selected as the source.
-4. Publish the container. Until it is published, nothing reaches GA4.
+1. **Admin → Container Settings → enable Consent Mode** so tags respect the
+   consent state pushed by the site.
+2. Keep the **GA4 Configuration** tag for `G-30ZQMK56KN` on *All Pages*, with
+   `analytics_storage` required in its additional-consent checks.
+3. Leave **history-change page views** enabled. Do **not** add a `page_view`
+   event tag.
+4. Add four **GA4 Event** tags, each with a *Custom Event* trigger whose event
+   name matches the table above, and with *Send Ecommerce data* enabled using
+   the **Data Layer** as the source: `view_item`, `add_to_cart`,
+   `remove_from_cart`, `begin_checkout`.
+5. Publish the container. Until it is published, none of the ecommerce events
+   reach GA4 (the published container currently only has the GA4 destination
+   and Google's automatic events).
 
-Purchases happen on Shopify's checkout domain, outside this site. To record
-`purchase` and checkout-step events in the same GA4 property, connect GA4 in
-Shopify admin (Google & YouTube channel / Shopify's Google Analytics 4
-integration). That integration only covers checkout, so it does not duplicate
-storefront page views.
+Purchases happen on Shopify's checkout domain, outside this site. Connect the
+same GA4 property `G-30ZQMK56KN` in **Shopify admin → Google & YouTube** so
+checkout `purchase` events land in the same property. In GA4, add
+`princeachar.com` and your Shopify checkout domain under *Data streams →
+Configure tag settings → Cross-domain measurement* so the session carries over.
+This integration only covers checkout, so it does not duplicate storefront page
+views.
 
 The CSP in `next.config.ts` already allows the GTM/GA4 hosts, so no header
 change is needed when adding tags.
@@ -253,12 +262,14 @@ Post-deploy smoke test:
 - [ ] Register the Shopify callback `https://princeachar.com/api/auth/callback`.
 - [ ] Add the production domain in **Vercel → Domains** and point DNS.
 - [ ] Enable **Web Analytics** and **Speed Insights** for the project in Vercel.
-- [ ] In **Google Tag Manager** (`GTM-NXXBQ7LC`): keep the GA4 configuration
-      tag for `G-30ZQMK56KN`, turn on history-change page views (or add the
-      `page_view` event tag — not both), add the ecommerce event tags listed in
-      section 7, then **Publish**.
-- [ ] In **Shopify admin**, connect the same GA4 property so `purchase` events
-      from checkout are recorded.
+- [ ] In **Google Tag Manager** (`GTM-NXXBQ7LC`): enable Consent Mode in
+      container settings, keep the GA4 configuration tag for `G-30ZQMK56KN`,
+      leave history-change page views on (never add a `page_view` event tag),
+      add the four ecommerce event tags listed in section 7, then **Publish**.
+- [ ] In **Shopify admin → Google & YouTube**, connect GA4 property
+      `G-30ZQMK56KN`, and add both domains to GA4 cross-domain measurement.
+- [ ] Confirm in GA4 **Realtime / DebugView** that `add_to_cart`,
+      `begin_checkout` and (after a test order) `purchase` all arrive.
 - [ ] Verify the domain in **Google Search Console** (DNS or the
       `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` token), then submit
       `https://princeachar.com/sitemap.xml`.

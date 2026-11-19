@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useContent } from "@/lib/content";
+import { openConsentSettings } from "@/lib/consent";
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -71,6 +72,13 @@ export default function Footer() {
                   {l.label}
                 </Link>
               ))}
+              <button
+                type="button"
+                onClick={openConsentSettings}
+                className="block text-left text-[13px] text-brand-black/60 hover:text-brand-black transition-colors"
+              >
+                Cookie settings
+              </button>
             </div>
           </div>
 

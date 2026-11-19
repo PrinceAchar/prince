@@ -2,13 +2,15 @@ import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Outfit } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import Script from "next/script";
 import "./globals.css";
 import { CartProvider } from "@/components/CartProvider";
 import CartDrawer from "@/components/CartDrawer";
 import ScrollToTop from "@/components/ScrollToTop";
 import Providers from "./providers";
-import GoogleTagManager from "@/components/GoogleTagManager";
-import { SITE_URL, SITE_NAME } from "@/lib/site";
+import CookieConsent from "@/components/CookieConsent";
+import { gtmBootstrap } from "@/lib/gtm";
+import { SITE_URL, SITE_NAME, GTM_ID } from "@/lib/site";
 import { getSiteContent } from "@/lib/content-server";
 
 // Storefront copy is edited in /admin and stored in Firestore. Revalidating
@@ -134,7 +136,26 @@ export default async function RootLayout({
   return (
     <html lang="en" className={`${cormorant.variable} ${outfit.variable}`} suppressHydrationWarning>
       <body>
-        <GoogleTagManager />
+        {/*
+          GTM lives in the root layout on purpose: `beforeInteractive` scripts
+          must be declared here (Next.js injects them into <head>), and the
+          Consent Mode defaults below must run before gtm.js loads. The
+          container's own history-change page views cover App Router routes.
+        */}
+        <Script
+          id="gtm-container"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{ __html: gtmBootstrap(GTM_ID) }}
+        />
+        <noscript>
+          <iframe
+            src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
+            height="0"
+            width="0"
+            style={{ display: "none", visibility: "hidden" }}
+            title="Google Tag Manager"
+          />
+        </noscript>
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:rounded-lg focus:bg-red focus:px-5 focus:py-3 focus:text-[13px] focus:font-semibold focus:uppercase focus:tracking-[1px] focus:text-white"
@@ -162,6 +183,7 @@ export default async function RootLayout({
         </Providers>
         <Analytics />
         <SpeedInsights />
+        <CookieConsent />
       </body>
     </html>
   );

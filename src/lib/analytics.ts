@@ -20,29 +20,22 @@ export interface Ga4Item {
 
 declare global {
   interface Window {
-    dataLayer?: Record<string, unknown>[];
+    // GTM commands are pushed as arrays (gtag command form), tags as objects.
+    dataLayer?: (Record<string, unknown> | unknown[])[];
   }
 }
 
 export function pushDataLayer(payload: Record<string, unknown>): void {
   if (typeof window === "undefined") return;
   window.dataLayer = window.dataLayer || [];
+  // Reset the shared ecommerce object so a smaller event can't inherit items
+  // from the previous one (a well-known GTM dataLayer gotcha).
+  if ("ecommerce" in payload) window.dataLayer.push({ ecommerce: null });
   window.dataLayer.push(payload);
 }
 
 function round(value: number): number {
   return Math.round(value * 100) / 100;
-}
-
-/** SPA navigations don't reload the page, so GTM never sees them by itself. */
-export function pushPageView(path: string, title?: string): void {
-  if (typeof window === "undefined") return;
-  pushDataLayer({
-    event: "page_view",
-    page_path: path,
-    page_location: window.location.href,
-    page_title: title || document.title,
-  });
 }
 
 export function buildItem(input: {
