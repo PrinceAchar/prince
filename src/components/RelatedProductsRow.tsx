@@ -8,6 +8,25 @@ import { type ShopifyProduct, formatPrice, isProductSoldOut } from "@/lib/shopif
 import { useCart } from "./CartProvider";
 import ProductTitle from "./ProductTitle";
 
+function BagIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      aria-hidden="true"
+      className={className}
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={1.75}
+      stroke="currentColor"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
+      />
+    </svg>
+  );
+}
+
 export default function RelatedProductsRow({ products }: { products: ShopifyProduct[] }) {
   if (products.length === 0) return null;
 
@@ -48,7 +67,7 @@ function RelatedCard({ product }: { product: ShopifyProduct }) {
 
   return (
     <div
-      className="group bg-yellow rounded-xl overflow-hidden border border-brand-black/5 hover:shadow-lg transition-shadow cursor-pointer"
+      className="group flex h-full flex-col bg-yellow rounded-xl overflow-hidden border border-brand-black/5 hover:shadow-lg transition-shadow cursor-pointer"
       onClick={() => router.push(`/products/${product.handle}`)}
     >
       <div className="relative aspect-square bg-brand-black/5 flex items-center justify-center overflow-hidden">
@@ -76,8 +95,8 @@ function RelatedCard({ product }: { product: ShopifyProduct }) {
         )}
       </div>
 
-      <div className="p-4">
-        <h3 className="font-heading text-[15px] font-semibold text-brand-black mb-1 leading-snug line-clamp-2">
+      <div className="flex flex-1 flex-col p-4">
+        <h3 className="min-h-[2.75em] font-heading text-[15px] font-semibold text-brand-black mb-1 leading-snug line-clamp-2">
           <Link
             href={`/products/${product.handle}`}
             onClick={(e) => e.stopPropagation()}
@@ -86,26 +105,44 @@ function RelatedCard({ product }: { product: ShopifyProduct }) {
             <ProductTitle title={product.title} />
           </Link>
         </h3>
-        <div className="flex items-center justify-between mt-3">
+        <div className="mt-auto flex items-center justify-between gap-2 pt-3">
           <span className="text-[16px] font-bold text-red">{price}</span>
           <button
+            type="button"
             onClick={handleAddToCart}
             disabled={isAdding || soldOut}
-            className={`px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider rounded-full transition-colors ${
+            aria-label={
+              soldOut
+                ? `${product.title} — sold out`
+                : isAdding
+                  ? `Adding ${product.title} to cart`
+                  : `Add ${product.title} to cart`
+            }
+            className={`flex shrink-0 items-center justify-center rounded-full p-2.5 text-[11px] font-semibold uppercase tracking-wider transition-colors md:px-3 md:py-1.5 ${
               soldOut
                 ? "bg-brand-black/10 text-gray cursor-not-allowed"
                 : "bg-red text-white hover:bg-red-dark disabled:opacity-50"
             }`}
           >
-            {soldOut ? "Sold Out" : isAdding ? (
+            {soldOut ? (
+              <>
+                <BagIcon className="h-4 w-4 md:hidden" />
+                <span className="hidden md:inline">Sold Out</span>
+              </>
+            ) : isAdding ? (
               <span className="flex items-center gap-1.5">
                 <svg className="animate-spin h-3 w-3" viewBox="0 0 24 24" fill="none">
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                 </svg>
-                Adding
+                <span className="hidden md:inline">Adding</span>
               </span>
-            ) : "Add to Cart"}
+            ) : (
+              <>
+                <BagIcon className="h-4 w-4 md:hidden" />
+                <span className="hidden md:inline">Add to Cart</span>
+              </>
+            )}
           </button>
         </div>
       </div>
